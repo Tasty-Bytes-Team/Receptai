@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "OBpkFmMlwy6JI2lKstVDm21qe7nLYIpZoLXR7pm79KQ=",
+  "Source": "Receptai.Server",
+  "BasePath": "_content/Receptai.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "/home/dominykas/Projects/Websites/Receptai/Receptai.client/Receptai.client.esproj",
+      "Version": 2,
+      "Source": "Receptai.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

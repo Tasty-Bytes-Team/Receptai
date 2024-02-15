@@ -1,6 +1,6 @@
+/home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/spa.proxy.json
 /home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/appsettings.Development.json
 /home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/appsettings.json
-/home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/spa.proxy.json
 /home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/Receptai.Server
 /home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/Receptai.Server.deps.json
 /home/dominykas/Projects/Websites/Receptai/Receptai.Server/bin/Debug/net8.0/Receptai.Server.runtimeconfig.json

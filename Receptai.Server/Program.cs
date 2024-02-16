@@ -1,5 +1,5 @@
 
-namespace VueApp3.Server
+namespace Receptai.Server
 {
 	public class Program
 	{

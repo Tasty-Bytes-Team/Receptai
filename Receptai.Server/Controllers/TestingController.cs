@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace VueApp3.Server.Controllers;
+namespace Receptai.Server.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]jkhhjkj")]

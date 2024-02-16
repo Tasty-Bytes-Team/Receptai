@@ -1,3 +1,5 @@
+using System;
+
 namespace Receptai.Server
 {
 	public class WeatherForecast

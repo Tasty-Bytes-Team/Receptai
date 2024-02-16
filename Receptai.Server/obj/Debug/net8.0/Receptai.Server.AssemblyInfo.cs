@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Receptai.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6784a5f986101e0ded83d7c714db78e957c510de")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+124a112e394eb24bbc49427f9f5278bdf8d838f9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Receptai.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Receptai.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

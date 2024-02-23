@@ -25,6 +25,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example_password
       MYSQL_DATABASE: example_database
+    volumes:
+      - "./data/database:/var/lib/mysql:delegated"
+
 
   nginx:
     image: nginx:latest

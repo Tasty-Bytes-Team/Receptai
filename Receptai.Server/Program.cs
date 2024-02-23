@@ -1,7 +1,11 @@
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Receptai.Server.Models;
+using DbContext = Receptai.Server.Models.DbContext;
 
 namespace Receptai.Server
 {
@@ -15,6 +19,9 @@ namespace Receptai.Server
 
 			builder.Services.AddRouting(options => options.LowercaseUrls = true);
 			builder.Services.AddControllers();
+			builder.Services.AddDbContext<DbContext>(opt =>
+				opt.UseInMemoryDatabase("DatabaseName"));
+			
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
@@ -33,8 +40,8 @@ namespace Receptai.Server
 
 			app.UseHttpsRedirection();
 
+			//app.UseAuthentication();
 			app.UseAuthorization();
-
 
 			app.MapControllers();
 

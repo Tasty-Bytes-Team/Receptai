@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # TODO: create docker file for the client
+  #frontend:
+  #  build:
+  #    context: ./Receptai.client
+  #    dockerfile: Dockerfile
+  #  depends_on:
+  #    - backend
+  #  links:
+  #    - "backend:backend"
+
+  backend:
+    build:
+      context: ./Receptai.Server
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    links:
+      - "database:database"
+
+  database:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: example_password
+      MYSQL_DATABASE: example_database
+
+  nginx:
+    image: nginx:latest
+    # Insecure, for now
+    ports:
+      - "80:80" 
+    #  - "443:443"
+    volumes:
+      - ./proxy.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      #- frontend
+      - database
+    links:
+      - "backend:backend"
+      #- "frontend:frontend"
+
+ 

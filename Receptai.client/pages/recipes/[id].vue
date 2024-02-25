@@ -1,10 +1,16 @@
 <script setup>
+definePageMeta({
+  layout: 'empty',
+})
 
+    import RecipePage from '@/components/RecipePage/RecipePage.vue';
+
+    const route = useRoute()
 </script>
 
 <template>
     <div>
-        <p>{{ $route.params.id }}</p>
+        <RecipePage :id="route.params.id" />
     </div>
 </template>
 

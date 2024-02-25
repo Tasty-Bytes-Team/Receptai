@@ -13,9 +13,10 @@ namespace Receptai.Server.Controllers
     [ApiController]
     public class IngredientController : ControllerBase
     {
-        private readonly Models.DbContext _context;
+        /*
+        private readonly Models.AppDbContext _context;
 
-        public IngredientController(Models.DbContext context)
+        public IngredientController(Models.AppDbContext context)
         {
             _context = context;
         }
@@ -55,6 +56,6 @@ namespace Receptai.Server.Controllers
         private bool IngredientExists(long id)
         {
             return _context.Ingredients.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

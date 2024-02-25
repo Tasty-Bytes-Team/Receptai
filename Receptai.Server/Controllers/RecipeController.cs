@@ -14,10 +14,11 @@ namespace Receptai.Server.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly Models.DbContext _context;
+        /*
+        private readonly Models.AppDbContext _context;
         private const int RecipesPerPage = 20;
 
-        public RecipeController(Models.DbContext context)
+        public RecipeController(Models.AppDbContext context)
         {
             _context = context;
         }
@@ -82,5 +83,6 @@ namespace Receptai.Server.Controllers
 
             return CreatedAtAction("GetRecipeById", new { id = recipe.Id }, recipe);
         }
+        */
     }
 }

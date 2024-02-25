@@ -13,8 +13,10 @@ services:
 
   backend:
     build:
-      context: ./Receptai.Server
+      context: ./Receptai-server
       dockerfile: Dockerfile
+    environment:
+        - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/production_db
     depends_on:
       - database
     links:
@@ -23,11 +25,12 @@ services:
   database:
     image: mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: example_password
-      MYSQL_DATABASE: example_database
+      MYSQL_USER: spring
+      MYSQL_PASSWORD: securePassword123
+      MYSQL_DATABASE: production_db
+      MYSQL_ROOT_PASSWORD: securePassword123Root
     volumes:
       - "./data/database:/var/lib/mysql:delegated"
-
 
   nginx:
     image: nginx:latest

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(path="/user")
-@PreAuthorize("permitAll()")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -34,7 +33,7 @@ public class UserController {
 
         userService.createUser(username, email, password);
 
-        return ResponseEntity.ok("A");
+        return ResponseEntity.ok("User created");
     }
 
     @GetMapping("/list")
@@ -43,22 +42,17 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
-
-
-    @GetMapping("/user/userProfile")
+    // TODO: figure out
+    @GetMapping("/userProfile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String userProfile() {
+    public @ResponseBody String userProfile() {
         return "Welcome to User Profile";
     }
 
-    @GetMapping("/admin/adminProfile")
+    // TODO: figure out
+    @GetMapping("/adminProfile")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String adminProfile() {
+    public @ResponseBody String adminProfile() {
         return "Welcome to Admin Profile";
     }
 

@@ -2,6 +2,9 @@ package lt.tastybytes.receptaiserver.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "recipes")
 public class Recipe {
@@ -16,6 +19,23 @@ public class Recipe {
     private String previewImage;
     @OneToOne
     private User author;
+
+
+
+    // receptas turi daug stepu
+    // stepas gali priklausyti tik vienam receptui
+
+
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    //@JoinTable(
+    //        name="users_roles",
+    //        joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
+    //        inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
+    private List<RecipeStep> recipeSteps = new ArrayList<>();
+
+
+    private int minutesToPrepare;
+    private int portionCount;
 
 
     // TODO: date created

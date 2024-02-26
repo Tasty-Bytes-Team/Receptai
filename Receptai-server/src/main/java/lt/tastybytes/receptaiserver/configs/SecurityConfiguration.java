@@ -45,23 +45,6 @@ public class SecurityConfiguration {
                 //.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 //.httpBasic(Customizer.withDefaults())
                 .build();
-
-        /*
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/user/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();*/
     }
 
     @Bean

@@ -9,6 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping(path="/api/v1/recipe")
 public class RecipeController {
@@ -44,6 +46,15 @@ public class RecipeController {
     @GetMapping("/list")
     public @ResponseBody Iterable<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
+    }
+
+    @GetMapping("/get")
+    public @ResponseBody ResponseEntity<Recipe> getRecipe(@RequestParam long id) {
+        var recipe =  recipeService.getRecipeById(id);
+        if (recipe.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recipe.get());
     }
 
 }

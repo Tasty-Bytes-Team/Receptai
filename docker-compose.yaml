@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  # TODO: create docker file for the client
-  #frontend:
-  #  build:
-  #    context: ./Receptai.client
-  #    dockerfile: Dockerfile
-  #  depends_on:
-  #    - backend
-  #  links:
-  #    - "backend:backend"
+  frontend:
+    build:
+      context: ./Receptai.client
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    links:
+      - "backend:backend"
 
   backend:
     build:

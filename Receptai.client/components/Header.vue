@@ -9,6 +9,7 @@ const headerNav = [
     title: "Recipes",
   },
 ];
+
 </script>
 
 <template>
@@ -20,19 +21,21 @@ const headerNav = [
       <div id="app-header__logo" class="flex items-center justify-between">
         <div class="py-4">
           <NuxtLink to="/">
-            <h1 class="font-semibold text-3xl w-40">Tasty Bytes</h1>
+            <h1 class="font-semibold sm:text-3xl text-2xl sm:w-40 w-36">Tasty Bytes</h1>
           </NuxtLink>
         </div>
         <div
           id="app-header__links"
-          class="w-full flex justify-center gap-6 ml-6"
+          class="w-full justify-center gap-6 ml-6 sm:flex hidden"
         >
           <NuxtLink v-for="nav in headerNav" :to="nav.to" class="hover:underline">{{
             nav.title
           }}</NuxtLink>
         </div>
       </div>
-      <div id="app-header__right" class="text-right">Login / Register</div>
+      <NuxtLink to="/login">
+      <div id="app-header__right" class="text-right">Login</div>
+    </NuxtLink>
     </div>
   </header>
 </template>

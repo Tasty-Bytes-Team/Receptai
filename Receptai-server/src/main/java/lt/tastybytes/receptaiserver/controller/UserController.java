@@ -1,5 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
+import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.dto.ShortUserDto;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
@@ -33,7 +35,7 @@ public class UserController {
 
         userService.createUser(username, email, password);
 
-        return ResponseEntity.ok("User created");
+        return ResponseEntity.ok(new ShortUserDto(username, email));
     }
 
     @GetMapping("/list")
@@ -45,8 +47,9 @@ public class UserController {
     // TODO: figure out
     @GetMapping("/userProfile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public @ResponseBody String userProfile() {
-        return "Welcome to User Profile";
+    public ResponseEntity<PublicUserDto> userProfile() {
+        //return "Welcome to User Profile";
+        return ResponseEntity.ok(new PublicUserDto("Sample User"));
     }
 
     // TODO: figure out

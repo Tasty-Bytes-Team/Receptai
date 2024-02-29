@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @RestController
@@ -64,8 +65,11 @@ public class RecipeController {
                 new Date(),
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 "https://www.youtube.com/embed/VkQajdYciW0",
-                new ArrayList<InstructionDto>(),
-                new ArrayList<TagDto>(),
+                Arrays.asList(
+                        new InstructionDto("Pirma atsisedam ant kedes"),
+                        new InstructionDto("Paskui atsisedam ir galvojam")
+                ),
+                Arrays.asList(new TagDto(1, "Nevalgomas maistas")),
                 new CategoryDto(1, "Pavyzdine kategorija"),
                 40,
                 4
@@ -85,8 +89,11 @@ public class RecipeController {
                 null,
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 null,
-                new ArrayList<InstructionDto>(),
-                new ArrayList<TagDto>(),
+                Arrays.asList(
+                        new InstructionDto("Pirma atsisedam ant kedes"),
+                        new InstructionDto("Paskui atsisedam ir galvojam")
+                ),
+                Arrays.asList(new TagDto(1, "Nevalgomas maistas")),
                 new CategoryDto(1, "Pavyzdine kategorija"),
                 40,
                 4

@@ -9,7 +9,6 @@ import java.util.List;
 
 public record RecipeDto(
         int id,
-
         @NonNull String name,
         @NonNull String shortDescription,
 

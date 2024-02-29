@@ -10,16 +10,11 @@ import java.util.List;
 public record CreateRecipeDto(
         @NonNull String name,
         @NonNull String shortDescription,
-
         @NonNull String previewImage,
-
         @Nullable String tutorialVideo,
-
-        // TODO: figure out the structure of ingredients
+        List<IngredientListDto> ingredients,
         List<String> instructions,
-
         List<Integer> tagIds,
-
         int categoryId,
         int minutesToPrepare,
         int portions

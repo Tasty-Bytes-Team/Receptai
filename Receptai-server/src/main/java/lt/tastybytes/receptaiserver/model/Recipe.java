@@ -31,7 +31,7 @@ public class Recipe {
     //        name="users_roles",
     //        joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
     //        inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
-    private List<RecipeStep> recipeSteps = new ArrayList<>();
+    private List<RecipeInstruction> recipeInstructions = new ArrayList<>();
 
 
     private int minutesToPrepare;

@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - backend
-    links:
-      - "backend:backend"
 
   backend:
     build:
@@ -41,10 +39,10 @@ services:
       - ./proxy.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
-      #- frontend
+      - frontend
       - database
     links:
       - "backend:backend"
-      #- "frontend:frontend"
+      - "frontend:frontend"
 
  

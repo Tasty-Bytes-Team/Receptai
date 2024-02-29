@@ -1,7 +1,10 @@
 package lt.tastybytes.receptaiserver.controller;
 
+import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import lt.tastybytes.receptaiserver.dto.ShortUserDto;
+import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginResponseDto;
 import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,40 +28,33 @@ public class UserController {
     private JwtServiceImpl jwtService;
 
     @PostMapping(path="/register") // Map ONLY POST Requests
-    public ResponseEntity<?> registerNewUser(@RequestBody RegisterRequestDto dto) {
+    public ResponseEntity<ShortUserDto> registerNewUser(@Valid @RequestBody RegisterRequestDto dto) throws Exception {
         var user = userService.findUserByEmail(dto.email());
         if (user != null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vartotojas tokiu el. pastu jau egzistuoja");
+            throw new UserAlreadyExistsException();
+            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vartotojas tokiu el. pastu jau egzistuoja");
 
         userService.createUser(dto.name(), dto.email(), dto.password());
 
         return ResponseEntity.ok(new ShortUserDto(dto.name(), dto.email()));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Iterable<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAllUsers());
-    }
-
-    // TODO: figure out
-    @GetMapping("/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<PublicUserDto> userProfile() {
-        //return "Welcome to User Profile";
-        return ResponseEntity.ok(new PublicUserDto("Sample User"));
-    }
-
-    // TODO: figure out
-    @GetMapping("/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public @ResponseBody String adminProfile() {
-        return "Welcome to Admin Profile";
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> authenticate(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto dto) {
         User authenticatedUser = userService.authenticate(dto.email(), dto.password());
         String jwtToken = jwtService.generateToken(authenticatedUser);
         return ResponseEntity.ok(new LoginResponseDto(jwtToken, jwtService.getExpirationTime()));
+    }
+
+    @GetMapping("/list")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        // TODO: secure behind
+        return ResponseEntity.ok(userService.findAllUsers());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<FullUserDto> getCurrentUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(new FullUserDto(user.getName(), user.getEmail()));
     }
 }

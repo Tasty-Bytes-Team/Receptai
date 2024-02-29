@@ -37,11 +37,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/user/register").permitAll()
                         .requestMatchers("/api/v1/user/login").permitAll()
                         .requestMatchers("/api/v1/recipe/list").permitAll()
+                        //.requestMatchers("/api/v1/user/list").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((ex) -> ex.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 //.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 //.httpBasic(Customizer.withDefaults())
                 .build();

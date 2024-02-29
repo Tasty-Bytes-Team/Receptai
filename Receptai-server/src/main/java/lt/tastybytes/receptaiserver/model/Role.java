@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 

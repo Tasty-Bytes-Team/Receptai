@@ -2,13 +2,16 @@ package lt.tastybytes.receptaiserver.controller;
 
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import lt.tastybytes.receptaiserver.dto.ShortUserDto;
+import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
+import lt.tastybytes.receptaiserver.dto.user.LoginResponseDto;
+import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,27 +24,19 @@ public class UserController {
     private JwtServiceImpl jwtService;
 
     @PostMapping(path="/register") // Map ONLY POST Requests
-    public ResponseEntity registerNewUser(
-            @RequestParam String username,
-            @RequestParam String email,
-            @RequestParam String password
-    ) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-
-        var user = userService.findUserByEmail(email);
+    public ResponseEntity<?> registerNewUser(@RequestBody RegisterRequestDto dto) {
+        var user = userService.findUserByEmail(dto.email());
         if (user != null)
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vartotojas tokiu el. pastu jau egzistuoja");
 
-        userService.createUser(username, email, password);
+        userService.createUser(dto.name(), dto.email(), dto.password());
 
-        return ResponseEntity.ok(new ShortUserDto(username, email));
+        return ResponseEntity.ok(new ShortUserDto(dto.name(), dto.email()));
     }
 
     @GetMapping("/list")
-    public @ResponseBody Iterable<User> getAllUsers() {
-        // This returns a JSON or XML with the users
-        return userService.findAllUsers();
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAllUsers());
     }
 
     // TODO: figure out
@@ -60,9 +55,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(String email, String password) {
-        User authenticatedUser = userService.authenticate(email, password);
+    public ResponseEntity<LoginResponseDto> authenticate(@RequestBody LoginRequestDto dto) {
+        User authenticatedUser = userService.authenticate(dto.email(), dto.password());
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        return ResponseEntity.ok(new LoginResponse(jwtToken, jwtService.getExpirationTime()));
+        return ResponseEntity.ok(new LoginResponseDto(jwtToken, jwtService.getExpirationTime()));
     }
 }

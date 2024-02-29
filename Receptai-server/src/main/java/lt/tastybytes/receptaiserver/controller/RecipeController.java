@@ -1,10 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
-import lt.tastybytes.receptaiserver.dto.recipe.CategoryDto;
-import lt.tastybytes.receptaiserver.dto.recipe.InstructionDto;
+import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
-import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
-import lt.tastybytes.receptaiserver.dto.recipe.TagDto;
 import lt.tastybytes.receptaiserver.model.Recipe;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
@@ -26,16 +23,10 @@ public class RecipeController {
 
 
     @PostMapping(path="/create")
-    public ResponseEntity createNewRecipe(
-            @RequestParam String name,
-            @RequestParam String description,
-            @AuthenticationPrincipal User user
-    ) {
-
-
+    public ResponseEntity<?> createNewRecipe(@RequestBody CreateRecipeDto dto, @AuthenticationPrincipal User user) {
        //if ()
 
-        recipeService.createRecipe(name, description, user);
+        recipeService.createRecipe(dto.name(), dto.shortDescription(), user);
 
 
 
@@ -50,7 +41,7 @@ public class RecipeController {
 
 
     @GetMapping("/list")
-    public @ResponseBody Iterable<Recipe> getAllRecipes() {
+    public Iterable<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
@@ -112,7 +103,7 @@ public class RecipeController {
     }
 
     @GetMapping("/get")
-    public @ResponseBody ResponseEntity<Recipe> getRecipe(@RequestParam long id) {
+    public ResponseEntity<Recipe> getRecipe(@RequestParam long id) {
         var recipe =  recipeService.getRecipeById(id);
         if (recipe.isEmpty()) {
             return ResponseEntity.notFound().build();

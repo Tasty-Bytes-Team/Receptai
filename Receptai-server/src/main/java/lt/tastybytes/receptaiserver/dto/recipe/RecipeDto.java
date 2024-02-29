@@ -1,5 +1,6 @@
-package lt.tastybytes.receptaiserver.dto;
+package lt.tastybytes.receptaiserver.dto.recipe;
 
+import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import org.springframework.lang.Nullable;
 import org.springframework.lang.NonNull;
 
@@ -23,6 +24,10 @@ public record RecipeDto(
         @Nullable String tutorialVideo,
 
         List<InstructionDto> instructions,
+
+        List<TagDto> tags,
+
+        @NonNull CategoryDto category,
 
         int minutesToPrepare,
         int portions

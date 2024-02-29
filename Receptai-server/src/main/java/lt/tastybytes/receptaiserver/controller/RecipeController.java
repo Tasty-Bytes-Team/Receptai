@@ -1,21 +1,20 @@
 package lt.tastybytes.receptaiserver.controller;
 
-import lt.tastybytes.receptaiserver.dto.InstructionDto;
+import lt.tastybytes.receptaiserver.dto.recipe.CategoryDto;
+import lt.tastybytes.receptaiserver.dto.recipe.InstructionDto;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
-import lt.tastybytes.receptaiserver.dto.RecipeDto;
+import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.dto.recipe.TagDto;
 import lt.tastybytes.receptaiserver.model.Recipe;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/api/v1/recipe")
@@ -66,6 +65,8 @@ public class RecipeController {
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 "https://www.youtube.com/embed/VkQajdYciW0",
                 new ArrayList<InstructionDto>(),
+                new ArrayList<TagDto>(),
+                new CategoryDto(1, "Pavyzdine kategorija"),
                 40,
                 4
         ));
@@ -85,6 +86,8 @@ public class RecipeController {
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 null,
                 new ArrayList<InstructionDto>(),
+                new ArrayList<TagDto>(),
+                new CategoryDto(1, "Pavyzdine kategorija"),
                 40,
                 4
         );

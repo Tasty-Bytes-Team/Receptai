@@ -56,7 +56,7 @@ console.log(props.id);
           <div class="lg:basis-1/3 md:basis-1/2 basis-full">
             <div class="p-4">
               <img
-                src="@/assets/images/Lasagne-square-FS-79.webp"
+                src="/images/Lasagne-square-FS-79.webp"
                 class="rounded-md border-2 border-[#c4c4c4] shadow-md max-h-96 m-auto"
               />
             </div>

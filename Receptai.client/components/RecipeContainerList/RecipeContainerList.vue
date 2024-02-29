@@ -3,7 +3,7 @@ import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContain
 
 const items = [
   {
-    imageLink: "/_nuxt/assets/images/Lasagne-square-FS-79.webp",
+    imageLink: "/images/Lasagne-square-FS-79.webp",
     name: "Vegetarian lasagne",
     raiting: 3,
     about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
@@ -13,7 +13,7 @@ const items = [
     prepTime: 30,
   },
   {
-    imageLink: "/_nuxt/assets/images/Lasagne-square-FS-79.webp",
+    imageLink: "/images/Lasagne-square-FS-79.webp",
     name: "Vegetarian lasagne",
     raiting: 3,
     about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
@@ -23,7 +23,7 @@ const items = [
     prepTime: 30,
   },
   {
-    imageLink: "/_nuxt/assets/images/Lasagne-square-FS-79.webp",
+    imageLink: "/images/Lasagne-square-FS-79.webp",
     name: "Vegetarian lasagne",
     raiting: 3,
     about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
@@ -33,7 +33,7 @@ const items = [
     prepTime: 30,
   },
   {
-    imageLink: "/_nuxt/assets/images/Lasagne-square-FS-79.webp",
+    imageLink: "/images/Lasagne-square-FS-79.webp",
     name: "Vegetarian lasagne",
     raiting: 3,
     about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
@@ -43,7 +43,7 @@ const items = [
     prepTime: 30,
   },
   {
-    imageLink: "/_nuxt/assets/images/Lasagne-square-FS-79.webp",
+    imageLink: "/images/Lasagne-square-FS-79.webp",
     name: "Vegetarian lasagne",
     raiting: 3,
     about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",

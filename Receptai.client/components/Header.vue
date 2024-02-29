@@ -33,7 +33,7 @@ const headerNav = [
           }}</NuxtLink>
         </div>
       </div>
-      <NuxtLink to="/login">
+      <NuxtLink to="/user/login">
       <div id="app-header__right" class="text-right">Login</div>
     </NuxtLink>
     </div>

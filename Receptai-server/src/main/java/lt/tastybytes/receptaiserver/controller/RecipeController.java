@@ -57,6 +57,16 @@ public class RecipeController {
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 "https://www.youtube.com/embed/VkQajdYciW0",
                 Arrays.asList(
+                        new IngredientListDto("Main course", Arrays.asList(
+                                new IngredientDto("pavadinimas", 1, "unit"),
+                                new IngredientDto("pavadinimas", 2, "unit")
+                        )),
+                        new IngredientListDto("Padazas", Arrays.asList(
+                                new IngredientDto("pavadinimas", 1, "unit"),
+                                new IngredientDto("pavadinimas", 2, "unit")
+                        ))
+                ),
+                Arrays.asList(
                         new InstructionDto("Pirma atsisedam ant kedes"),
                         new InstructionDto("Paskui atsisedam ir galvojam")
                 ),
@@ -80,6 +90,16 @@ public class RecipeController {
                 null,
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 null,
+                Arrays.asList(
+                        new IngredientListDto("Main course", Arrays.asList(
+                                new IngredientDto("pavadinimas", 1, "unit"),
+                                new IngredientDto("pavadinimas", 2, "unit")
+                        )),
+                        new IngredientListDto("Padazas", Arrays.asList(
+                                new IngredientDto("pavadinimas", 1, "unit"),
+                                new IngredientDto("pavadinimas", 2, "unit")
+                        ))
+                ),
                 Arrays.asList(
                         new InstructionDto("Pirma atsisedam ant kedes"),
                         new InstructionDto("Paskui atsisedam ir galvojam")

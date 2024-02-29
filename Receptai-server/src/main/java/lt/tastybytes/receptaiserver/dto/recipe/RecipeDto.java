@@ -23,7 +23,8 @@ public record RecipeDto(
 
         @Nullable String tutorialVideo,
 
-        // TODO: figure out the structure of ingredients
+        List<IngredientListDto> ingredients,
+
         List<InstructionDto> instructions,
 
         List<TagDto> tags,

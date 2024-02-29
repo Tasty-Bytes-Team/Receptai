@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.controller;
 
+import lt.tastybytes.receptaiserver.dto.InstructionDto;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import lt.tastybytes.receptaiserver.dto.RecipeDto;
 import lt.tastybytes.receptaiserver.model.Recipe;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(path="/api/v1/recipe")
 public class RecipeController {
 
@@ -56,6 +57,7 @@ public class RecipeController {
     @GetMapping("/getfake")
     public ResponseEntity<RecipeDto> getFakeRecipe(@RequestParam long id) {
         return ResponseEntity.ok(new RecipeDto(
+                -1,
                 "Recepto pavadinimas",
                 "Recepto trumpas aprasymas ir panasiai",
                 new PublicUserDto("Vardenis Pavardenis"),
@@ -63,6 +65,7 @@ public class RecipeController {
                 new Date(),
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 "https://www.youtube.com/embed/VkQajdYciW0",
+                new ArrayList<InstructionDto>(),
                 40,
                 4
         ));
@@ -73,6 +76,7 @@ public class RecipeController {
         var list = new ArrayList<RecipeDto>();
 
         var dto = new RecipeDto(
+                -1,
                 "Recepto pavadinimas",
                 "Recepto trumpas aprasymas ir panasiai",
                 new PublicUserDto("Vardenis Pavardenis"),
@@ -80,6 +84,7 @@ public class RecipeController {
                 null,
                 "https://img.mazuma.lt/media/images/maxima/maxima_5f079612ae294f7595e2956a33e7620a23d212b936eeca3c07039453ef33b072.jpg",
                 null,
+                new ArrayList<InstructionDto>(),
                 40,
                 4
         );

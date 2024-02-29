@@ -4,8 +4,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.lang.NonNull;
 
 import java.util.Date;
+import java.util.List;
 
 public record RecipeDto(
+        int id,
+
         @NonNull String name,
         @NonNull String shortDescription,
 
@@ -18,6 +21,8 @@ public record RecipeDto(
         @NonNull String previewImage,
 
         @Nullable String tutorialVideo,
+
+        List<InstructionDto> instructions,
 
         int minutesToPrepare,
         int portions

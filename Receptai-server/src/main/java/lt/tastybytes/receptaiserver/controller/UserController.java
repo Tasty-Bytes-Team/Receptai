@@ -1,8 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
-import lt.tastybytes.receptaiserver.UserAlreadyExistsException;
-import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.dto.ShortUserDto;
 import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
@@ -12,9 +11,7 @@ import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

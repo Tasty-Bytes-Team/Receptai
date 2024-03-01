@@ -1,4 +1,4 @@
-package lt.tastybytes.receptaiserver;
+package lt.tastybytes.receptaiserver.exception;
 
 public class UserAlreadyExistsException extends Exception {
 }

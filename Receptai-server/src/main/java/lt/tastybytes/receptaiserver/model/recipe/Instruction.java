@@ -1,10 +1,10 @@
-package lt.tastybytes.receptaiserver.model;
+package lt.tastybytes.receptaiserver.model.recipe;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "recipe_instructions")
-public class RecipeInstruction {
+public class Instruction {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

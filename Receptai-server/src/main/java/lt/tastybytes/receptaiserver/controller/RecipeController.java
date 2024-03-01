@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
-import lt.tastybytes.receptaiserver.model.Recipe;
+import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class RecipeController {
     public ResponseEntity<?> createNewRecipe(@Valid @RequestBody CreateRecipeDto dto, @AuthenticationPrincipal User user) {
        //if ()
 
-        recipeService.createRecipe(dto.name(), dto.shortDescription(), user);
+        var newRecipe = recipeService.createRecipe(dto, user);
 
 
 
@@ -38,7 +38,7 @@ public class RecipeController {
 
         //userService.createUser(username, email, password);
 
-        return ResponseEntity.ok("Recipe created");
+        return ResponseEntity.ok(newRecipe);
     }
 
 

@@ -4,12 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 public class Metadata{
+  private long id;
+  
   private String anonymousName;
   
   private String anonymousSurname;
   
   private String ipAdress;
 
+  public void setID(long id){
+     this.id = id
+  }
+  
   public void setAnonymousName(String name){
      anonymousName = name;
   }
@@ -20,6 +26,10 @@ public class Metadata{
 
   public void setIpAdress(String ipAdress){
      this.ipAdress = ipAdress;
+  }
+
+    public void getID(){
+     return id;
   }
 
   public String getAnonymousName(){

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record RegisterRequestDto(
         @NotEmpty
-        @Size(min = 3, message = "name should have at least 8 characters")
+        @Size(min = 3, message = "name should have at least 3 characters")
         String name,
 
         @NotEmpty
@@ -14,7 +14,7 @@ public record RegisterRequestDto(
         String email,
 
         @NotEmpty
-        @Size(min = 8, message = "password should have at least 8 characters")
+        @Size(min = 6, message = "password should have at least 6 characters")
         String password
 ) {
 }

@@ -11,7 +11,6 @@ public record LoginRequestDto(
         @NonNull String email,
 
         @NotEmpty
-        @Size(min = 8, message = "password should have at least 8 characters")
         @NonNull String password
 ) {
 }

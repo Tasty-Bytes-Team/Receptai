@@ -3,7 +3,7 @@ package lt.tastybytes.receptaiserver.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "recipe_steps")
+@Table(name = "recipe_instructions")
 public class RecipeInstruction {
 
     @Id

@@ -82,12 +82,12 @@ console.log(props.id);
             <div class="flex flex-wrap">
               <InfoBadge
                 icon="majesticons:clock-line"
-                text="Ruošimas:"
+                text="Preparation:"
                 info="30 min."
               />
               <InfoBadge
                 icon="tabler:tools-kitchen-2"
-                text="Porcijos:"
+                text="Portions:"
                 info="4"
               />
               <Badge
@@ -95,7 +95,7 @@ console.log(props.id);
                 text="Vegetarian"
               />
               <Badge icon="ph:snowflake" text="Freezable" />
-              <Badge icon="twemoji:flag-italy" text="Itališko maisto kelionės" />
+              <Badge icon="twemoji:flag-italy" text="Italic food travels" />
             </div>
           </div>
         </div>

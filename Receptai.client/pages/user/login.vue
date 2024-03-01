@@ -1,4 +1,6 @@
 <script setup>
+import axios from "axios";
+
 const email = ref("");
 const password = ref("");
 
@@ -6,11 +8,33 @@ let error = ref(false);
 let errorText = ref("");
 
 const handleSubmit = async () => {
-  error.value = true;
-  errorText.value = "This is an error.";
+  error.value = false; // Clear existing errors before making a new attempt
 
-  console.log("Submit");
-  await navigateTo('/')
+  try {
+    const response = await axios.post("/api/v1/user/login", {
+      email: email.value, // Coerce to string
+      password: password.value, // Coerce to string
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Login successful:', response.data);
+      localStorage.setItem("TastyBytes_user", JSON.stringify(response.data));
+      console.log(JSON.parse(localStorage.getItem("TastyBytes_user")))
+      console.log(localStorage.getItem("TastyBytes"))
+      await navigateTo("/user/dashboard")
+    } else {
+      error.value = true;
+      errorText.value = "Login failed: " + response.data.message || "An error occurred.";
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    error.value = true;
+    errorText.value = "An error occurred during login.";
+  }
 };
 </script>
 
@@ -41,6 +65,7 @@ const handleSubmit = async () => {
           type="password"
           required
           v-model="password"
+          autocomplete="current-password"
         />
       </div>
       <button

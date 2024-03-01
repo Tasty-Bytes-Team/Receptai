@@ -1,4 +1,6 @@
 <script setup>
+import axios from "axios";
+
 const email = ref("");
 const name = ref("");
 const password = ref("");
@@ -15,25 +17,45 @@ const passwordCheck = () =>
   password.value.match(/[0-9]+/) &&
   password.value.match(/[$@#&!?*-~.,/;:]+/);
 
-const handleSubmit = async () => {
+  const handleSubmit = async () => {
   if (!passwordCheck()) {
     error.value = true;
-    errorText.value =
-      "Password must include at least one capital letter, number and special symbol ($@#&!?*-~.,/;:).";
-    window.scrollTo(0, 0);
+    errorText.value = 'Password must be at least 8 characters long and include a lowercase letter, an uppercase letter, a number, and a special symbol.';
     return;
   }
 
   if (password.value !== repeatPassword.value) {
     passwordsMatch.value = false;
     error.value = true;
-    errorText.value = "Passwords must match to create an account.";
-    window.scrollTo(0, 0);
+    errorText.value = 'Passwords must match.';
     return;
   }
 
-  console.log("Submited");
-  await navigateTo("/");
+  error.value = false; // Clear existing errors before making a new attempt
+
+  try {
+    const response = await axios.post('/api/v1/user/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 200) {
+      console.log('Registration successful:', response.data);
+      await navigateTo("/user/login")
+    } else {
+      error.value = true;
+      errorText.value = 'Registration failed: ' + response.data.message || 'An error occurred.';
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+    error.value = true;
+    errorText.value = 'An error occurred during registration.';
+  }
 };
 </script>
 
@@ -75,8 +97,9 @@ const handleSubmit = async () => {
           placeholder="At least six character"
           type="password"
           required
-          minlength="6"
+          minlength="8"
           v-model="password"
+          autocomplete="new-password"
         />
         <label class="text-sm"
           >Password must include at least one capital letter, number and special
@@ -91,6 +114,7 @@ const handleSubmit = async () => {
           type="password"
           required
           v-model="repeatPassword"
+          autocomplete="new-password"
         />
       </div>
       <button

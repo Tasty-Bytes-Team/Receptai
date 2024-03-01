@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.model;
 
 import jakarta.persistence.*;
+import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -91,5 +92,9 @@ public class User implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public PublicUserDto toPublicUserDto() {
+        return new PublicUserDto(name);
     }
 }

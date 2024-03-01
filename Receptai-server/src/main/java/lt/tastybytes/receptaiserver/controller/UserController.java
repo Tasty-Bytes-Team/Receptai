@@ -29,7 +29,6 @@ public class UserController {
         var user = userService.findUserByEmail(dto.email());
         if (user != null)
             throw new UserAlreadyExistsException();
-            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vartotojas tokiu el. pastu jau egzistuoja");
 
         userService.createUser(dto.name(), dto.email(), dto.password());
 

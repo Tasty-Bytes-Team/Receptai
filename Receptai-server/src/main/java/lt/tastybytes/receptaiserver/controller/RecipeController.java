@@ -1,7 +1,9 @@
 package lt.tastybytes.receptaiserver.controller;
 
+import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.Recipe;
 import lt.tastybytes.receptaiserver.model.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
@@ -23,7 +25,7 @@ public class RecipeController {
 
 
     @PostMapping(path="/create")
-    public ResponseEntity<?> createNewRecipe(@RequestBody CreateRecipeDto dto, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> createNewRecipe(@Valid @RequestBody CreateRecipeDto dto, @AuthenticationPrincipal User user) {
        //if ()
 
         recipeService.createRecipe(dto.name(), dto.shortDescription(), user);
@@ -41,14 +43,15 @@ public class RecipeController {
 
 
     @GetMapping("/list")
-    public Iterable<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public Iterable<RecipeDto> getAllRecipes() {
+        var recipes = recipeService.getAllRecipes();
+        return recipes.stream().map(Recipe::toDto).toList();
     }
 
     @GetMapping("/getfake")
     public ResponseEntity<RecipeDto> getFakeRecipe(@RequestParam long id) {
         return ResponseEntity.ok(new RecipeDto(
-                -1,
+                id,
                 "Recepto pavadinimas",
                 "Recepto trumpas aprasymas ir panasiai",
                 new PublicUserDto("Vardenis Pavardenis"),
@@ -82,7 +85,7 @@ public class RecipeController {
         var list = new ArrayList<RecipeDto>();
 
         var dto = new RecipeDto(
-                -1,
+                -1L,
                 "Recepto pavadinimas",
                 "Recepto trumpas aprasymas ir panasiai",
                 new PublicUserDto("Vardenis Pavardenis"),
@@ -122,13 +125,13 @@ public class RecipeController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<Recipe> getRecipe(@RequestParam long id) {
+    @GetMapping("/get/{id}")
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable(value = "id") long id) throws NotFoundException {
         var recipe =  recipeService.getRecipeById(id);
         if (recipe.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Recipe by specified ID not found");
         }
-        return ResponseEntity.ok(recipe.get());
+        return ResponseEntity.ok(recipe.get().toDto());
     }
 
 }

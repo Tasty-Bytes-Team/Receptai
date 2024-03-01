@@ -1,6 +1,10 @@
 package lt.tastybytes.receptaiserver.dto.recipe;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -20,7 +24,7 @@ public record CreateRecipeDto(
 
         @Nullable String tutorialVideo,
 
-        @NotEmpty
+        @NotEmpty @Valid
         List<IngredientListDto> ingredients,
 
         @NotEmpty
@@ -29,13 +33,14 @@ public record CreateRecipeDto(
         @NotEmpty
         List<Integer> tagIds,
 
-        @NotEmpty
+        @NotNull
+        @Positive
         int categoryId,
 
-        @NotEmpty
+        @Positive
         int minutesToPrepare,
 
-        @NotEmpty
+        @Positive
         int portions
 ) {
 }

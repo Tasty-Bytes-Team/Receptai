@@ -1,8 +1,11 @@
 package lt.tastybytes.receptaiserver.model;
 
 import jakarta.persistence.*;
+import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,6 +20,9 @@ public class Recipe {
     private String description;
 
     private String previewImage;
+
+    private String tutorialVideo;
+
     @OneToOne
     private User author;
 
@@ -34,12 +40,11 @@ public class Recipe {
     private List<RecipeInstruction> recipeInstructions = new ArrayList<>();
 
 
+    private Date dateCreated;
+    private Date dateModified;
+
     private int minutesToPrepare;
     private int portionCount;
-
-
-    // TODO: date created
-    // TODO: date updated
 
     public void setId(Long id) {
         this.id = id;
@@ -72,4 +77,25 @@ public class Recipe {
     public void setAuthor(User author) {
         this.author = author;
     }
+
+
+    public RecipeDto toDto() {
+        return new RecipeDto(
+                id,
+                name,
+                description,
+                author.toPublicUserDto(),
+                dateCreated,
+                dateModified,
+                previewImage,
+                tutorialVideo,
+                null,
+                null,
+                null,
+                null,
+                minutesToPrepare,
+                portionCount
+        );
+    }
+
 }

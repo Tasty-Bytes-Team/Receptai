@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public record RecipeDto(
-        int id,
+        Long id,
         @NonNull String name,
         @NonNull String shortDescription,
 
@@ -22,11 +22,11 @@ public record RecipeDto(
 
         @Nullable String tutorialVideo,
 
-        List<IngredientListDto> ingredients,
+        @NonNull List<IngredientListDto> ingredients,
 
-        List<InstructionDto> instructions,
+        @NonNull List<InstructionDto> instructions,
 
-        List<TagDto> tags,
+        @NonNull List<TagDto> tags,
 
         @NonNull CategoryDto category,
 

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  database-testing:
+    image: mariadb:latest
+    environment:
+      MYSQL_USER: spring
+      MYSQL_PASSWORD: securePassword123
+      MYSQL_DATABASE: production_db
+      MYSQL_ROOT_PASSWORD: securePassword123Root
+    #volumes:
+    #  - "./data/database:/var/lib/mysql:delegated"
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: database-testing
+      PMA_USER: root
+      PMA_PASSWORD: securePassword123Root
+    ports:
+      - "8081:80"
+    depends_on:
+      - database-testing

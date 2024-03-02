@@ -74,7 +74,7 @@ public class RecipeController {
                         new InstructionDto("Paskui atsisedam ir galvojam")
                 ),
                 Arrays.asList(new TagDto(1, "Nevalgomas maistas")),
-                new CategoryDto(1, "Pavyzdine kategorija"),
+                Arrays.asList(new CategoryDto(1, "Pavyzdine kategorija", true)),
                 40,
                 4
         ));
@@ -108,7 +108,7 @@ public class RecipeController {
                         new InstructionDto("Paskui atsisedam ir galvojam")
                 ),
                 Arrays.asList(new TagDto(1, "Nevalgomas maistas")),
-                new CategoryDto(1, "Pavyzdine kategorija"),
+                Arrays.asList(new CategoryDto(1, "Pavyzdine kategorija", true)),
                 40,
                 4
         );

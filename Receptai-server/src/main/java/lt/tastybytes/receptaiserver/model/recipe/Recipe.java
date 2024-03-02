@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.model.recipe;
 
 import jakarta.persistence.*;
+import lt.tastybytes.receptaiserver.dto.recipe.IngredientListDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.model.User;
 
@@ -31,19 +32,13 @@ public class Recipe {
     @JoinColumn(name = "user_id")
     private User author;
 
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IngredientType> ingredients = new ArrayList<>();
 
-    // receptas turi daug stepu
-    // stepas gali priklausyti tik vienam receptui
-
-
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    //@JoinTable(
-    //        name="users_roles",
-    //        joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
-    //        inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Instruction> instructions = new ArrayList<>();
-    //private List<Ingredient> ingredients = new ArrayList<>();
 
+    /*
     @ManyToMany
     @JoinTable(
             name = "recipe_tag",
@@ -52,8 +47,9 @@ public class Recipe {
     )
     private List<Tag> tags;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<RecipeCategory> categories;
+    //@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    //private List<RecipeCategory> categories;
+    */
 
     @Column(nullable = false)
     private Date dateCreated;
@@ -68,19 +64,19 @@ public class Recipe {
     public RecipeDto toDto() {
         return new RecipeDto(
                 id,
-                name,
-                description,
+                getName(),
+                getDescription(),
                 author.toPublicUserDto(),
-                dateCreated,
-                dateModified,
-                previewImage,
-                tutorialVideo,
-                null,
-                null,
-                null,
-                null,
-                minutesToPrepare,
-                portionCount
+                getDateCreated(),
+                getDateModified(),
+                getPreviewImage(),
+                getTutorialVideo(),
+                getIngredients().stream().map(IngredientType::toDto).toList(),
+                getInstructions().stream().map(Instruction::toDto).toList(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                getMinutesToPrepare(),
+                getPortionCount()
         );
     }
 
@@ -128,10 +124,6 @@ public class Recipe {
         return instructions;
     }
 
-    public void setInstructions(List<Instruction> instructions) {
-        this.instructions = instructions;
-    }
-
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -162,5 +154,25 @@ public class Recipe {
 
     public void setPortionCount(int portionCount) {
         this.portionCount = portionCount;
+    }
+
+    public void addInstruction(Instruction instruction) {
+        if (instructions == null) {
+            instructions = new ArrayList<>();
+        }
+        instructions.add(instruction);
+        instruction.setRecipe(this);
+    }
+
+    public List<IngredientType> getIngredients() {
+        return ingredients;
+    }
+
+    public void addIngredientType(IngredientType ingredientType) {
+        if (ingredients == null) {
+            ingredients = new ArrayList<>();
+        }
+        ingredients.add(ingredientType);
+        ingredientType.setRecipe(this);
     }
 }

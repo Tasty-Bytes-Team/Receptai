@@ -2,8 +2,12 @@ package lt.tastybytes.receptaiserver.service.impl;
 
 import lt.tastybytes.receptaiserver.dto.recipe.CreateRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.model.recipe.Ingredient;
+import lt.tastybytes.receptaiserver.model.recipe.IngredientType;
+import lt.tastybytes.receptaiserver.model.recipe.Instruction;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.User;
+import lt.tastybytes.receptaiserver.repository.InstructionRepository;
 import lt.tastybytes.receptaiserver.repository.RecipeRepository;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,27 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setMinutesToPrepare(dto.minutesToPrepare());
         recipe.setPortionCount(dto.portions());
         recipe.setPreviewImage(dto.previewImage());
+        // Add instructions
+        var instructions = dto.instructions();
+        for (int i = 0; i < instructions.size(); i++) {
+            var instruction = new Instruction();
+            instruction.setStepNo(i+1);
+            instruction.setStepDescription(instructions.get(i));
+            recipe.addInstruction(instruction);
+        }
+        // Add ingredients
+        for (var ingredientList: dto.ingredients()) {
+            var ingredientType = new IngredientType();
+            ingredientType.setPurpose(ingredientList.purpose());
+            for (var ingredient: ingredientList.ingredients()) {
+                var ingredientObject = new Ingredient();
+                ingredientObject.setName(ingredient.name());
+                ingredientObject.setQuantity(ingredient.quantity());
+                ingredientObject.setUnit(ingredient.unit());
+                ingredientType.addIngredient(ingredientObject);
+            }
+            recipe.addIngredientType(ingredientType);
+        }
         recipeRepository.save(recipe);
         return recipe.toDto();
     }

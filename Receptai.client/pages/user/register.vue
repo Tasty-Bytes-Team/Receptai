@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  middleware: 'to-dashboard'
+});
 import axios from "axios";
 
 const email = ref("");
@@ -31,7 +34,7 @@ const passwordCheck = () =>
     return;
   }
 
-  error.value = false; // Clear existing errors before making a new attempt
+  error.value = false;
 
   try {
     const response = await axios.post('/api/v1/user/register', {

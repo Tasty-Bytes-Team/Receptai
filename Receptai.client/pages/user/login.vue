@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  middleware: 'to-dashboard'
+});
 import axios from "axios";
 
 const email = ref("");
@@ -8,30 +11,31 @@ let error = ref(false);
 let errorText = ref("");
 
 const handleSubmit = async () => {
-  error.value = false; // Clear existing errors before making a new attempt
+  error.value = false;
 
   try {
     const response = await axios.post("/api/v1/user/login", {
-      email: email.value, // Coerce to string
-      password: password.value, // Coerce to string
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      email: email.value,
+      password: password.value,
     });
 
-    if (response.status === 200) {
-      console.log('Login successful:', response.data);
-      localStorage.setItem("TastyBytes_user", JSON.stringify(response.data));
-      console.log(JSON.parse(localStorage.getItem("TastyBytes_user")))
-      console.log(localStorage.getItem("TastyBytes"))
-      await navigateTo("/user/dashboard")
-    } else {
-      error.value = true;
-      errorText.value = "Login failed: " + response.data.message || "An error occurred.";
-    }
+    const TastyBytes_user = useCookie("TastyBytes_user", {
+      maxAge: response.data.expiresIn,
+      SameSite: "none",
+    });
+
+    axios
+      .get(`/api/v1/user/me`, {
+        headers: { Authorization: `Bearer ${response.data.token}` },
+      })
+      .then((r) => {
+        const all_object = { token: response.data.token, ...r.data };
+        TastyBytes_user.value = all_object;
+      });
+
+    await navigateTo("/user/dashboard");
   } catch (error) {
-    console.error('Error during login:', error);
+    console.error("Error during login:", error);
     error.value = true;
     errorText.value = "An error occurred during login.";
   }

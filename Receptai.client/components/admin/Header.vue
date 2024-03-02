@@ -1,4 +1,6 @@
 <script setup>
+import UserBannerVue from '@/components/Header/UserBanner.vue';
+
 const headerNav = [
   {
     to: "#",
@@ -41,9 +43,7 @@ const headerNav = [
           >
         </div>
       </div>
-      <NuxtLink to="/user/login">
-        <div id="app-header__right" class="text-right">Login</div>
-      </NuxtLink>
+      <UserBannerVue />
     </div>
   </header>
 </template>

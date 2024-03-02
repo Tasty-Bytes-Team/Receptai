@@ -1,4 +1,5 @@
 <script setup>
+
 import RecipeContainerList from '@/components/RecipeContainerList/RecipeContainerList.vue';
 
 </script>

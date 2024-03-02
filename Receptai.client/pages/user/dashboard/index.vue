@@ -1,12 +1,9 @@
 <script setup>
 definePageMeta({
   layout: "admin",
-  middleware: [
-    function (to, from){
-      return navigateTo('/')
-    }
-  ]
+  middleware: 'auth'
 });
+
 
 </script>
 

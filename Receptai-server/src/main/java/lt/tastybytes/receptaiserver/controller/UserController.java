@@ -7,7 +7,7 @@ import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginResponseDto;
 import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
-import lt.tastybytes.receptaiserver.model.User;
+import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

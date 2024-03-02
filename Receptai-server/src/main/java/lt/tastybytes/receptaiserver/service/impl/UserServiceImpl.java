@@ -1,7 +1,7 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
-import lt.tastybytes.receptaiserver.model.Role;
-import lt.tastybytes.receptaiserver.model.User;
+import lt.tastybytes.receptaiserver.model.user.Role;
+import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.repository.RoleRepository;
 import lt.tastybytes.receptaiserver.repository.UserRepository;
 import lt.tastybytes.receptaiserver.service.UserService;

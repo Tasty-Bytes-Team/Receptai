@@ -1,9 +1,8 @@
 package lt.tastybytes.receptaiserver.model.recipe;
 
 import jakarta.persistence.*;
-import lt.tastybytes.receptaiserver.dto.recipe.IngredientListDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
-import lt.tastybytes.receptaiserver.model.User;
+import lt.tastybytes.receptaiserver.model.user.User;
 
 import java.util.ArrayList;
 import java.util.Date;

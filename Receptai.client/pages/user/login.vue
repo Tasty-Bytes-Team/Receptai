@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  middleware: 'to-dashboard'
+  middleware: "to-dashboard",
 });
 import axios from "axios";
 
@@ -12,30 +12,33 @@ let errorText = ref("");
 
 const handleSubmit = async () => {
   error.value = false;
+  errorText.value = "";
 
   try {
-    const response = await axios.post("/api/v1/user/login", {
+    const { data } = await axios.post("/api/v1/user/login", {
       email: email.value,
       password: password.value,
     });
 
     const TastyBytes_user = useCookie("TastyBytes_user", {
-      maxAge: response.data.expiresIn,
+      maxAge: data.expiresIn,
       SameSite: "none",
     });
 
-    axios
-      .get(`/api/v1/user/me`, {
-        headers: { Authorization: `Bearer ${response.data.token}` },
-      })
-      .then((r) => {
-        const all_object = { token: response.data.token, ...r.data };
-        TastyBytes_user.value = all_object;
+    try {
+      const response = await axios.get(`/api/v1/user/me`, {
+        headers: { Authorization: `Bearer ${data.token}` },
       });
 
-    await navigateTo("/user/dashboard");
-  } catch (error) {
-    console.error("Error during login:", error);
+      TastyBytes_user.value = { token: data.token, ...response.data };
+      navigateTo("/user/dashboard");
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      error.value = true;
+      errorText.value = "Failed to fetch user data.";
+    }
+  } catch (err) {
+    console.error("Error during login:", err);
     error.value = true;
     errorText.value = "An error occurred during login.";
   }

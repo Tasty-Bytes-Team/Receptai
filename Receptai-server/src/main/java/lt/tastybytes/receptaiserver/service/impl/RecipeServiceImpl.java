@@ -34,6 +34,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setMinutesToPrepare(dto.minutesToPrepare());
         recipe.setPortionCount(dto.portions());
         recipe.setPreviewImage(dto.previewImage());
+        recipe.setTutorialVideo(dto.tutorialVideo());
         // Add instructions
         var instructions = dto.instructions();
         for (int i = 0; i < instructions.size(); i++) {

@@ -9,14 +9,18 @@ const props = defineProps({
   categoryLink: String,
   prepTime: Number,
 });
-
 </script>
 
 <template>
   <div id="recipe-container" class="lg:basis-1/4 sm:basis-1/3 basis-1/2">
     <div class="m-3">
       <NuxtLink :to="link">
-        <img id="recipe-container__image" :src="imageLink" class="m-auto rounded-md" />
+        <NuxtImg
+          id="recipe-container__image"
+          :src="imageLink"
+          class="m-auto rounded-md lg:h-56 h-48 object-cover"
+          @error="imageLink = '/assets/TastyBytes_Fallback.webp'"
+        />
       </NuxtLink>
       <div id="recipe-container__text" class="px-3 py-2">
         <div id="recipe-container__info" class="text-sm font-normal">
@@ -25,7 +29,7 @@ const props = defineProps({
           }}</NuxtLink>
           <span id="recipe-container__prep_time" class="ml-3"
             ><Icon name="majesticons:clock-line" color="black" />
-{{ prepTime }} min.</span
+            {{ prepTime }} min.</span
           >
         </div>
         <NuxtLink :to="link">

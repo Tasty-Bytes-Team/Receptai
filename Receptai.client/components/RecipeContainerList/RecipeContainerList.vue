@@ -1,72 +1,21 @@
 <script setup>
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 
-const items = [
-  {
-    imageLink: "/images/Lasagne-square-FS-79.webp",
-    name: "Vegetarian lasagne",
-    raiting: 3,
-    about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
-    link: "/recipes/1",
-    category: "Vegetarian",
-    categoryLink: "/recipes/veg",
-    prepTime: 30,
-  },
-  {
-    imageLink: "/images/Lasagne-square-FS-79.webp",
-    name: "Vegetarian lasagne",
-    raiting: 3,
-    about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
-    link: "/recipes/1",
-    category: "Vegetarian",
-    categoryLink: "/recipes/veg",
-    prepTime: 30,
-  },
-  {
-    imageLink: "/images/Lasagne-square-FS-79.webp",
-    name: "Vegetarian lasagne",
-    raiting: 3,
-    about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
-    link: "/recipes/1",
-    category: "Vegetarian",
-    categoryLink: "/recipes/veg",
-    prepTime: 30,
-  },
-  {
-    imageLink: "/images/Lasagne-square-FS-79.webp",
-    name: "Vegetarian lasagne",
-    raiting: 3,
-    about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
-    link: "/recipes/1",
-    category: "Vegetarian",
-    categoryLink: "/recipes/veg",
-    prepTime: 30,
-  },
-  {
-    imageLink: "/images/Lasagne-square-FS-79.webp",
-    name: "Vegetarian lasagne",
-    raiting: 3,
-    about: "Make our easy vegetable lasagne using just a few ingredients. You can use ready-made tomato sauce and white sauce, or batch cook the sauces and freeze them.",
-    link: "/recipes/1",
-    category: "Vegetarian",
-    categoryLink: "/recipes/veg",
-    prepTime: 30,
-  }
-];
+const { data: recipeList } = await useMyFetch("/api/v1/recipe/list");
 </script>
 
 <template>
   <div class="flex flex-wrap">
     <RecipeContainer
-      v-for="item in items"
-      :imageLink="item.imageLink"
+      v-for="item in recipeList"
+      :imageLink="item.previewImage"
       :name="item.name"
       :raiting="item.raiting"
-      :about="item.about"
-      :link="item.link"
-      :category="item.category"
-      :categoryLink="item.categoryLink"
-      :prepTime="item.prepTime"
+      :about="item.shortDescription"
+      :link="`/recipes/${item.id}`"
+      :category="item.categories.length > 0 ? item.categories[0].name : 'Empty'"
+      :categoryLink="item.categories.length > 0 ? item.categories[0].link : '#'"
+      :prepTime="item.minutesToPrepare"
     />
   </div>
 </template>

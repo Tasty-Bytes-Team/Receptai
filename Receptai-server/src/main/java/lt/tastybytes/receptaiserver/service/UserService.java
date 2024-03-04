@@ -1,6 +1,6 @@
 package lt.tastybytes.receptaiserver.service;
 
-import lt.tastybytes.receptaiserver.model.User;
+import lt.tastybytes.receptaiserver.model.user.User;
 
 import java.util.List;
 

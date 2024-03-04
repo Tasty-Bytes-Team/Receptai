@@ -28,7 +28,7 @@ public record RecipeDto(
 
         @NonNull List<TagDto> tags,
 
-        @NonNull CategoryDto category,
+        @NonNull List<CategoryDto> categories,
 
         int minutesToPrepare,
         int portions

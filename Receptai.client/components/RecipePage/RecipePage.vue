@@ -11,6 +11,7 @@ const props = defineProps({
   id: String,
 });
 
+
 const { data: recipe } = await useMyFetch(`/api/v1/recipe/get/${props.id}`);
 
 let video = youtube_parser(recipe.value.tutorialVideo);
@@ -55,13 +56,13 @@ let video = youtube_parser(recipe.value.tutorialVideo);
             <div class="flex flex-wrap">
               <InfoBadge
                 icon="majesticons:clock-line"
-                text="Preparation:"
-                :info="`${recipe.minutesToPrepare} min.`"
+                text="Ruošimas:"
+                info="30 min."
               />
               <InfoBadge
                 icon="tabler:tools-kitchen-2"
-                text="Portions:"
-                :info="recipe.portions.toString()"
+                text="Porcijos:"
+                info="4"
               />
               <Badge
                 icon="fluent-emoji-high-contrast:broccoli"

@@ -1,7 +1,6 @@
-package lt.tastybytes.receptaiserver.model;
+package lt.tastybytes.receptaiserver.model.user;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 

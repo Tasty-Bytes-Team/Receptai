@@ -13,7 +13,7 @@ public class Ingredient {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private int quantity;
+    private double quantity;
     @Column(nullable = false)
     private String unit;
 
@@ -33,7 +33,7 @@ public class Ingredient {
         this.name = name;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 

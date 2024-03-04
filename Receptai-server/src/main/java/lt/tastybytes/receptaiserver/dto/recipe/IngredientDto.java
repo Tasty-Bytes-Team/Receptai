@@ -7,7 +7,7 @@ import org.springframework.lang.NonNull;
 public record IngredientDto(
         @NotEmpty @NonNull String name,
         @Positive
-        int quantity,
+        double quantity,
         @NotEmpty @NonNull String unit
 ) {
 }

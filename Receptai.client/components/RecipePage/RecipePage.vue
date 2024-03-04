@@ -1,5 +1,6 @@
 <script setup>
 import youtube_parser from "@/javascript/youtubeId";
+import axios from "axios";
 
 import NutritionTable from "@/components/RecipePage/components/NutritionTable.vue";
 import Badge from "@/components/RecipePage/components/Badge.vue";
@@ -11,14 +12,17 @@ const props = defineProps({
   id: String,
 });
 
+const recipe = ref(null)
+const video = ref(null)
 
-const { data: recipe } = await useMyFetch(`/api/v1/recipe/get/${props.id}`);
-
-let video = youtube_parser(recipe.value.tutorialVideo);
+axios.get(`/api/v1/recipe/get/${props.id}`).then(res => {
+  recipe.value = res.data
+  video.value = recipe.value.tutorialVideo ? youtube_parser(recipe.value.tutorialVideo) : null
+});
 </script>
 
 <template>
-  <div>
+  <div v-if="recipe">
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
         Home > {{ recipe.categories[0].name }} > {{ recipe.name }}
@@ -56,13 +60,13 @@ let video = youtube_parser(recipe.value.tutorialVideo);
             <div class="flex flex-wrap">
               <InfoBadge
                 icon="majesticons:clock-line"
-                text="Ruošimas:"
-                info="30 min."
+                text="Preparation:"
+                :info="`${recipe.minutesToPrepare} min.`"
               />
               <InfoBadge
                 icon="tabler:tools-kitchen-2"
-                text="Porcijos:"
-                info="4"
+                text="Portions:"
+                :info="recipe.portions.toString()"
               />
               <Badge
                 icon="fluent-emoji-high-contrast:broccoli"
@@ -99,6 +103,9 @@ let video = youtube_parser(recipe.value.tutorialVideo);
         allowfullscreen
       ></iframe>
     </div>
+  </div>
+  <div v-else>
+    Loading...
   </div>
 </template>
 

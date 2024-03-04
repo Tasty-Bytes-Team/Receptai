@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL || 'http://localhost/'
+      baseURL: process.env.NODE_ENV === 'development' ? process.env.BASE_URL : 'http://localhost/'
     }
   },
   devtools: { enabled: true },

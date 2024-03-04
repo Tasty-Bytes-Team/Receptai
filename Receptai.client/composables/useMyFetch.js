@@ -1,5 +1,5 @@
 export const useMyFetch = (request, opts) => {
     const config = useRuntimeConfig()
   
-    return useFetch(request, { baseURL: config.public.baseURL, ...opts })
+    return useLazyFetch(request, { baseURL: config.public.baseURL, server: false, lazy:false, ...opts })
   }

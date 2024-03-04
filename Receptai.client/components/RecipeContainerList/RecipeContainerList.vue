@@ -1,11 +1,16 @@
 <script setup>
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
+import axios from 'axios'
 
-const { data: recipeList } = await useMyFetch("/api/v1/recipe/list");
+const recipeList = ref(null);
+
+axios.get('/api/v1/recipe/list').then(res => {
+  recipeList.value = res.data
+});
 </script>
 
 <template>
-  <div class="flex flex-wrap">
+  <div v-if="recipeList" class="flex flex-wrap">
     <RecipeContainer
       v-for="item in recipeList"
       :imageLink="item.previewImage"
@@ -18,6 +23,7 @@ const { data: recipeList } = await useMyFetch("/api/v1/recipe/list");
       :prepTime="item.minutesToPrepare"
     />
   </div>
+  <div v-else>Loading...</div>
 </template>
 
 <style lang="scss" scoped></style>

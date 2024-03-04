@@ -9,6 +9,7 @@ const props = defineProps({
   id: String,
 });
 
+
 const cookingInstructions = [
   {
     text: "To make the tomato sauce, heat the olive oil in a saucepan. Add the onions, garlic and carrot. Cook for 5-7 mins over a medium heat until softened. Turn up the heat a little and stir in the tomato purée. Cook for 1 min, pour in the white wine, then cook for 5 mins until this has reduced by two-thirds. Pour over the chopped tomatoes and add the basil leaves. Bring to the boil then simmer for 20 mins. Leave to cool then whizz in a food processor. Will keep, cooled, in the fridge for up to three days or frozen for three months.",
@@ -55,7 +56,7 @@ console.log(props.id);
           <div class="lg:basis-1/3 md:basis-1/2 basis-full">
             <div class="p-4">
               <img
-                src="@/assets/images/Lasagne-square-FS-79.webp"
+                src="/images/Lasagne-square-FS-79.webp"
                 class="rounded-md border-2 border-[#c4c4c4] shadow-md max-h-96 m-auto"
               />
             </div>
@@ -81,12 +82,12 @@ console.log(props.id);
             <div class="flex flex-wrap">
               <InfoBadge
                 icon="majesticons:clock-line"
-                text="Ruošimas:"
+                text="Preparation:"
                 info="30 min."
               />
               <InfoBadge
                 icon="tabler:tools-kitchen-2"
-                text="Porcijos:"
+                text="Portions:"
                 info="4"
               />
               <Badge
@@ -94,7 +95,7 @@ console.log(props.id);
                 text="Vegetarian"
               />
               <Badge icon="ph:snowflake" text="Freezable" />
-              <Badge icon="twemoji:flag-italy" text="Itališko maisto kelionės" />
+              <Badge icon="twemoji:flag-italy" text="Italic food travels" />
             </div>
           </div>
         </div>

@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto dto) {
         User authenticatedUser = userService.authenticate(dto.email(), dto.password());
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        return ResponseEntity.ok(new LoginResponseDto(jwtToken, jwtService.getExpirationTime()));
+        return ResponseEntity.ok(new LoginResponseDto(jwtToken, jwtService.getExpirationTime(), authenticatedUser.toShortUserDto()));
     }
 
     @GetMapping("/list")

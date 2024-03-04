@@ -2,6 +2,7 @@ package lt.tastybytes.receptaiserver.model.user;
 
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.dto.ShortUserDto;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -100,5 +101,8 @@ public class User implements UserDetails {
 
     public PublicUserDto toPublicUserDto() {
         return new PublicUserDto(name);
+    }
+    public ShortUserDto toShortUserDto() {
+        return new ShortUserDto(name, email);
     }
 }

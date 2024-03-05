@@ -1,7 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.NODE_ENV === 'development' ? process.env.BASE_URL : 'http://localhost/'
+    }
+  },
   devtools: { enabled: true },
-  modules: ["nuxt-icon"],
+  modules: ["nuxt-icon", "@nuxt/image"],
   css: ["~/assets/css/main.css"],
   pages: true,
   postcss: {

@@ -1,23 +1,32 @@
-<script setup>
-    const props = defineProps({
-        ingredients: Object
-    })
+<script setup lang="ts">
+interface Ingredients {
+  purpose: string;
+  ingredients: Ingredient[];
+}
 
+interface Ingredient {
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
+defineProps<{
+  ingredients: Ingredients[];
+}>();
 </script>
 
 <template>
-    <div class="mx-2">
-        <h2 class="font-semibold text-2xl">Ingredients</h2>
-        <div v-for="oneIngCat in ingredients">
-            <h3 class="font-semibold text-lg">{{ oneIngCat.purpose }}</h3>
-        <ul class="list-disc pl-10">
-            <li v-for="ingredient in oneIngCat.ingredients">{{ ingredient.name }}, {{ ingredient.quantity }} {{ ingredient.unit }}</li>
-        </ul>
-        </div>
-        
+  <div class="mx-2">
+    <h2 class="font-semibold text-2xl">Ingredients</h2>
+    <div v-for="oneIngCat in ingredients">
+      <h3 class="font-semibold text-lg">{{ oneIngCat.purpose }}</h3>
+      <ul class="list-disc pl-10">
+        <li v-for="ingredient in oneIngCat.ingredients">
+          {{ ingredient.name }}, {{ ingredient.quantity }} {{ ingredient.unit }}
+        </li>
+      </ul>
     </div>
+  </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

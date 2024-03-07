@@ -1,31 +1,41 @@
-<script setup>
-import axios from "axios";
+<script setup lang="ts">
+interface User {
+  name: string;
+  email: string;
+}
 
-const TastyBytes_user = useCookie("TastyBytes_user");
+interface UserCookie {
+  token: string;
+  expiresIn: number;
+  user: User;
+}
 
-const user_name = ref(null);
-const user_email = ref(null);
+const user_name = ref("");
+const user_email = ref("");
 
-if (TastyBytes_user.value) {
-  user_name.value = TastyBytes_user.value.name;
-  user_email.value = TastyBytes_user.value.email;
+const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+if (TastyBytes_user.value?.user) {
+  user_name.value = TastyBytes_user.value.user.name;
+  user_email.value = TastyBytes_user.value.user.email;
+} else {
+  TastyBytes_user.value = null;
 }
 
 const logout = () => {
-  const TastyBytes_user = useCookie("TastyBytes_user");
   TastyBytes_user.value = null;
-  window.location.reload(true);
+  window.location.reload();
 };
 </script>
 
 <template>
   <div v-if="user_name" class="flex gap-6">
-    <NuxtLink to="/user/dashboard" class="font-bold">{{user_name}}</NuxtLink>
+    <NuxtLink to="/user/dashboard" class="font-bold">{{ user_name }}</NuxtLink>
     <div @click="logout" class="cursor-pointer">Logout</div>
   </div>
   <div v-else>
     <NuxtLink to="/user/login">
-      <div id="app-header__right" class="text-right">Login</div>
+      <div class="text-right">Login</div>
     </NuxtLink>
   </div>
 </template>

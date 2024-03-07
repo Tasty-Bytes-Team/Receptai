@@ -1,28 +1,80 @@
-<script setup>
-import youtube_parser from "@/javascript/youtubeId";
+<script setup lang="ts">
 import axios from "axios";
 
+import youtube_parser from "@/typescript/youtubeId";
 import NutritionTable from "@/components/RecipePage/components/NutritionTable.vue";
 import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
 
-const props = defineProps({
-  id: String,
-});
+const props = defineProps<{
+  id: string | string[];
+}>();
 
-const recipe = ref(null)
-const video = ref(null)
+const config = useRuntimeConfig();
 
-axios.get(`/api/v1/recipe/get/${props.id}`).then(res => {
-  recipe.value = res.data
-  video.value = recipe.value.tutorialVideo ? youtube_parser(recipe.value.tutorialVideo) : null
-});
+interface Recipe {
+  id: number;
+  name: string;
+  shortDescription: string;
+  author: Author;
+  dateCreated: string;
+  dateModified: string | null;
+  previewImage: string;
+  tutorialVideo?: string;
+  ingredients: Ingredients[];
+  instructions: string[];
+  tags: string[];
+  categories: Category[];
+  minutesToPrepare: number;
+  portions: number;
+}
+
+interface Author {
+  name: string;
+}
+
+interface Ingredients {
+  purpose: string;
+  ingredients: Ingredient[];
+}
+
+interface Ingredient {
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
+interface Category {
+  name: string;
+  link: string;
+}
+
+const recipe = ref<Recipe>(Object.create(null));
+const video = ref<string | null>(null);
+
+const error = ref(false);
+const loading = ref(true);
+
+try {
+  axios
+    .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
+    .then((res) => {
+      recipe.value = res.data;
+      video.value = recipe.value?.tutorialVideo
+        ? youtube_parser(recipe.value.tutorialVideo)
+        : null;
+      loading.value = false;
+    });
+} catch (e) {
+  console.error("Error fetching recipe", e);
+}
 </script>
 
 <template>
-  <div v-if="recipe">
+  <div v-if="loading" class="max-w-screen-lg m-auto my-5 px-2">Loading...</div>
+  <div v-else>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
         Home > {{ recipe.categories[0].name }} > {{ recipe.name }}
@@ -35,9 +87,13 @@ axios.get(`/api/v1/recipe/get/${props.id}`).then(res => {
           <div class="lg:basis-1/3 md:basis-1/2 basis-full">
             <div class="p-4">
               <NuxtImg
-                :src="recipe.previewImage"
+                :src="
+                  !error
+                    ? recipe.previewImage
+                    : '/assets/TastyBytes_Fallback.webp'
+                "
                 class="rounded-md border-2 border-[#c4c4c4] shadow-md max-h-96 m-auto object-cover"
-                @error="recipe.previewImage = '/assets/TastyBytes_Fallback.webp'"
+                @error="() => (error = true)"
               />
             </div>
           </div>
@@ -103,9 +159,6 @@ axios.get(`/api/v1/recipe/get/${props.id}`).then(res => {
         allowfullscreen
       ></iframe>
     </div>
-  </div>
-  <div v-else>
-    Loading...
   </div>
 </template>
 

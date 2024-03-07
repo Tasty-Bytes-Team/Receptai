@@ -1,46 +1,52 @@
-<script setup>
+<script setup lang="ts">
+import axios from "axios";
+
+const config = useRuntimeConfig();
+
 definePageMeta({
   middleware: "to-dashboard",
 });
-import axios from "axios";
 
-const email = ref("");
-const password = ref("");
+interface User {
+  name: string;
+  email: string;
+}
 
-let error = ref(false);
-let errorText = ref("");
+interface UserCookie {
+  token: string;
+  expiresIn: number;
+  user: User;
+}
+
+const email: Ref<string> = ref("");
+const password: Ref<string> = ref("");
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
 
 const handleSubmit = async () => {
   error.value = false;
   errorText.value = "";
 
   try {
-    const { data } = await axios.post("/api/v1/user/login", {
+    const response = await axios.post(`${config.public.baseURL}/api/v1/user/login`, {
       email: email.value,
       password: password.value,
     });
 
-    const TastyBytes_user = useCookie("TastyBytes_user", {
+    const data: UserCookie = response.data;
+
+    const TastyBytes_user = useCookie<UserCookie>("TastyBytes_user", {
       maxAge: data.expiresIn,
-      SameSite: "none",
     });
 
-    try {
-      const response = await axios.get(`/api/v1/user/me`, {
-        headers: { Authorization: `Bearer ${data.token}` },
-      });
+    TastyBytes_user.value = data;
 
-      TastyBytes_user.value = { token: data.token, ...response.data };
-      navigateTo("/user/dashboard");
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-      error.value = true;
-      errorText.value = "Failed to fetch user data.";
-    }
-  } catch (err) {
-    console.error("Error during login:", err);
-    error.value = true;
+    navigateTo("/user/dashboard");
+  } catch (e) {
+    console.error("Error during login", e);
     errorText.value = "An error occurred during login.";
+    error.value = true;
   }
 };
 </script>

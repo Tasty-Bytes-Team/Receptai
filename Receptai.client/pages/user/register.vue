@@ -1,63 +1,53 @@
-<script setup>
-definePageMeta({
-  middleware: 'to-dashboard'
-});
+<script setup lang="ts">
 import axios from "axios";
+import passwordCheck from "@/typescript/passwordCheck";
 
-const email = ref("");
-const name = ref("");
-const password = ref("");
-const repeatPassword = ref("");
+const config = useRuntimeConfig();
 
-const passwordsMatch = ref(true);
+definePageMeta({
+  middleware: "to-dashboard",
+});
 
-let error = ref(false);
-let errorText = ref("");
+const email: Ref<string> = ref("");
+const name: Ref<string> = ref("");
+const password: Ref<string> = ref("");
+const repeatPassword: Ref<string> = ref("");
 
-const passwordCheck = () =>
-  password.value.match(/[a-z]+/) &&
-  password.value.match(/[A-Z]+/) &&
-  password.value.match(/[0-9]+/) &&
-  password.value.match(/[$@#&!?*-~.,/;:]+/);
+const passwordsMatch: Ref<boolean> = ref(true);
 
-  const handleSubmit = async () => {
-  if (!passwordCheck()) {
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
+
+const handleSubmit = async () => {
+  if (!passwordCheck(password.value)) {
+    errorText.value =
+      "Password must be at least 8 characters long and include a lowercase letter, an uppercase letter, a number, and a special symbol.";
     error.value = true;
-    errorText.value = 'Password must be at least 8 characters long and include a lowercase letter, an uppercase letter, a number, and a special symbol.';
     return;
   }
 
   if (password.value !== repeatPassword.value) {
     passwordsMatch.value = false;
+    errorText.value = "Passwords must match.";
     error.value = true;
-    errorText.value = 'Passwords must match.';
     return;
   }
 
+  passwordsMatch.value = true;
   error.value = false;
 
   try {
-    const response = await axios.post('/api/v1/user/register', {
+    await axios.post(`${config.public.baseURL}/api/v1/user/register`, {
       name: name.value,
       email: email.value,
       password: password.value,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
-    if (response.status === 200) {
-      console.log('Registration successful:', response.data);
-      await navigateTo("/user/login")
-    } else {
-      error.value = true;
-      errorText.value = 'Registration failed: ' + response.data.message || 'An error occurred.';
-    }
-  } catch (error) {
-    console.error('Error during registration:', error);
+    navigateTo("/user/login");
+  } catch (e) {
+    console.error("Error during registration:", e);
+    errorText.value = "An error occurred during registration.";
     error.value = true;
-    errorText.value = 'An error occurred during registration.';
   }
 };
 </script>

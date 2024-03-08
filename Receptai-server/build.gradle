@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.liquibase.gradle' version '2.2.0'
 }
 
 group = 'lt.tastybytes'
@@ -23,6 +24,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	implementation 'org.liquibase:liquibase-core'
 	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

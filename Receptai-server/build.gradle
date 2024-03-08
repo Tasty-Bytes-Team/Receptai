@@ -26,8 +26,25 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation 'org.liquibase:liquibase-core'
 	testImplementation 'org.springframework.security:spring-security-test'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	liquibaseRuntime 'org.liquibase:liquibase-core'
+	liquibaseRuntime 'info.picocli:picocli:4.6.3'
+	liquibaseRuntime 'org.mariadb.jdbc:mariadb-java-client'
+}
+
+
+liquibase {
+	activities {
+		main {
+			changelogFile "src/main/resources/db/changelog/db.changelog-master.xml"
+			url "jdbc:mariadb://localhost:3306/production_db"
+			username "spring"
+			password "securePassword123"
+			//referenceUrl "hibernate:spring:com.example.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect"
+		}
+	}
 }
 
 /*

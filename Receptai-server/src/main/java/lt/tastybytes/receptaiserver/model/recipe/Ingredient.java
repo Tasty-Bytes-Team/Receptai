@@ -7,7 +7,7 @@ import lt.tastybytes.receptaiserver.dto.recipe.IngredientDto;
 @Table(name = "recipe_ingredients")
 public class Ingredient {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

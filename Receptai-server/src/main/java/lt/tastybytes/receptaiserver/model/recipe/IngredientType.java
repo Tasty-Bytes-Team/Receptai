@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "recipe_ingredient_types")
 public class IngredientType {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

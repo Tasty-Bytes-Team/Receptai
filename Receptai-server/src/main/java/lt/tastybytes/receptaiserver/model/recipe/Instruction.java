@@ -8,7 +8,7 @@ import lt.tastybytes.receptaiserver.dto.recipe.InstructionDto;
 public class Instruction {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

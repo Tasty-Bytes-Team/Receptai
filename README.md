@@ -15,6 +15,34 @@ After containers start up, the website will be available on http://localhost/ ov
 
 ...
 
+### Frontend
+
+...
+
+### API
+
+The API backend is written in Java Spring Boot. You need to have at least Java 17 installed to run the backend. The API uses Gradle build system so to boot up a version
+of the backend, you can run the following command:
+
+```sh
+./gradlew bootRun
+```
+
+The server will become available at `localhost:8080`.
+
+Note that you will need to have an active MySQL database configured in `application.properties` file.
+For your convenience, a database docker compose file is provided at the server root in `testing-db.yaml`. You can run it with the following command:
+
+```sh
+docker compose -f testing-db.yaml up
+```
+
+This will spin up a MySQL database at port 3306 and a PHPMyAdmin instance at port 8081.
+
+The backend uses Liquidbase for database schema versioning. Changelogs are stored in backend resources and are automatically loaded for migration on application boot.
+
+For now, the changelogs are created through an Intellij plugin called JPA Buddy by creating a difference between a running database and the current entity models in the code.
+
 ## API docs
 
 In the future, documentation will be accessible over Swagger. For the time being, this is contains a short documentation of all endpoints.

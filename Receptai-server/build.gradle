@@ -25,11 +25,14 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation 'org.liquibase:liquibase-core'
-	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	liquibaseRuntime 'org.liquibase:liquibase-core'
+	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
+	liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate6:4.26.0'
+	liquibaseRuntime 'org.hibernate:hibernate-core:6.4.4.Final'
 	liquibaseRuntime 'info.picocli:picocli:4.6.3'
 	liquibaseRuntime 'org.mariadb.jdbc:mariadb-java-client'
 }
@@ -42,7 +45,7 @@ liquibase {
 			url "jdbc:mariadb://localhost:3306/production_db"
 			username "spring"
 			password "securePassword123"
-			//referenceUrl "hibernate:spring:com.example.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect"
+			referenceUrl "hibernate:spring:lt.tastybytes.receptaiserver?dialect=org.hibernate.dialect.MySQLDialect"
 		}
 	}
 }

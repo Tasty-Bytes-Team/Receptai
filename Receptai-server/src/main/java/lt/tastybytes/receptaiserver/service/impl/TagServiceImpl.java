@@ -29,6 +29,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Optional<Tag> getTagById(long id) {
+        return Optional.ofNullable(tagRepository.findTagById(id));
+    }
+
+    @Override
     public Tag createTag(CreateTagDto dto) {
         var tag = new Tag(dto.name(), dto.iconName());
         tagRepository.save(tag);

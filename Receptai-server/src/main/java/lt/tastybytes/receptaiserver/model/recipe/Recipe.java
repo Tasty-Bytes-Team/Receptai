@@ -2,9 +2,12 @@ package lt.tastybytes.receptaiserver.model.recipe;
 
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.model.category.Category;
+import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.model.user.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,18 +40,33 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Instruction> instructions = new ArrayList<>();
 
-    /*
+    public void setCategory(Category category) {
+        this.categories = new ArrayList<>();
+        this.categories.add(category);
+    }
+
+    public void addTag(Tag tag) {
+        if (tags == null) {
+            tags = new ArrayList<>();
+        }
+        tags.add(tag);
+    }
+
     @ManyToMany
     @JoinTable(
-            name = "recipe_tag",
+            name = "recipe_categories",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
+
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_tags",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags;
-
-    //@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    //private List<RecipeCategory> categories;
-    */
 
     @Column(nullable = false)
     private Date dateCreated;
@@ -72,8 +90,8 @@ public class Recipe {
                 getTutorialVideo(),
                 getIngredients().stream().map(IngredientType::toDto).toList(),
                 getInstructions().stream().map(Instruction::toDto).toList(),
-                new ArrayList<>(),
-                new ArrayList<>(),
+                getTags().stream().map(Tag::toDto).toList(),
+                getCategories().stream().map(Category::toDto).toList(),
                 getMinutesToPrepare(),
                 getPortionCount()
         );
@@ -165,6 +183,14 @@ public class Recipe {
 
     public List<IngredientType> getIngredients() {
         return ingredients;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 
     public void addIngredientType(IngredientType ingredientType) {

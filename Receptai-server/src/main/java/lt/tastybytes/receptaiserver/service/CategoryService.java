@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface CategoryService {
     List<Category> getAllCategories();
     Optional<Category> getCategoryByName(String name);
+    Optional<Category> getCategoryById(long id);
     Category createCategory(CreateCategoryDto dto);
 }

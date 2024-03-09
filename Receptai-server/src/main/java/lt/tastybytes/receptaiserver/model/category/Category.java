@@ -2,6 +2,9 @@ package lt.tastybytes.receptaiserver.model.category;
 
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
+import lt.tastybytes.receptaiserver.model.recipe.Recipe;
+
+import java.util.List;
 
 @Entity
 @Table(name = "categories")

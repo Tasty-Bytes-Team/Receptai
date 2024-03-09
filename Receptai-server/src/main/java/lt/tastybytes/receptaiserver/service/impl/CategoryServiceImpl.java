@@ -30,6 +30,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Optional<Category> getCategoryById(long id) {
+        return Optional.ofNullable(categoryRepository.findCategoryById(id));
+    }
+
+    @Override
     public Category createCategory(CreateCategoryDto dto) {
         var category = new Category(dto.name().strip());
         categoryRepository.save(category);

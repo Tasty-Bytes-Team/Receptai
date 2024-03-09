@@ -5,4 +5,6 @@
     <includeAll path="db/changelog/changes"/>
     <include file="db/changelog/2024/03/08-01-changelog.xml"/>
     <include file="db/changelog/2024/03/08-02-changelog.xml"/>
+    <include file="db/changelog/2024/03/09-01-changelog.xml"/>
+    <include file="db/changelog/2024/03/09-02-changelog.xml"/>
 </databaseChangeLog>

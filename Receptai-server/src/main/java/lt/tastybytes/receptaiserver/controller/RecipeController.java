@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.controller;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
+import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
@@ -19,8 +20,10 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @PostMapping(path="/create")
-    public ResponseEntity<?> createNewRecipe(@Valid @RequestBody CreateRecipeDto dto, @AuthenticationPrincipal User user) {
-       // TODO: any extra validation on DTO, if needed
+    public ResponseEntity<?> createNewRecipe(
+            @Valid @RequestBody CreateRecipeDto dto,
+            @AuthenticationPrincipal User user
+    ) throws Exception {
         var newRecipe = recipeService.createRecipe(dto, user);
         return ResponseEntity.ok(newRecipe);
     }

@@ -29,12 +29,12 @@ public record CreateRecipeDto(
         @Valid
         List<@Valid @NotEmpty @NotNull String> instructions,
 
-        //@NotEmpty
-        //List<Integer> tagIds,
+        @NotEmpty
+        List<Integer> tagIds,
 
-        //@NotNull
-        //@Positive
-        //int categoryId,
+        @NotNull
+        @Positive
+        int categoryId,
 
         @Positive
         int minutesToPrepare,

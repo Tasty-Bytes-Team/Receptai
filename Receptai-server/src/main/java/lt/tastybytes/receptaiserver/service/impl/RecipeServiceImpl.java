@@ -2,13 +2,16 @@ package lt.tastybytes.receptaiserver.service.impl;
 
 import lt.tastybytes.receptaiserver.dto.recipe.CreateRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Ingredient;
 import lt.tastybytes.receptaiserver.model.recipe.IngredientType;
 import lt.tastybytes.receptaiserver.model.recipe.Instruction;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.repository.RecipeRepository;
+import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
+import lt.tastybytes.receptaiserver.service.TagService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,12 +23,18 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    private final CategoryService categoryService;
+
+    private final TagService tagService;
+
+    public RecipeServiceImpl(RecipeRepository recipeRepository, CategoryService categoryService, TagService tagService) {
         this.recipeRepository = recipeRepository;
+        this.categoryService = categoryService;
+        this.tagService = tagService;
     }
 
     @Override
-    public RecipeDto createRecipe(CreateRecipeDto dto, User author) {
+    public RecipeDto createRecipe(CreateRecipeDto dto, User author) throws ValidationException {
         var recipe = new Recipe();
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());
@@ -34,6 +43,22 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setMinutesToPrepare(dto.minutesToPrepare());
         recipe.setPortionCount(dto.portions());
         recipe.setPreviewImage(dto.previewImage());
+
+        recipe.setCategory(categoryService.getCategoryById(dto.categoryId())
+                .orElseThrow(() -> new ValidationException("Invalid category ID, such category does not exist"))
+        );
+
+        for (var tagId : dto.tagIds()) {
+
+            if (tagId == null) {
+                throw new ValidationException("Invalid tags specified");
+            }
+
+            var tagObj = tagService.getTagById(tagId);
+            recipe.addTag(tagObj
+                    .orElseThrow(() -> new ValidationException("Tag with ID of '%s' does not exist".formatted(tagId)))
+            );
+        }
 
         if (dto.tutorialVideo() == null || dto.tutorialVideo().isBlank()) {
             recipe.setTutorialVideo(null);

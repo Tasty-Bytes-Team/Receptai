@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface TagService {
     List<Tag> getAllTags();
     Optional<Tag> getTagByName(String name);
+    Optional<Tag> getTagById(long id);
     Tag createTag(CreateTagDto dto);
 }

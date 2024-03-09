@@ -5,6 +5,7 @@ import lt.tastybytes.receptaiserver.dto.PublicUserDto;
 import lt.tastybytes.receptaiserver.dto.ShortUserDto;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles.stream().map((a) -> new SimpleGrantedAuthority(a.getName())).toList();
     }
 
     public String getPassword() {

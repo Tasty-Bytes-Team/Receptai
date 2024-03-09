@@ -8,16 +8,12 @@ interface Navigation {
 
 const headerNav: Array<Navigation> = [
   {
-    to: "#",
+    to: "/user/dashboard",
     title: "Dashboard",
   },
   {
-    to: "#",
+    to: "/user/dashboard/my-recipes",
     title: "My Recipes",
-  },
-  {
-    to: "#",
-    title: "Reviews",
   },
 ];
 </script>
@@ -34,10 +30,24 @@ const headerNav: Array<Navigation> = [
           </NuxtLink>
         </div>
         <div class="w-full justify-center gap-6 ml-6 sm:flex hidden">
-          <NuxtLink v-for="nav in headerNav" :to="nav.to" class="hover:underline">{{ nav.title }}</NuxtLink>
+          <NuxtLink
+            v-for="nav in headerNav"
+            :to="nav.to"
+            class="hover:underline"
+            >{{ nav.title }}</NuxtLink
+          >
         </div>
       </div>
-      <UserBannerVue />
+      <div class="flex gap-4 items-center">
+        <NuxtLink to="/user/dashboard/my-recipes/create">
+          <button
+            class="p-1 px-3 border-2 border-[#707070] rounded-sm font-medium bg-[#f3f3f3]"
+          >
+            Create
+          </button>
+        </NuxtLink>
+        <UserBannerVue />
+      </div>
     </div>
   </header>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
 
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
+
 const config = useRuntimeConfig();
 
 definePageMeta({
@@ -54,9 +56,7 @@ const handleSubmit = async () => {
 <template>
   <div class="text-center w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-3">Log in</h1>
-    <div v-if="error" class="border-2 border-red-600 my-3 p-2 text-red-600">
-      <p>{{ errorText }}</p>
-    </div>
+    <ErrorBaner v-if="error" :errorText="errorText" />
     <form
       @submit.prevent="handleSubmit"
       class="flex flex-col items-start gap-3"

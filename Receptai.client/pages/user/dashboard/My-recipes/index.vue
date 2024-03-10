@@ -77,7 +77,7 @@ try {
 <template>
   <h1 class="text-3xl font-bold text-center m-5">My Recipes</h1>
   <div class="flex flex-col gap-2">
-    <RecipeContainer v-for="recipe in recipes" :recipe="recipe" />
+    <RecipeContainer :recipes="recipes" />
   </div>
 </template>
 

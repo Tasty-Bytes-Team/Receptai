@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Image from "./Image.vue";
+
 interface Recipe {
   id: number;
   name: string;
@@ -36,41 +38,82 @@ interface Category {
   link: string;
 }
 
-defineProps<{
-  recipe: Recipe;
+const props = defineProps<{
+  recipes: Recipe[] | null;
 }>();
 
-const error = ref(false);
+const recipeSelection = props.recipes?.map((recipe) => ({
+  id: recipe.id,
+  image: recipe.previewImage,
+  name: recipe.name,
+  dateCreated: recipe.dateCreated.split("T")[0],
+}));
+
+const columns = [
+  {
+    key: "id",
+    label: "ID",
+    sortable: true,
+  },
+  {
+    key: "image",
+    label: "Image",
+  },
+  {
+    key: "name",
+    label: "Name",
+    sortable: true,
+  },
+  {
+    key: "dateCreated",
+    label: "Creaton date",
+    sortable: true,
+  },
+  {
+    key: "action",
+    label: "Action",
+    sortable: true,
+  },
+];
 </script>
 
 <template>
-  <NuxtLink :to="`/recipes/${recipe.id}`" target="_blank">
-    <div
-      class="flex flex-row gap-3 border-2 border-gray-400 bg-[#f5f5f5] rounded-md p-2 items-center shadow-[2px_2px_0_0_#919191] hover:shadow-[4px_4px_0_0_#444444] transition-shadow duration-200"
-    >
-      <NuxtImg
-        :src="!error ? recipe.previewImage : '/assets/TastyBytes_Fallback.webp'"
-        class="rounded-md aspect-[4/3] border-2 border-[#c4c4c4] shadow-md max-h-24 object-cover"
-        @error="() => (error = true)"
-      />
-      <div class="flex flex-col justify-center">
-        <div>
-          <h2 class="font-bold text-lg">{{ recipe.name }}</h2>
-        </div>
-        <div class="flex flex-row gap-2">
-          <h5 class="text-xs font-normal" v-for="category in recipe.categories">
-            {{ category.name }}
-          </h5>
-          <h5 class="text-xs font-normal">
-            {{ recipe.dateCreated.split("T")[0] }}
-          </h5>
-        </div>
-        <div>
-          <p class="text-sm">{{ recipe.shortDescription }}</p>
-        </div>
-      </div>
-    </div>
-  </NuxtLink>
+  <div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right">
+      <thead class="text-sm bg-concrete-100">
+        <tr>
+          <th
+            scope="col"
+            class="px-3 py-3 border-concrete-300 border-2"
+            v-for="item in columns"
+          >
+            {{ item.label }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="border-b-2 border-concrete-200"
+          v-for="recipe in recipeSelection"
+        >
+          <td class="text-center">{{ recipe.id }}</td>
+          <td class="text-center">
+            <Image class="m-auto" :preview-image="recipe.image" />
+          </td>
+          <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
+          <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
+          <td class="text-center">
+            <NuxtLink
+              :to="`/recipes/${recipe.id}`"
+              target="_blank"
+              title="Open in browser"
+              ><Icon name="material-symbols:globe" size="24px" color="black"
+            /></NuxtLink>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <style scoped></style>

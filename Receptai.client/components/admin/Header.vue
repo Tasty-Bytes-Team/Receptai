@@ -41,7 +41,7 @@ const headerNav: Array<Navigation> = [
       <div class="flex gap-4 items-center">
         <NuxtLink to="/user/dashboard/my-recipes/create">
           <button
-            class="p-1 px-3 border-2 border-[#707070] rounded-sm font-medium bg-[#f3f3f3]"
+            class="p-1 px-3 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
           >
             Create
           </button>

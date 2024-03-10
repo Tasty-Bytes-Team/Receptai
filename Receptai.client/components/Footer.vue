@@ -69,7 +69,7 @@ const NavigationTabs: Navigation[] = [
 
 <template>
   <footer>
-    <div class="bg-[#f3f3f3]">
+    <div class="bg-concrete-100">
       <div
         class="max-w-screen-lg m-auto px-3 py-6 flex justify-evenly flex-wrap"
       >
@@ -89,7 +89,7 @@ const NavigationTabs: Navigation[] = [
         </div>
       </div>
     </div>
-    <div class="p-3 bg-[#e2e2e2]">
+    <div class="p-3 bg-concrete-200">
       <div class="max-w-screen-lg m-auto">
         <span class="font-medium text-sm"
           >KTU, Programų sistemų inžinerija</span

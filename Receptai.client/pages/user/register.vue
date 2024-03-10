@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
+
 import passwordCheck from "@/typescript/passwordCheck";
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 const config = useRuntimeConfig();
 
@@ -55,9 +57,7 @@ const handleSubmit = async () => {
 <template>
   <div class="text-center w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-4">Register</h1>
-    <div v-if="error" class="border-2 border-red-600 my-3 p-2 text-red-600">
-      <p>{{ errorText }}</p>
-    </div>
+    <ErrorBaner v-if="error" :error-text="errorText" />
     <form
       @submit.prevent="handleSubmit"
       class="flex flex-col items-start gap-3"
@@ -65,8 +65,9 @@ const handleSubmit = async () => {
       <div class="w-full text-left">
         <label class="font-semibold text-sm">Name</label>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="text"
+          placeholder="Name"
           required
           v-model="name"
           autocomplete="name"
@@ -75,8 +76,9 @@ const handleSubmit = async () => {
       <div class="w-full text-left">
         <label class="font-semibold text-sm">Email</label>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="email"
+          placeholder="Email"
           required
           v-model="email"
           autocomplete="email"
@@ -85,9 +87,9 @@ const handleSubmit = async () => {
       <div class="w-full text-left">
         <label class="font-semibold text-sm">Password</label>
         <input
-          class="outline-none w-full p-2 px-5 placeholder:text-[#666666] bg-[#f9f9f9] rounded-sm border-2 transition-colors duration-150 focus:border-black"
-          :class="!passwordsMatch ? 'border-red-600' : 'border-[#cbcbcb]'"
-          placeholder="At least six character"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 transition-colors duration-150 focus:border-black"
+          :class="!passwordsMatch ? 'border-red-600' : 'border-concrete-400'"
+          placeholder="Password"
           type="password"
           required
           minlength="8"
@@ -96,15 +98,17 @@ const handleSubmit = async () => {
         />
         <label class="text-sm"
           >Password must include at least one capital letter, number and special
-          symbol ($@#&!?*-~.,/;:).</label
+          symbol ($@#&!?*-~.,/;:). Password must be at least 8 characters
+          long.</label
         >
       </div>
       <div class="w-full text-left">
         <label>Re-enter password</label>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 transition-colors duration-150 focus:border-black"
-          :class="!passwordsMatch ? 'border-red-600' : 'border-[#cbcbcb]'"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 transition-colors duration-150 focus:border-black"
+          :class="!passwordsMatch ? 'border-red-600' : 'border-concrete-400'"
           type="password"
+          placeholder="Password"
           required
           v-model="repeatPassword"
           autocomplete="new-password"
@@ -112,7 +116,7 @@ const handleSubmit = async () => {
       </div>
       <button
         type="submit"
-        class="bg-[#f8ceb7] p-2 w-full rounded-lg drop-shadow-md font-semibold transition-colors duration-200 hover:bg-[#f0bb9e]"
+        class="bg-whiskey-300 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-semibold transition-colors duration-200 hover:bg-whiskey-400"
       >
         Register
       </button>
@@ -122,7 +126,7 @@ const handleSubmit = async () => {
       <NuxtLink to="/user/login">
         <button
           type="submit"
-          class="bg-white p-2 w-full border-2 border-[#c5c5c5] rounded-lg drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-[#efefef]"
+          class="bg-concrete-800 text-white p-2 w-[50%] min-w-20 rounded-full drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-concrete-900"
         >
           Log in
         </button>

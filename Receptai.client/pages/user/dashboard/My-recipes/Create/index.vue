@@ -174,7 +174,7 @@ const handleSubmit = async () => {
       <select
         required
         v-model="object.categoryId"
-        class="outline-none w-full p-2 px-3 placeholder:text-[#9a9a9a] bg-[#f9f9f9] rounded-sm border-2 border-[#9a9a9a] transition-colors duration-150 focus:border-black"
+        class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
       >
         <option disabled value="">Please select one category</option>
         <option
@@ -192,7 +192,7 @@ const handleSubmit = async () => {
       <select
         required
         v-model="object.tagIds[0]"
-        class="outline-none w-full p-2 px-3 placeholder:text-[#9a9a9a] bg-[#f9f9f9] rounded-sm border-2 border-[#9a9a9a] transition-colors duration-150 focus:border-black"
+        class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
       >
         <option disabled value="">Please select one tag</option>
         <option v-for="tag in tagList" :key="tag.id" :value="tag.id">
@@ -318,7 +318,7 @@ const handleSubmit = async () => {
       </div>
     </div>
     <button
-      class="bg-black text-white p-2 w-full rounded-md drop-shadow-md font-medium transition-colors duration-200 hover:bg-[#292929]"
+      class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"
       type="submit"
     >
       Submit

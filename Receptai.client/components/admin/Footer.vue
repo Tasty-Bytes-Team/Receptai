@@ -4,7 +4,7 @@ const currYear: Date = new Date();
 
 <template>
   <footer>
-    <div class="p-3 bg-[#e2e2e2]">
+    <div class="p-3 bg-concrete-200">
       <div class="max-w-screen-lg m-auto">
         <span class="font-medium text-sm">KTU, Programų sistemų inžinerija</span>
         <br />

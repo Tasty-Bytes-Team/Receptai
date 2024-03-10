@@ -31,10 +31,13 @@ const handleSubmit = async () => {
   errorText.value = "";
 
   try {
-    const response = await axios.post(`${config.public.baseURL}/api/v1/user/login`, {
-      email: email.value,
-      password: password.value,
-    });
+    const response = await axios.post(
+      `${config.public.baseURL}/api/v1/user/login`,
+      {
+        email: email.value,
+        password: password.value,
+      }
+    );
 
     const data: UserCookie = response.data;
 
@@ -64,8 +67,9 @@ const handleSubmit = async () => {
       <div class="w-full text-left">
         <label class="font-semibold text-sm">Email</label>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="email"
+          placeholder="Email"
           required
           v-model="email"
           autocomplete="email"
@@ -74,8 +78,9 @@ const handleSubmit = async () => {
       <div class="w-full text-left">
         <label class="font-semibold text-sm">Password</label>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="password"
+          placeholder="Password"
           required
           v-model="password"
           autocomplete="current-password"
@@ -83,7 +88,7 @@ const handleSubmit = async () => {
       </div>
       <button
         type="submit"
-        class="bg-[#f8ceb7] p-2 w-full rounded-lg drop-shadow-md font-semibold transition-colors duration-200 hover:bg-[#f0bb9e]"
+        class="bg-whiskey-300 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-semibold transition-colors duration-200 hover:bg-whiskey-400"
       >
         Log in
       </button>
@@ -93,7 +98,7 @@ const handleSubmit = async () => {
       <NuxtLink to="/user/register">
         <button
           type="submit"
-          class="bg-white p-2 w-full border-2 border-[#c5c5c5] rounded-lg drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-[#efefef]"
+          class="bg-concrete-800 text-white p-2 w-[50%] min-w-20 rounded-full drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-concrete-900"
         >
           Register
         </button>

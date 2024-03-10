@@ -16,7 +16,7 @@ defineProps<{
       :value="model"
       @input="$emit('update:model', ($event.target as HTMLInputElement).value)"
       :placeholder="placeholder"
-      class="outline-none w-full p-2 px-3 placeholder:text-[#9a9a9a] bg-[#f9f9f9] rounded-sm border-2 border-[#9a9a9a] transition-colors duration-150 focus:border-black"
+      class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
     />
     <input
       v-else
@@ -26,7 +26,7 @@ defineProps<{
       :placeholder="placeholder"
       type="number"
       min="0"
-      class="outline-none w-full p-2 px-3 placeholder:text-[#9a9a9a] bg-[#f9f9f9] rounded-sm border-2 border-[#9a9a9a] transition-colors duration-150 focus:border-black"
+      class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
     />
   </div>
 </template>

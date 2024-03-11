@@ -1,4 +1,4 @@
-package lt.tastybytes.receptaiserver.dto.recipe;
+package lt.tastybytes.receptaiserver.dto.category;
 
 import org.springframework.lang.NonNull;
 

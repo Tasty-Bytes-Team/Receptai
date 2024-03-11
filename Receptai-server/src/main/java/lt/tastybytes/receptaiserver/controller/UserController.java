@@ -7,11 +7,14 @@ import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
 import lt.tastybytes.receptaiserver.dto.user.LoginResponseDto;
 import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
+import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
+import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RecipeService recipeService;
 
     @Autowired
     private JwtServiceImpl jwtService;
@@ -43,10 +49,13 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Iterable<User>> getAllUsers() {
-        // TODO: secure behind
         return ResponseEntity.ok(userService.findAllUsers());
+    }
+
+    @GetMapping("/recipes")
+    public ResponseEntity<?> getUserRecipes(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(recipeService.getAllUserRecipes(user).stream().map(Recipe::toDto).toList());
     }
 
     @GetMapping("/me")

@@ -3,6 +3,7 @@ defineProps<{
   model: string;
   label: string;
   placeholder: string;
+  notReq?: boolean;
 }>();
 </script>
 
@@ -10,7 +11,7 @@ defineProps<{
   <div class="w-full text-left">
     <label class="font-semibold text-sm">{{ label }}</label>
     <textarea
-      required
+      :required="!notReq"
       :value="model"
       @input="$emit('update:model', ($event.target as HTMLInputElement).value)"
       :placeholder="placeholder"

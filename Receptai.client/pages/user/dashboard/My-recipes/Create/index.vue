@@ -148,6 +148,7 @@ const handleSubmit = async () => {
       console.log("Create recipe", e);
       errorText.value = "Could not create a recipe. Please try again.";
       error.value = true;
+      window.scrollTo(0, 0);
     }
   }
 };
@@ -190,11 +191,11 @@ const handleSubmit = async () => {
     <div class="w-full text-left">
       <label class="font-semibold text-sm">Tag</label>
       <select
+        multiple
         required
-        v-model="object.tagIds[0]"
+        v-model="object.tagIds"
         class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
       >
-        <option disabled value="">Please select one tag</option>
         <option v-for="tag in tagList" :key="tag.id" :value="tag.id">
           {{ tag.name }}
         </option>
@@ -222,6 +223,7 @@ const handleSubmit = async () => {
       placeholder="Where could we find a picture of your recipe?"
     />
     <InputWithLabel
+      :notReq="true"
       :model="object.tutorialVideo"
       @update:model="object.tutorialVideo = $event"
       label="Making tutorial video link (from youtube.com)"
@@ -286,10 +288,18 @@ const handleSubmit = async () => {
               </li>
             </ul>
           </div>
-          <AddButton color="yellow" @add="addIngriedient(groupIndex)" />
+          <AddButton
+            color="yellow"
+            text="Add new ingredient"
+            @add="addIngriedient(groupIndex)"
+          />
         </div>
       </div>
-      <AddButton color="green" @add="addNewIngriedientsGroup" />
+      <AddButton
+        color="green"
+        text="Add new group"
+        @add="addNewIngriedientsGroup"
+      />
     </div>
     <div class="px-3 flex flex-col gap-2">
       <h3 class="text-center text-lg font-semibold">Cooking Instructions</h3>
@@ -314,7 +324,7 @@ const handleSubmit = async () => {
             :placeholder="`What are we doing in STEP ${index + 1}?`"
           />
         </div>
-        <AddButton color="green" @add="addInstruction" />
+        <AddButton color="green" text="Add new step" @add="addInstruction" />
       </div>
     </div>
     <button

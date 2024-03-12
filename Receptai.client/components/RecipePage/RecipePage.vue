@@ -25,7 +25,7 @@ interface Recipe {
   tutorialVideo?: string;
   ingredients: Ingredients[];
   instructions: string[];
-  tags: string[];
+  tags: Tag[];
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
@@ -49,6 +49,12 @@ interface Ingredient {
 interface Category {
   name: string;
   link: string;
+}
+
+interface Tag {
+  id: number;
+  iconName: string;
+  name: string;
 }
 
 const recipe = ref<Recipe>(Object.create(null));
@@ -84,7 +90,7 @@ try {
     <div class="bg-[#f7f7f7] border-y-2">
       <div class="max-w-screen-lg m-auto my-5 px-2">
         <div class="flex flex-wrap items-center">
-          <div class="lg:basis-1/3 md:basis-1/2 basis-full">
+          <div class="lg:basis-2/5 md:basis-1/2 basis-full">
             <div class="p-4">
               <NuxtImg
                 :src="
@@ -92,12 +98,12 @@ try {
                     ? recipe.previewImage
                     : '/assets/TastyBytes_Fallback.webp'
                 "
-                class="rounded-md border-2 border-[#c4c4c4] shadow-md max-h-96 m-auto object-cover"
+                class="rounded-md border-2 border-[#c4c4c4] shadow-md max-h-96 m-auto object-cover aspect-[4/3]"
                 @error="() => (error = true)"
               />
             </div>
           </div>
-          <div class="lg:basis-2/3 md:basis-1/2 basis-full">
+          <div class="lg:basis-3/5 md:basis-1/2 basis-full">
             <div class="p-4">
               <div class="mb-3">
                 <h1 class="font-bold text-4xl">{{ recipe.name }}</h1>
@@ -125,11 +131,10 @@ try {
                 :info="recipe.portions.toString()"
               />
               <Badge
-                icon="fluent-emoji-high-contrast:broccoli"
-                text="Vegetarian"
+                v-for="tag in recipe.tags"
+                :icon="tag.iconName"
+                :text="tag.name"
               />
-              <Badge icon="ph:snowflake" text="Freezable" />
-              <Badge icon="twemoji:flag-italy" text="Italic food travels" />
             </div>
           </div>
         </div>
@@ -137,10 +142,10 @@ try {
     </div>
     <div class="max-w-screen-lg m-auto my-3 px-2">
       <div class="flex flex-wrap">
-        <div class="my-3 md:basis-1/3 basis-full">
+        <div class="my-3 md:basis-2/5 basis-full">
           <Ingredients :ingredients="recipe.ingredients" />
         </div>
-        <div class="my-3 md:basis-2/3 basis-full">
+        <div class="my-3 md:basis-3/5 basis-full">
           <CookingInstructions :cookingInstructions="recipe.instructions" />
         </div>
       </div>

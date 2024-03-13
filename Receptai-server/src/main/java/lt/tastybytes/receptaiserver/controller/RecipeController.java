@@ -43,4 +43,17 @@ public class RecipeController {
         return ResponseEntity.ok(recipe.get().toDto());
     }
 
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<RecipeDto> editRecipe(@PathVariable(value = "id") long id) throws NotFoundException {
+        var recipe =  recipeService.getRecipeById(id);
+        if (recipe.isEmpty()) {
+            throw new NotFoundException("Recipe by specified ID not found");
+        }
+
+        // TODO: editing logic
+
+
+        return ResponseEntity.ok(recipe.get().toDto());
+    }
+
 }

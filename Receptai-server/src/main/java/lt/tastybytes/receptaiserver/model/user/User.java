@@ -106,4 +106,8 @@ public class User implements UserDetails {
     public ShortUserDto toShortUserDto() {
         return new ShortUserDto(name, email);
     }
+
+    public Long getId() {
+        return id;
+    }
 }

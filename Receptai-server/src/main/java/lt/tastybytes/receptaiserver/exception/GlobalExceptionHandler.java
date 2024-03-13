@@ -36,6 +36,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(MissingRightsException.class)
+    public ResponseEntity<?> handleMissingRightsException(MissingRightsException ex) {
+        return new ResponseEntity<>(
+                new ErrorResponseDto(ex.getMessage()),
+                HttpStatus.FORBIDDEN
+        );
+    }
+
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<?> handleValidationException(ValidationException ex) {
         return new ResponseEntity<>(

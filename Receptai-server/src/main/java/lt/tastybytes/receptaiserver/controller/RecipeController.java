@@ -2,6 +2,7 @@ package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
+import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
@@ -44,10 +45,17 @@ public class RecipeController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<RecipeDto> editRecipe(@PathVariable(value = "id") long id) throws NotFoundException {
+    public ResponseEntity<RecipeDto> editRecipe(
+            @PathVariable(value = "id") long id,
+            @AuthenticationPrincipal User user
+    ) throws Exception {
         var recipe =  recipeService.getRecipeById(id);
         if (recipe.isEmpty()) {
             throw new NotFoundException("Recipe by specified ID not found");
+        }
+
+        if (!recipe.get().getAuthor().getId().equals(user.getId())) {
+            throw new MissingRightsException("You cannot edit a recipe that is not yours!");
         }
 
         // TODO: editing logic

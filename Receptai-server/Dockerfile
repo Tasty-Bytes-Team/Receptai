@@ -4,9 +4,9 @@ COPY gradle gradle
 COPY gradlew gradlew
 COPY build.gradle build.gradle
 COPY settings.gradle settings.gradle
-RUN gradlew dependencies --refresh-dependencies
+RUN gradle dependencies --refresh-dependencies
 COPY src src
-RUN gradlew build
+RUN gradle build
 
 FROM gradle:8.6-jdk17
 WORKDIR /app

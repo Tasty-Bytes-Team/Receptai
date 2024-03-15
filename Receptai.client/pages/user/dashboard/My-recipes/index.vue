@@ -77,7 +77,17 @@ try {
 <template>
   <h1 class="text-3xl font-bold text-center m-5">My Recipes</h1>
   <div class="flex flex-col gap-2">
-    <RecipeContainer :recipes="recipes" />
+    <RecipeContainer v-if="recipes?.length !== 0" :recipes="recipes" />
+    <div v-else class="flex flex-col items-center gap-2">
+      <p class="font-base text-lg text-center">Your recipe box is currently empty. Why not add a new recipe today?</p>
+      <NuxtLink to="/user/dashboard/my-recipes/create">
+        <button
+          class="text-lg py-2 px-10 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
+        >
+          Create a new recipe
+        </button>
+      </NuxtLink>
+    </div>
   </div>
 </template>
 

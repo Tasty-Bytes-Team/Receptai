@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { store } from "@/store/store";
+
 interface User {
   name: string;
   email: string;
@@ -24,7 +26,10 @@ if (TastyBytes_user.value?.user) {
 
 const logout = () => {
   TastyBytes_user.value = null;
-  window.location.reload();
+  navigateTo("/user/login");
+  store.text = "You've been successfully logged out. See you next time!";
+  store.show = true;
+  store.label = "Success";
 };
 </script>
 

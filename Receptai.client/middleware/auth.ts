@@ -27,11 +27,11 @@ export default defineNuxtRouteMiddleware(async () => {
           return;
         })
         .catch(async () => {
-          TastyBytes_user.value = null;
           return navigateTo("/user/login");
         });
     } catch (e) {
       console.log("Auth", e);
+      TastyBytes_user.value = null;
       return navigateTo("/user/login");
     }
   } else {

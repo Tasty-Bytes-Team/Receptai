@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import axios from "axios";
+import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
 
-import passwordCheck from "@/typescript/passwordCheck";
+import { store } from "@/store/store";
+
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 const config = useRuntimeConfig();
@@ -10,32 +14,51 @@ definePageMeta({
   middleware: "to-dashboard",
 });
 
-const email: Ref<string> = ref("");
-const name: Ref<string> = ref("");
-const password: Ref<string> = ref("");
-const repeatPassword: Ref<string> = ref("");
-
-const passwordsMatch: Ref<boolean> = ref(true);
-
 const error: Ref<boolean> = ref(false);
 const errorText: Ref<string> = ref("");
 
-const handleSubmit = async () => {
-  if (!passwordCheck(password.value)) {
-    errorText.value =
-      "Password must be at least 8 characters long and include a lowercase letter, an uppercase letter, a number, and a special symbol.";
-    error.value = true;
-    return;
-  }
+const validationSchema = toTypedSchema(
+  zod
+    .object({
+      name: zod.string().min(1, "This is required"),
+      email: zod
+        .string()
+        .min(1, "This is required")
+        .email({ message: "Must be a valid email" }),
+      password: zod
+        .string()
+        .min(1, "This is required")
+        .min(8, "Password must be at least 8 characters long")
+        .regex(new RegExp(".*[A-Z].*"), {
+          message: "Password must include one capital letter",
+        })
+        .regex(new RegExp(".*[a-z].*"), {
+          message: "Password must include one lowercase letter",
+        })
+        .regex(new RegExp(".*[0-9].*"), {
+          message: "Password must include one number",
+        })
+        .regex(new RegExp(".*[`~<>?,./!@#$%^&*()\\-_+=\"'|{}\\[\\];:\\\\].*"), {
+          message: "Password must include one special letter",
+        }),
+      repeatPassword: zod.string().min(1, "This is required"),
+    })
+    .refine((data) => data.password === data.repeatPassword, {
+      message: "Passwords do not match",
+      path: ["repeatPassword"],
+    })
+);
 
-  if (password.value !== repeatPassword.value) {
-    passwordsMatch.value = false;
-    errorText.value = "Passwords must match.";
-    error.value = true;
-    return;
-  }
+const { handleSubmit, errors } = useForm({
+  validationSchema,
+});
 
-  passwordsMatch.value = true;
+const { value: name } = useField("name");
+const { value: email } = useField("email");
+const { value: password } = useField("password");
+const { value: repeatPassword } = useField("repeatPassword");
+
+const onSubmit = handleSubmit(async () => {
   error.value = false;
 
   try {
@@ -46,70 +69,79 @@ const handleSubmit = async () => {
     });
 
     navigateTo("/user/login");
+
+    store.text =
+      "Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.";
+    store.show = true;
+    store.label = "Success";
   } catch (e) {
     console.error("Error during registration:", e);
     errorText.value = "An error occurred during registration.";
     error.value = true;
+
+    window?.scrollTo(0, 0);
+
+    store.text =
+      "Oops! Something went wrong with your registration. Please try again.";
+    store.show = true;
+    store.label = "Error";
   }
-};
+});
 </script>
 
 <template>
   <div class="text-center w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-4">Register</h1>
     <ErrorBaner v-if="error" :error-text="errorText" />
-    <form
-      @submit.prevent="handleSubmit"
-      class="flex flex-col items-start gap-3"
-    >
+    <form @submit="onSubmit" class="flex flex-col items-start gap-3">
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Name</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Name</label>
+          <span class="text-red-600 text-sm">{{ errors.name }}</span>
+        </div>
         <input
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="text"
           placeholder="Name"
-          required
           v-model="name"
           autocomplete="name"
         />
       </div>
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Email</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Email</label>
+          <span class="text-red-600 text-sm">{{ errors.email }}</span>
+        </div>
         <input
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="email"
           placeholder="Email"
-          required
           v-model="email"
           autocomplete="email"
         />
       </div>
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Password</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Password</label>
+          <span class="text-red-600 text-sm">{{ errors.password }}</span>
+        </div>
         <input
-          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 transition-colors duration-150 focus:border-black"
-          :class="!passwordsMatch ? 'border-red-600' : 'border-concrete-400'"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           placeholder="Password"
           type="password"
-          required
-          minlength="8"
           v-model="password"
           autocomplete="new-password"
         />
-        <label class="text-sm"
-          >Password must include at least one capital letter, number and special
-          symbol ($@#&!?*-~.,/;:). Password must be at least 8 characters
-          long.</label
-        >
       </div>
       <div class="w-full text-left">
-        <label>Re-enter password</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Re-enter password</label>
+          <span class="text-red-600 text-sm">{{ errors.repeatPassword }}</span>
+        </div>
         <input
-          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 transition-colors duration-150 focus:border-black"
-          :class="!passwordsMatch ? 'border-red-600' : 'border-concrete-400'"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
           type="password"
           placeholder="Password"
-          required
           v-model="repeatPassword"
           autocomplete="new-password"
         />

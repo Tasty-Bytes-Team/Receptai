@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import axios from "axios";
+import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
 
+import { store } from "@/store/store";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 const config = useRuntimeConfig();
@@ -20,13 +24,27 @@ interface UserCookie {
   user: User;
 }
 
-const email: Ref<string> = ref("");
-const password: Ref<string> = ref("");
-
 const error: Ref<boolean> = ref(false);
 const errorText: Ref<string> = ref("");
 
-const handleSubmit = async () => {
+const validationSchema = toTypedSchema(
+  zod.object({
+    email: zod
+      .string()
+      .min(1, "This is required")
+      .email({ message: "Must be a valid email" }),
+    password: zod.string().min(1, "This is required"),
+  })
+);
+
+const { handleSubmit, errors } = useForm({
+  validationSchema,
+});
+
+const { value: email } = useField("email");
+const { value: password } = useField("password");
+
+const onSubmit = handleSubmit(async () => {
   error.value = false;
   errorText.value = "";
 
@@ -48,42 +66,63 @@ const handleSubmit = async () => {
     TastyBytes_user.value = data;
 
     navigateTo("/user/dashboard");
+
+    store.text = "Welcome back! You're now logged in.";
+    store.show = true;
+    store.label = "Success";
+    store.links = [
+      { text: "My recipes", link: "/user/dashboard/my-recipes", type: "Black" },
+      {
+        text: "Create recipe",
+        link: "/user/dashboard/my-recipes/create",
+        type: "Gray",
+      },
+    ];
   } catch (e) {
     console.error("Error during login", e);
     errorText.value = "An error occurred during login.";
     error.value = true;
+
+    window?.scrollTo(0, 0);
+
+    store.text = "Incorrect username or password. Please try again.";
+    store.show = true;
+    store.label = "Error";
   }
-};
+});
 </script>
 
 <template>
   <div class="text-center w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-3">Log in</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
-    <form
-      @submit.prevent="handleSubmit"
-      class="flex flex-col items-start gap-3"
-    >
+    <form @submit="onSubmit" class="flex flex-col items-start gap-3">
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Email</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Email</label>
+          <span class="text-red-600 text-sm">{{ errors.email }}</span>
+        </div>
         <input
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+          name="email"
           type="email"
           placeholder="Email"
-          required
-          v-model="email"
           autocomplete="email"
+          v-model="email"
         />
       </div>
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Password</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Password</label>
+          <span class="text-red-600 text-sm">{{ errors.password }}</span>
+        </div>
         <input
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+          name="password"
           type="password"
           placeholder="Password"
-          required
-          v-model="password"
           autocomplete="current-password"
+          v-model="password"
         />
       </div>
       <button

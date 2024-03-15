@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto> authenticate(@Valid @RequestBody LoginRequestDto dto) throws Exception {
         User authenticatedUser = userService.authenticate(dto.email(), dto.password());
         String jwtToken = jwtService.generateToken(authenticatedUser);
         return ResponseEntity.ok(new LoginResponseDto(jwtToken, jwtService.getExpirationTime(), authenticatedUser.toShortUserDto()));

@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -88,6 +89,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ExpiredJwtException.class)
     protected ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
         return new ResponseEntity<>(new ErrorResponseDto("Authentication token expired"), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        return new ResponseEntity<>(new ErrorResponseDto(ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(JwtException.class)

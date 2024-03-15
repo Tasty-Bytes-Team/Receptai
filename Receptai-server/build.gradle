@@ -28,6 +28,7 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.10.0'
 
 	liquibaseRuntime 'org.liquibase:liquibase-core'
 	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
@@ -50,8 +51,7 @@ liquibase {
 	}
 }
 
-/*
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
-*/

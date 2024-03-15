@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
-import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
@@ -22,7 +21,7 @@ public class RecipeController {
 
     @PostMapping(path="/create")
     public ResponseEntity<?> createNewRecipe(
-            @Valid @RequestBody CreateRecipeDto dto,
+            @Valid @RequestBody ModifyRecipeDto dto,
             @AuthenticationPrincipal User user
     ) throws Exception {
         var newRecipe = recipeService.createRecipe(dto, user);
@@ -46,6 +45,7 @@ public class RecipeController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<RecipeDto> editRecipe(
+            @Valid @RequestBody ModifyRecipeDto dto,
             @PathVariable(value = "id") long id,
             @AuthenticationPrincipal User user
     ) throws Exception {
@@ -58,10 +58,9 @@ public class RecipeController {
             throw new MissingRightsException("You cannot edit a recipe that is not yours!");
         }
 
-        // TODO: editing logic
+        var newDto = recipeService.editRecipe(recipe.get(), dto);
 
-
-        return ResponseEntity.ok(recipe.get().toDto());
+        return ResponseEntity.ok(newDto);
     }
 
 }

@@ -45,6 +45,10 @@ public class Recipe {
         this.categories.add(category);
     }
 
+    public void clearTags() {
+        if (tags != null) tags.clear();
+    }
+
     public void addTag(Tag tag) {
         if (tags == null) {
             tags = new ArrayList<>();
@@ -173,6 +177,10 @@ public class Recipe {
         this.portionCount = portionCount;
     }
 
+    public void clearInstructions() {
+        if (instructions != null) instructions.clear();
+    }
+
     public void addInstruction(Instruction instruction) {
         if (instructions == null) {
             instructions = new ArrayList<>();
@@ -191,6 +199,10 @@ public class Recipe {
 
     public List<Tag> getTags() {
         return tags;
+    }
+
+    public void clearIngredients() {
+        if (ingredients != null) ingredients.clear();
     }
 
     public void addIngredientType(IngredientType ingredientType) {

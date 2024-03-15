@@ -4,8 +4,8 @@ meta {
   seq: 9
 }
 
-post {
-  url: http://localhost:8080/api/v1/recipe/create
+put {
+  url: http://localhost:8080/api/v1/recipe/edit/1
   body: json
   auth: bearer
 }
@@ -16,11 +16,11 @@ auth:bearer {
 
 body:json {
   {
-    "name": "Bandomasis receptas",
-    "shortDescription": "Tai yra bandomasis receptas",
-    "previewImage": "https://cdn.discordapp.com/attachments/1207598743193387078/1213070010138755132/image.png?ex=65f4227c&is=65e1ad7c&hm=a476b34c138b8f3faa98d22e41b3d9e3ec2989949d176e7a1863bf99dc3bedab&",
-    "portions": 4,
-    "minutesToPrepare": 36,
+    "name": "Bandomasis receptas (koreguotas)",
+    "shortDescription": "Tai yra bandomasis pakoreguotas receptas",
+    "previewImage": "https://cdn.discordapp.com/attachments/1207598743193387078/1213070010138755132/image.png?ex=65f4227c&is=65e1ad7c&hm=a476b34c138b8f3faa98d22e41b3d9e3ec2989949d176e7a1863bf99dc3bedab",
+    "portions": 11,
+    "minutesToPrepare": 136,
     "ingredients": [
       {
         "purpose": "Main",

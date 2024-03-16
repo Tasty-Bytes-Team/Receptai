@@ -4,7 +4,7 @@ import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
-import { store } from "@/store/store";
+import { addNotification } from "@/store/store";
 
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
@@ -70,10 +70,7 @@ const onSubmit = handleSubmit(async () => {
 
     navigateTo("/user/login");
 
-    store.text =
-      "Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.";
-    store.show = true;
-    store.label = "Success";
+    addNotification("Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.", "Success");
   } catch (e) {
     console.error("Error during registration:", e);
     errorText.value = "An error occurred during registration.";
@@ -81,10 +78,7 @@ const onSubmit = handleSubmit(async () => {
 
     window?.scrollTo(0, 0);
 
-    store.text =
-      "Oops! Something went wrong with your registration. Please try again.";
-    store.show = true;
-    store.label = "Error";
+    addNotification("Oops! Something went wrong with your registration. Please try again.", "Error");
   }
 });
 </script>

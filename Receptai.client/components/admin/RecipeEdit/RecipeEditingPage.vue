@@ -9,12 +9,20 @@ import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import DeleteButton from "@/components/admin/RecipeCreate/DeleteButton.vue";
 import AddButton from "@/components/admin/RecipeCreate/AddButton.vue";
 
-const config = useRuntimeConfig();
-
-definePageMeta({
-  layout: "admin",
-  middleware: "auth",
-});
+interface GetRecipe {
+  id: number;
+  name: string;
+  author: { id: number; name: string };
+  shortDescription: string;
+  previewImage: string;
+  tutorialVideo: string;
+  ingredients: Ingredients[];
+  instructions: Instructions[];
+  minutesToPrepare: number | null;
+  portions: number | null;
+  categories: Category[];
+  tags: Tag[];
+}
 
 interface Recipe {
   name: string;
@@ -52,9 +60,8 @@ interface Tag {
   iconName: string;
 }
 
-interface User {
-  name: string;
-  email: string;
+interface Instructions {
+  text: string;
 }
 
 interface UserCookie {
@@ -63,7 +70,24 @@ interface UserCookie {
   user: User;
 }
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+const props = defineProps<{
+  recipeData: GetRecipe | null;
+}>();
+
+const categoryList = ref<Category[] | null>(null);
+const tagList = ref<Tag[] | null>(null);
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
 
 const object = reactive<Recipe>({
   name: "",
@@ -80,24 +104,33 @@ const object = reactive<Recipe>({
   categoryId: "",
 });
 
-const categoryList = ref<Category[] | null>(null);
-const tagList = ref<Tag[] | null>(null);
-
-const error: Ref<boolean> = ref(false);
-const errorText: Ref<string> = ref("");
-
 try {
   const [responseCategory, responseTag] = await Promise.all([
     axios.get(`${config.public.baseURL}/api/v1/category/list`),
     axios.get(`${config.public.baseURL}/api/v1/tag/list`),
   ]);
 
+  if (props.recipeData) {
+    object.name = props.recipeData.name;
+    object.shortDescription = props.recipeData.shortDescription;
+    object.previewImage = props.recipeData.previewImage;
+    object.tutorialVideo = props.recipeData.tutorialVideo;
+    object.instructions = props.recipeData.instructions.map(
+      (instructions: Instructions) => instructions.text
+    );
+    object.ingredients = props.recipeData.ingredients;
+    object.minutesToPrepare = props.recipeData.minutesToPrepare;
+    object.portions = props.recipeData.portions;
+    object.tagIds = props.recipeData.tags?.map((tagIds: Tag) => tagIds.id);
+    object.categoryId = props.recipeData.categories?.[0].id;
+  }
+
   categoryList.value = responseCategory.data;
   tagList.value = responseTag.data;
 } catch (e) {
-  console.log("Get category and tag list", e);
+  console.log(e);
 
-  errorText.value = "Could not get categories and tags list. Please try again.";
+  errorText.value = "Couldn't load recipe data. Please try again.";
   error.value = true;
 
   window?.scrollTo(0, 0);
@@ -134,13 +167,16 @@ const removeInstruction = (index: number) => {
   object.instructions.splice(index, 1);
 };
 
+console.log(TastyBytes_user.value?.user.id);
+
 const handleSubmit = async () => {
   error.value = false;
   errorText.value = "";
+
   if (TastyBytes_user.value) {
     try {
-      const res = await axios.post(
-        `${config.public.baseURL}/api/v1/recipe/create`,
+      const res = await axios.put(
+        `${config.public.baseURL}/api/v1/recipe/edit/${props.recipeData?.id}`,
         object,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
@@ -150,7 +186,7 @@ const handleSubmit = async () => {
       await navigateTo("/user/dashboard/my-recipes");
 
       addNotification(
-        `Your delicious recipe ${object.name} has been added! Time to share or enjoy.`,
+        `Your recipe ${object.name} has been updated!`,
         "Success",
         [
           {
@@ -161,13 +197,17 @@ const handleSubmit = async () => {
         ]
       );
     } catch (e) {
-      console.log("Create recipe", e);
-      errorText.value = "Could not create a recipe. Please try again.";
+      console.log("Edit recipe", e);
+
+      errorText.value = "Oops! There was an error saving your changes.";
       error.value = true;
 
       window?.scrollTo(0, 0);
 
-      addNotification("There was a problem creating your recipe. Please try again.", "Error");
+      addNotification(
+        "Uh oh! We couldn't update this recipe. Please try again.",
+        "Error"
+      );
     }
   }
 };
@@ -175,7 +215,7 @@ const handleSubmit = async () => {
 
 <template>
   <div v-if="categoryList && tagList">
-    <h1 class="text-3xl font-bold text-center m-5">Create Recipe</h1>
+    <h1 class="text-3xl font-bold text-center m-5">Edit Recipe</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
     <form class="flex flex-col gap-3" @submit.prevent="handleSubmit">
       <InputWithLabel

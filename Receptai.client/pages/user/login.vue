@@ -4,7 +4,7 @@ import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
-import { store } from "@/store/store";
+import { addNotification } from "@/store/store";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 const config = useRuntimeConfig();
@@ -14,6 +14,7 @@ definePageMeta({
 });
 
 interface User {
+  id: number;
   name: string;
   email: string;
 }
@@ -67,17 +68,14 @@ const onSubmit = handleSubmit(async () => {
 
     navigateTo("/user/dashboard");
 
-    store.text = "Welcome back! You're now logged in.";
-    store.show = true;
-    store.label = "Success";
-    store.links = [
+    addNotification("Welcome back! You're now logged in.", "Success", [
       { text: "My recipes", link: "/user/dashboard/my-recipes", type: "Black" },
       {
         text: "Create recipe",
         link: "/user/dashboard/my-recipes/create",
         type: "Gray",
       },
-    ];
+    ]);
   } catch (e) {
     console.error("Error during login", e);
     errorText.value = "An error occurred during login.";
@@ -85,9 +83,10 @@ const onSubmit = handleSubmit(async () => {
 
     window?.scrollTo(0, 0);
 
-    store.text = "Incorrect username or password. Please try again.";
-    store.show = true;
-    store.label = "Error";
+    addNotification(
+      "Incorrect username or password. Please try again.",
+      "Error"
+    );
   }
 });
 </script>

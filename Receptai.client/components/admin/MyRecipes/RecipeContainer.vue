@@ -109,6 +109,11 @@ const columns = [
               title="Open in browser"
               ><Icon name="material-symbols:globe" size="24px" color="black"
             /></NuxtLink>
+            <NuxtLink
+              :to="`/user/dashboard/my-recipes/edit/${recipe.id}`"
+              title="Edit recipe"
+              ><Icon name="material-symbols:contract-edit" size="24px" color="black"
+            /></NuxtLink>
           </td>
         </tr>
       </tbody>

@@ -8,6 +8,7 @@ interface UserCookie {
   user: User;
 }
 interface User {
+  id: number;
   name: string;
   email: string;
 }
@@ -79,10 +80,12 @@ try {
   <div class="flex flex-col gap-2">
     <RecipeContainer v-if="recipes?.length !== 0" :recipes="recipes" />
     <div v-else class="flex flex-col items-center gap-2">
-      <p class="font-base text-lg text-center">Your recipe box is currently empty. Why not add a new recipe today?</p>
+      <p class="font-medium text-lg text-center">
+        Your recipe box is currently empty. Why not add a new recipe today?
+      </p>
       <NuxtLink to="/user/dashboard/my-recipes/create">
         <button
-          class="text-lg py-2 px-10 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
+          class="text-base py-2 px-8 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
         >
           Create a new recipe
         </button>

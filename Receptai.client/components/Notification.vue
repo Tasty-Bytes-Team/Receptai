@@ -1,32 +1,25 @@
 <script setup lang="ts">
-import { store } from "@/store/store.ts";
+import { store, resetNotification } from "@/store/store.ts";
 
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 function cancelTimeout() {
   if (timeoutId) {
     clearTimeout(timeoutId);
-    timeoutId = null;
-    store.text = "";
-    store.show = false;
-    store.label = undefined;
-    store.links = undefined;
+    resetNotification();
   }
 }
 
 watch(store, (newVal, oldVal) => {
   if (newVal.show === true) {
     if (timeoutId) {
-      clearTimeout(timeoutId); // Clear any existing timeout
+      clearTimeout(timeoutId);
     }
     timeoutId = setTimeout(() => {
-      store.text = "";
-      store.show = false;
-      store.label = undefined;
-      store.links = undefined;
+      resetNotification();
     }, 6000);
   } else if (newVal.show === false && timeoutId) {
-    cancelTimeout(); // Clear timeout if store.show becomes false
+    cancelTimeout();
   }
 });
 </script>

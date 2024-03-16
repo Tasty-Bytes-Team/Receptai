@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { store } from "@/store/store";
+import { addNotification } from "@/store/store";
 
 interface User {
+  id: number;
   name: string;
   email: string;
 }
@@ -27,14 +28,15 @@ if (TastyBytes_user.value?.user) {
 const logout = () => {
   TastyBytes_user.value = null;
   navigateTo("/user/login");
-  store.text = "You've been successfully logged out. See you next time!";
-  store.show = true;
-  store.label = "Success";
+  addNotification(
+    "You've been successfully logged out. See you next time!",
+    "Success"
+  );
 };
 </script>
 
 <template>
-  <div v-if="user_name" class="flex gap-6">
+  <div v-if="user_name" class="flex gap-6 items-center">
     <NuxtLink to="/user/dashboard" class="font-bold">{{ user_name }}</NuxtLink>
     <div @click="logout" class="cursor-pointer">Logout</div>
   </div>

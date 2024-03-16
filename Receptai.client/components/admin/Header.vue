@@ -29,7 +29,9 @@ const headerNav: Array<Navigation> = [
             </h1>
           </NuxtLink>
         </div>
-        <div class="w-full justify-center gap-6 ml-6 sm:flex hidden">
+        <div
+          class="w-full justify-center gap-6 ml-6 items-center sm:flex hidden"
+        >
           <NuxtLink
             v-for="nav in headerNav"
             :to="nav.to"

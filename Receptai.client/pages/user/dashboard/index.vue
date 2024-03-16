@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { store } from "@/store/store.js";
 
 definePageMeta({
   layout: "admin",

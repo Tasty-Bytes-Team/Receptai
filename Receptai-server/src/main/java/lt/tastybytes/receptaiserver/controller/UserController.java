@@ -38,7 +38,7 @@ public class UserController {
 
         userService.createUser(dto.name(), dto.email(), dto.password());
 
-        return ResponseEntity.ok(new ShortUserDto(dto.name(), dto.email()));
+        return ResponseEntity.ok(userService.findUserByEmail(dto.email()).toShortUserDto());
     }
 
     @PostMapping("/login")

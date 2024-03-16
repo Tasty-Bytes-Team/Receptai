@@ -1,3 +1,3 @@
 package lt.tastybytes.receptaiserver.dto;
 
-public record PublicUserDto(String name) { }
+public record PublicUserDto(long id, String name) { }

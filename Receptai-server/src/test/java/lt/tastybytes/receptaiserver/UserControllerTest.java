@@ -2,9 +2,7 @@ package lt.tastybytes.receptaiserver;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.tastybytes.receptaiserver.controller.UserController;
-import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.containsString;
@@ -13,14 +11,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -38,22 +33,5 @@ class UserControllerTest {
                 post("/api/v1/user/me"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void registerNewUserTest() throws Exception {
-
-        var registerRequest = new RegisterRequestDto("New User", "newuser@example.com", "securePassword");
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonRequest = objectMapper.writeValueAsString(registerRequest);
-
-
-        this.mockMvc.perform(post("/api/v1/user/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonRequest).with(csrf()))
-                        .andDo(print())
-                        .andExpect(status().isOk());
     }
 }

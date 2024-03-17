@@ -24,13 +24,13 @@ COPY nuxt.config.ts /usr/src/nuxt-app/
 # Other folders
 COPY assets /usr/src/nuxt-app/assets
 COPY components /usr/src/nuxt-app/components
-COPY composables /usr/src/nuxt-app/composables
-COPY javascript /usr/src/nuxt-app/javascript
 COPY layouts /usr/src/nuxt-app/layouts
 COPY middleware /usr/src/nuxt-app/middleware
 COPY pages /usr/src/nuxt-app/pages
 COPY public /usr/src/nuxt-app/public
 COPY server /usr/src/nuxt-app/server
+COPY store /usr/src/nuxt-app/store
+COPY typescript /usr/src/nuxt-app/typescript
 RUN npm run build
 
 EXPOSE 3000

@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import axios from "axios";
 
+import {
+  ErrorMessage,
+  FieldArray,
+  Form,
+  Field,
+  type GenericObject,
+} from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+
 import { addNotification } from "@/store/store";
 
-import InputWithLabel from "@/components/admin/RecipeCreate/InputWithLabel.vue";
-import TextareaWithLabel from "@/components/admin/RecipeCreate/TextareaWithLabel.vue";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import DeleteButton from "@/components/admin/RecipeCreate/DeleteButton.vue";
 import AddButton from "@/components/admin/RecipeCreate/AddButton.vue";
@@ -15,30 +23,6 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
-interface Recipe {
-  name: string;
-  shortDescription: string;
-  previewImage: string;
-  tutorialVideo: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  minutesToPrepare: number | null;
-  portions: number | null;
-  categoryId: number | string;
-  tagIds: number[] | string[];
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number | null;
-  unit: string;
-}
 
 interface Category {
   id: number;
@@ -65,7 +49,39 @@ interface UserCookie {
 
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
-const object = reactive<Recipe>({
+const validationSchema = toTypedSchema(
+  zod.object({
+    name: zod.string().min(1, "Required"),
+    shortDescription: zod.string().min(1, "Required"),
+    previewImage: zod.string().url("Preview image must be a valid URL"),
+    tutorialVideo: zod.union([
+      zod.literal(""),
+      zod.string().trim().url("Tutorial video must be a valid URL"),
+    ]),
+    instructions: zod.array(zod.string().min(1, "Required")),
+    ingredients: zod.array(
+      zod.object({
+        purpose: zod.string().min(1, "Required"),
+        ingredients: zod.array(
+          zod.object({
+            name: zod.string().min(1, "Required"),
+            quantity: zod.number({ invalid_type_error: "Required" }),
+            unit: zod.string().min(1, "Required"),
+          })
+        ),
+      })
+    ),
+    minutesToPrepare: zod.number({ invalid_type_error: "Required" }),
+    portions: zod.number({ invalid_type_error: "Required" }),
+    tagIds: zod
+      .number({ invalid_type_error: "Required" })
+      .array()
+      .min(0, "Required"),
+    categoryId: zod.number({ invalid_type_error: "Required" }),
+  })
+);
+
+const initialValues = {
   name: "",
   shortDescription: "",
   previewImage: "",
@@ -78,7 +94,7 @@ const object = reactive<Recipe>({
   portions: null,
   tagIds: [""],
   categoryId: "",
-});
+};
 
 const categoryList = ref<Category[] | null>(null);
 const tagList = ref<Tag[] | null>(null);
@@ -103,45 +119,14 @@ try {
   window?.scrollTo(0, 0);
 }
 
-const addNewIngriedientsGroup = () => {
-  object.ingredients.push({
-    purpose: "",
-    ingredients: [{ name: "", quantity: null, unit: "" }],
-  });
-};
-
-const removeNewIngriedientsGroup = (index: number) => {
-  object.ingredients.splice(index, 1);
-};
-
-const addIngriedient = (groupIndex: number) => {
-  object.ingredients[groupIndex].ingredients.push({
-    name: "",
-    quantity: null,
-    unit: "",
-  });
-};
-
-const removeIngriedient = (groupIndex: number, index: number) => {
-  object.ingredients[groupIndex].ingredients.splice(index, 1);
-};
-
-const addInstruction = () => {
-  object.instructions.push("");
-};
-
-const removeInstruction = (index: number) => {
-  object.instructions.splice(index, 1);
-};
-
-const handleSubmit = async () => {
+const onSubmit = async (values: GenericObject) => {
   error.value = false;
   errorText.value = "";
   if (TastyBytes_user.value) {
     try {
       const res = await axios.post(
         `${config.public.baseURL}/api/v1/recipe/create`,
-        object,
+        values,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
         }
@@ -150,7 +135,7 @@ const handleSubmit = async () => {
       await navigateTo("/user/dashboard/my-recipes");
 
       addNotification(
-        `Your delicious recipe ${object.name} has been added! Time to share or enjoy.`,
+        `Your delicious recipe ${values.name} has been added! Time to share or enjoy.`,
         "Success",
         [
           {
@@ -167,34 +152,57 @@ const handleSubmit = async () => {
 
       window?.scrollTo(0, 0);
 
-      addNotification("There was a problem creating your recipe. Please try again.", "Error");
+      addNotification(
+        "There was a problem creating your recipe. Please try again.",
+        "Error"
+      );
     }
   }
 };
 </script>
 
 <template>
-  <div v-if="categoryList && tagList">
+  <div>
     <h1 class="text-3xl font-bold text-center m-5">Create Recipe</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
-    <form class="flex flex-col gap-3" @submit.prevent="handleSubmit">
-      <InputWithLabel
-        :model="object.name"
-        @update:model="object.name = $event"
-        label="Name"
-        placeholder="What's the recipe's name?"
-      />
-      <TextareaWithLabel
-        :model="object.shortDescription"
-        @update:model="object.shortDescription = $event"
-        label="Short description"
-        placeholder="How would you describe your recipe?"
-      />
+    <Form
+      :initial-values="initialValues"
+      :validation-schema="validationSchema"
+      @submit="onSubmit"
+      class="flex flex-col gap-3"
+    >
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Name</label>
+          <ErrorMessage name="name" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          name="name"
+          placeholder="What's the recipe's name?"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+        />
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Short description</label>
+          <ErrorMessage name="shortDescription" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          name="shortDescription"
+          placeholder="How would you describe your recipe?"
+          as="textarea"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+        />
+      </div>
+
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Category</label>
-        <select
-          required
-          v-model="object.categoryId"
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Category</label>
+          <ErrorMessage name="categoryId" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          as="select"
+          name="categoryId"
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
         >
           <option disabled value="">Please select one category</option>
@@ -205,147 +213,240 @@ const handleSubmit = async () => {
           >
             {{ category.name }}
           </option>
-        </select>
+        </Field>
       </div>
 
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Tag</label>
-        <select
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Tag</label>
+          <ErrorMessage name="tagIds" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          as="select"
           multiple
-          required
-          v-model="object.tagIds"
+          name="tagIds"
           class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
         >
           <option v-for="tag in tagList" :key="tag.id" :value="tag.id">
             {{ tag.name }}
           </option>
-        </select>
+        </Field>
       </div>
 
-      <InputWithLabel
-        :model="object.minutesToPrepare"
-        @update:model="object.minutesToPrepare = parseInt($event)"
-        type="number"
-        label="Preparation time (in minutes)"
-        placeholder="How long does it take to prepare?"
-      />
-      <InputWithLabel
-        :model="object.portions"
-        @update:model="object.portions = parseInt($event)"
-        type="number"
-        label="Servings"
-        placeholder="How many people does this recipe serve?"
-      />
-      <InputWithLabel
-        :model="object.previewImage"
-        @update:model="object.previewImage = $event"
-        label="Image link"
-        placeholder="Where could we find a picture of your recipe?"
-      />
-      <InputWithLabel
-        :notReq="true"
-        :model="object.tutorialVideo"
-        @update:model="object.tutorialVideo = $event"
-        label="Making tutorial video link (from youtube.com)"
-        placeholder="Do you have a tutorial video to share?"
-      />
-      <div class="px-3 flex flex-col gap-2">
-        <h3 class="text-center text-lg font-semibold">Cooking Ingredients</h3>
-        <div
-          class="border-2 border-black p-3 flex flex-col gap-2"
-          v-for="(ingredientGroup, groupIndex) in object.ingredients"
-        >
-          <div class="flex gap-3 items-center">
-            <h5 class="font-semibold text-base uppercase">
-              Ingredients group {{ groupIndex + 1 }}
-            </h5>
-            <DeleteButton
-              @delete="removeNewIngriedientsGroup(groupIndex)"
-              v-if="object.ingredients.length > 1"
-            />
-          </div>
-          <InputWithLabel
-            :model="ingredientGroup.purpose"
-            @update:model="ingredientGroup.purpose = $event"
-            label="Purpose"
-            :placeholder="`What are we making with group ${
-              groupIndex + 1
-            } ingredients?`"
-          />
-          <div>
-            <label class="font-semibold text-sm">Ingredients</label>
-            <div class="justify-around flex items-center">
-              <ul class="w-full list-disc pl-5">
-                <li
-                  v-for="(ingredient, index) in ingredientGroup.ingredients"
-                  class="mb-3"
-                >
-                  <div class="flex flex-col gap-2 sm:flex-row">
-                    <InputWithLabel
-                      :model="ingredient.name"
-                      @update:model="ingredient.name = $event"
-                      placeholder="Name"
-                      label="Name"
-                    />
-                    <InputWithLabel
-                      :model="ingredient.quantity"
-                      @update:model="ingredient.quantity = parseInt($event)"
-                      type="number"
-                      placeholder="Quantity"
-                      label="Quantity"
-                    />
-                    <InputWithLabel
-                      :model="ingredient.unit"
-                      @update:model="ingredient.unit = $event"
-                      placeholder="Unit"
-                      label="Unit"
-                    />
-                    <DeleteButton
-                      @delete="removeIngriedient(groupIndex, index)"
-                      v-if="ingredientGroup.ingredients.length > 1"
-                    />
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <AddButton
-              color="yellow"
-              text="Add new ingredient"
-              @add="addIngriedient(groupIndex)"
-            />
-          </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm"
+            >Preparation time (in minutes)</label
+          >
+          <ErrorMessage name="minutesToPrepare" class="text-red-600 text-sm" />
         </div>
-        <AddButton
-          color="green"
-          text="Add new group"
-          @add="addNewIngriedientsGroup"
+        <Field
+          name="minutesToPrepare"
+          type="number"
+          min="1"
+          placeholder="How long does it take to prepare?"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+        />
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Servings</label>
+          <ErrorMessage name="portions" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          name="portions"
+          type="number"
+          min="1"
+          placeholder="How many people does this recipe serve?"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+        />
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm">Image link</label>
+          <ErrorMessage name="previewImage" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          name="previewImage"
+          placeholder="Where could we find a picture of your recipe?"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+        />
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <label class="font-semibold text-sm"
+            >Making tutorial video link (from youtube.com)</label
+          >
+          <ErrorMessage name="tutorialVideo" class="text-red-600 text-sm" />
+        </div>
+        <Field
+          name="tutorialVideo"
+          placeholder="Do you have a tutorial video to share?"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
         />
       </div>
       <div class="px-3 flex flex-col gap-2">
-        <h3 class="text-center text-lg font-semibold">Cooking Instructions</h3>
-        <div class="justify-around flex-col gap-2 flex">
-          <div
-            v-for="(instruction, index) in object.instructions"
+        <h3 class="text-center text-lg font-semibold">Cooking Ingredients</h3>
+        <FieldArray
+          name="ingredients"
+          v-slot="{ fields, push, remove }"
+          class="justify-around flex-col gap-2 flex"
+        >
+          <fieldset
+            v-for="(field, groupIndex) in fields"
+            :key="field.key"
             class="border-2 border-black p-3 flex flex-col gap-2"
           >
             <div class="flex gap-3 items-center">
               <h5 class="font-semibold text-md uppercase">
-                Step {{ index + 1 }}
+                Ingredients group {{ groupIndex + 1 }}
               </h5>
               <DeleteButton
-                @delete="removeInstruction(index)"
-                v-if="object.instructions.length > 1"
+                @delete="remove(groupIndex)"
+                v-if="fields.length > 1"
               />
             </div>
-            <TextareaWithLabel
-              :model="object.instructions[index]"
-              @update:model="object.instructions[index] = $event"
-              label="Instructions"
-              :placeholder="`What are we doing in STEP ${index + 1}?`"
-            />
-          </div>
-          <AddButton color="green" text="Add new step" @add="addInstruction" />
-        </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <label class="font-semibold text-sm">Purpose</label>
+                <ErrorMessage
+                  :name="`ingredients[${groupIndex}].purpose`"
+                  class="text-red-600 text-sm"
+                />
+              </div>
+              <Field
+                :name="`ingredients[${groupIndex}].purpose`"
+                :placeholder="`What are we making with group ${
+                  groupIndex + 1
+                } ingredients?`"
+                class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+              />
+            </div>
+            <label class="font-semibold text-sm">Ingredients</label>
+            <FieldArray
+              :name="`ingredients[${groupIndex}].ingredients`"
+              v-slot="{ fields, push, remove }"
+              class="justify-around flex items-center"
+            >
+              <ul class="w-full list-disc pl-5">
+                <li
+                  v-for="(field, index) in fields"
+                  :key="field.key"
+                  class="mb-3"
+                >
+                  <div class="flex flex-col gap-2 sm:flex-row">
+                    <div class="w-full">
+                      <div class="flex items-center gap-2">
+                        <label class="font-semibold text-sm">Name</label>
+                        <ErrorMessage
+                          :name="`ingredients[${groupIndex}].ingredients[${index}].name`"
+                          class="text-red-600 text-sm"
+                        />
+                      </div>
+                      <Field
+                        :name="`ingredients[${groupIndex}].ingredients[${index}].name`"
+                        placeholder="Name"
+                        class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+                      />
+                    </div>
+                    <div class="w-full">
+                      <div class="flex items-center gap-2">
+                        <label class="font-semibold text-sm">Quantity</label>
+                        <ErrorMessage
+                          :name="`ingredients[${groupIndex}].ingredients[${index}].quantity`"
+                          class="text-red-600 text-sm"
+                        />
+                      </div>
+                      <Field
+                        :name="`ingredients[${groupIndex}].ingredients[${index}].quantity`"
+                        placeholder="Quantity"
+                        min="1"
+                        type="number"
+                        class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+                      />
+                    </div>
+                    <div class="w-full">
+                      <div class="flex items-center gap-2">
+                        <label class="font-semibold text-sm">Unit</label>
+                        <ErrorMessage
+                          :name="`ingredients[${groupIndex}].ingredients[${index}].unit`"
+                          class="text-red-600 text-sm"
+                        />
+                      </div>
+                      <Field
+                        :name="`ingredients[${groupIndex}].ingredients[${index}].unit`"
+                        placeholder="Unit"
+                        class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+                      />
+                    </div>
+                    <DeleteButton
+                      @delete="remove(index)"
+                      v-if="fields.length > 1"
+                    />
+                  </div>
+                </li>
+              </ul>
+              <AddButton
+                color="yellow"
+                text="Add new ingredient"
+                @add="
+                  push({
+                    name: '',
+                    quantity: null,
+                    unit: '',
+                  })
+                "
+              />
+            </FieldArray>
+          </fieldset>
+          <AddButton
+            color="green"
+            text="Add new group"
+            @add="
+              push({
+                purpose: '',
+                ingredients: [{ name: '', quantity: null, unit: '' }],
+              })
+            "
+          />
+        </FieldArray>
+      </div>
+      <div class="px-3 flex flex-col gap-2">
+        <h3 class="text-center text-lg font-semibold">Cooking Instructions</h3>
+        <FieldArray
+          name="instructions"
+          v-slot="{ fields, push, remove }"
+          class="justify-around flex-col gap-2 flex"
+        >
+          <fieldset
+            v-for="(field, idx) in fields"
+            :key="field.key"
+            class="border-2 border-black p-3 flex flex-col gap-2"
+          >
+            <div class="flex gap-3 items-center">
+              <h5 class="font-semibold text-md uppercase">
+                Step {{ idx + 1 }}
+              </h5>
+              <DeleteButton @delete="remove(idx)" v-if="fields.length > 1" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <label class="font-semibold text-sm">Instructions</label>
+                <ErrorMessage
+                  :name="`instructions[${idx}]`"
+                  class="text-red-600 text-sm"
+                />
+              </div>
+              <Field
+                as="textarea"
+                :name="`instructions[${idx}]`"
+                :placeholder="`What are we doing in STEP ${idx + 1}?`"
+                class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+              />
+            </div>
+          </fieldset>
+          <AddButton color="green" text="Add new step" @add="push('')" />
+        </FieldArray>
       </div>
       <button
         class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"
@@ -353,9 +454,8 @@ const handleSubmit = async () => {
       >
         Submit
       </button>
-    </form>
+    </Form>
   </div>
-  <div v-else>Loading...</div>
 </template>
 
 <style scoped></style>

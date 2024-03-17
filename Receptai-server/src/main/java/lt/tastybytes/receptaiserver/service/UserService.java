@@ -11,5 +11,5 @@ public interface UserService {
 
     List<User> findAllUsers();
 
-    User authenticate(String email, String password);
+    User authenticate(String email, String password) throws Exception;
 }

@@ -1,11 +1,13 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
+import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.user.Role;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.repository.RoleRepository;
 import lt.tastybytes.receptaiserver.repository.UserRepository;
 import lt.tastybytes.receptaiserver.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public User authenticate(String email, String password) {
+        var user = userRepository.findByEmail(email);
+        if (user == null) throw new BadCredentialsException("Bad credentials");
+
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );

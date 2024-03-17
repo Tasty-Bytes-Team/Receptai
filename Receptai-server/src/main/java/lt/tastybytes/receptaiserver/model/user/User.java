@@ -101,9 +101,13 @@ public class User implements UserDetails {
     }
 
     public PublicUserDto toPublicUserDto() {
-        return new PublicUserDto(name);
+        return new PublicUserDto(id, name);
     }
     public ShortUserDto toShortUserDto() {
-        return new ShortUserDto(name, email);
+        return new ShortUserDto(id, name, email);
+    }
+
+    public Long getId() {
+        return id;
     }
 }

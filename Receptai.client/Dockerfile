@@ -9,9 +9,28 @@ WORKDIR /usr/src/nuxt-app
 RUN apk update && apk upgrade
 RUN apk add git
 
-# copy the app, note .dockerignore
-COPY . /usr/src/nuxt-app/
+# Install dependencies
+COPY package-lock.json /usr/src/nuxt-app/
+COPY package.json /usr/src/nuxt-app/
+COPY yarn.lock /usr/src/nuxt-app/
 RUN npm install
+
+# Copy over the rest
+# Configuration and files
+COPY app.vue /usr/src/nuxt-app/
+COPY tailwind.config.js /usr/src/nuxt-app/
+COPY tsconfig.json /usr/src/nuxt-app/
+COPY nuxt.config.ts /usr/src/nuxt-app/
+# Other folders
+COPY assets /usr/src/nuxt-app/assets
+COPY components /usr/src/nuxt-app/components
+COPY composables /usr/src/nuxt-app/composables
+COPY javascript /usr/src/nuxt-app/javascript
+COPY layouts /usr/src/nuxt-app/layouts
+COPY middleware /usr/src/nuxt-app/middleware
+COPY pages /usr/src/nuxt-app/pages
+COPY public /usr/src/nuxt-app/public
+COPY server /usr/src/nuxt-app/server
 RUN npm run build
 
 EXPOSE 3000

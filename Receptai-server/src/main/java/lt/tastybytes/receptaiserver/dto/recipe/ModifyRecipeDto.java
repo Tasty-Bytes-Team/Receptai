@@ -7,10 +7,9 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import java.util.Date;
 import java.util.List;
 
-public record CreateRecipeDto(
+public record ModifyRecipeDto(
         @NotEmpty
         @NonNull String name,
 

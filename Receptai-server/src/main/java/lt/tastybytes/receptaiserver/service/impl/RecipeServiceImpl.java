@@ -1,6 +1,6 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
-import lt.tastybytes.receptaiserver.dto.recipe.CreateRecipeDto;
+import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Ingredient;
@@ -34,7 +34,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto createRecipe(CreateRecipeDto dto, User author) throws ValidationException {
+    public RecipeDto createRecipe(ModifyRecipeDto dto, User author) throws ValidationException {
         var recipe = new Recipe();
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());
@@ -87,6 +87,67 @@ public class RecipeServiceImpl implements RecipeService {
             }
             recipe.addIngredientType(ingredientType);
         }
+        recipeRepository.save(recipe);
+        return recipe.toDto();
+    }
+
+    @Override
+    public RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto) throws ValidationException {
+        recipe.setName(dto.name());
+        recipe.setDescription(dto.shortDescription());
+        recipe.setDateModified(new Date());
+        recipe.setMinutesToPrepare(dto.minutesToPrepare());
+        recipe.setPortionCount(dto.portions());
+        recipe.setPreviewImage(dto.previewImage());
+
+        recipe.setCategory(categoryService.getCategoryById(dto.categoryId())
+                .orElseThrow(() -> new ValidationException("Invalid category ID, such category does not exist"))
+        );
+
+        if (dto.tutorialVideo() == null || dto.tutorialVideo().isBlank()) {
+            recipe.setTutorialVideo(null);
+        } else {
+            recipe.setTutorialVideo(dto.tutorialVideo().strip());
+        }
+
+        recipe.clearTags();
+        for (var tagId : dto.tagIds()) {
+            if (tagId == null) {
+                throw new ValidationException("Invalid tags specified");
+            }
+
+            var tagObj = tagService.getTagById(tagId);
+            recipe.addTag(tagObj
+                    .orElseThrow(() -> new ValidationException("Tag with ID of '%s' does not exist".formatted(tagId)))
+            );
+        }
+
+        // TODO: figure out
+
+        // Add instructions
+        recipe.clearInstructions();
+        var instructions = dto.instructions();
+        for (int i = 0; i < instructions.size(); i++) {
+            var instruction = new Instruction();
+            instruction.setStepNo(i+1);
+            instruction.setStepDescription(instructions.get(i));
+            recipe.addInstruction(instruction);
+        }
+        // Add ingredients
+        recipe.clearIngredients();
+        for (var ingredientList: dto.ingredients()) {
+            var ingredientType = new IngredientType();
+            ingredientType.setPurpose(ingredientList.purpose());
+            for (var ingredient: ingredientList.ingredients()) {
+                var ingredientObject = new Ingredient();
+                ingredientObject.setName(ingredient.name());
+                ingredientObject.setQuantity(ingredient.quantity());
+                ingredientObject.setUnit(ingredient.unit());
+                ingredientType.addIngredient(ingredientObject);
+            }
+            recipe.addIngredientType(ingredientType);
+        }
+
         recipeRepository.save(recipe);
         return recipe.toDto();
     }

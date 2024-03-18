@@ -1,13 +1,7 @@
-<script setup>
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>
-        Receptai
-    </div>
+  <div>Receptai</div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

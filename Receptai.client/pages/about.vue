@@ -1,9 +1,5 @@
-<script setup>
-
-
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  About
+  <div>About</div>
 </template>

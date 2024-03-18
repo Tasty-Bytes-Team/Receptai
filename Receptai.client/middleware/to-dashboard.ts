@@ -1,18 +1,36 @@
 import axios from "axios";
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
-  const TastyBytes_user = useCookie("TastyBytes_user");
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+interface UserCookie {
+  token: string;
+  expiresIn: number;
+  user: User;
+}
+
+export default defineNuxtRouteMiddleware(async () => {
+  const config = useRuntimeConfig();
+
+  const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
   if (TastyBytes_user.value) {
-    const userObj: any = TastyBytes_user.value;
+    const userObj: UserCookie = TastyBytes_user.value;
 
     try {
       axios
-        .get("/api/v1/user/me", {
+        .get(`${config.public.baseURL}/api/v1/user/me`, {
           headers: { Authorization: `Bearer ${userObj.token}` },
         })
-        return navigateTo("/user/dashboard");
+        .catch(async () => {
+          TastyBytes_user.value = null;
+          return navigateTo("/user/login");
+        });
+      return navigateTo("/user/dashboard");
     } catch (e) {
+      console.log("To-dashboard", e);
       return;
     }
   } else {

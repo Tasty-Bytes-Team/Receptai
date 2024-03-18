@@ -1,83 +1,132 @@
-<script setup>
+<script setup lang="ts">
+import axios from "axios";
+import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+
+import { addNotification } from "@/store/store";
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
+
+const config = useRuntimeConfig();
+
 definePageMeta({
   middleware: "to-dashboard",
 });
-import axios from "axios";
 
-const email = ref("");
-const password = ref("");
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
-let error = ref(false);
-let errorText = ref("");
+interface UserCookie {
+  token: string;
+  expiresIn: number;
+  user: User;
+}
 
-const handleSubmit = async () => {
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
+
+const validationSchema = toTypedSchema(
+  zod.object({
+    email: zod
+      .string()
+      .min(1, "This is required")
+      .email({ message: "Must be a valid email" }),
+    password: zod.string().min(1, "This is required"),
+  })
+);
+
+const { handleSubmit, errors } = useForm({
+  validationSchema,
+});
+
+const { value: email } = useField("email");
+const { value: password } = useField("password");
+
+const onSubmit = handleSubmit(async () => {
   error.value = false;
   errorText.value = "";
 
   try {
-    const { data } = await axios.post("/api/v1/user/login", {
-      email: email.value,
-      password: password.value,
-    });
+    const response = await axios.post(
+      `${config.public.baseURL}/api/v1/user/login`,
+      {
+        email: email.value,
+        password: password.value,
+      }
+    );
 
-    const TastyBytes_user = useCookie("TastyBytes_user", {
+    const data: UserCookie = response.data;
+
+    const TastyBytes_user = useCookie<UserCookie>("TastyBytes_user", {
       maxAge: data.expiresIn,
-      SameSite: "none",
     });
 
-    try {
-      const response = await axios.get(`/api/v1/user/me`, {
-        headers: { Authorization: `Bearer ${data.token}` },
-      });
+    TastyBytes_user.value = data;
 
-      TastyBytes_user.value = { token: data.token, ...response.data };
-      navigateTo("/user/dashboard");
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-      error.value = true;
-      errorText.value = "Failed to fetch user data.";
-    }
-  } catch (err) {
-    console.error("Error during login:", err);
-    error.value = true;
+    navigateTo("/user/dashboard");
+
+    addNotification("Welcome back! You're now logged in.", "Success", [
+      { text: "My recipes", link: "/user/dashboard/my-recipes", type: "Black" },
+      {
+        text: "Create recipe",
+        link: "/user/dashboard/my-recipes/create",
+        type: "Gray",
+      },
+    ]);
+  } catch (e) {
+    console.error("Error during login", e);
     errorText.value = "An error occurred during login.";
+    error.value = true;
+
+    window?.scrollTo(0, 0);
+
+    addNotification(
+      "Incorrect username or password. Please try again.",
+      "Error"
+    );
   }
-};
+});
 </script>
 
 <template>
   <div class="text-center w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-3">Log in</h1>
-    <div v-if="error" class="border-2 border-red-600 my-3 p-2 text-red-600">
-      <p>{{ errorText }}</p>
-    </div>
-    <form
-      @submit.prevent="handleSubmit"
-      class="flex flex-col items-start gap-3"
-    >
+    <ErrorBaner v-if="error" :errorText="errorText" />
+    <form @submit="onSubmit" class="flex flex-col items-start gap-3">
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Email</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Email</label>
+          <span class="text-red-600 text-sm">{{ errors.email }}</span>
+        </div>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+          name="email"
           type="email"
-          required
-          v-model="email"
+          placeholder="Email"
           autocomplete="email"
+          v-model="email"
         />
       </div>
       <div class="w-full text-left">
-        <label class="font-semibold text-sm">Password</label>
+        <div class="flex gap-2 items-center flex-row">
+          <label class="font-semibold text-sm">Password</label>
+          <span class="text-red-600 text-sm">{{ errors.password }}</span>
+        </div>
         <input
-          class="outline-none w-full p-2 px-5 bg-[#f9f9f9] rounded-sm border-2 border-[#cbcbcb] transition-colors duration-150 focus:border-black"
+          class="outline-none w-full p-2 px-3 placeholder:text-concrete-400 bg-concrete-50 rounded-sm border-2 border-concrete-400 transition-colors duration-150 focus:border-black"
+          name="password"
           type="password"
-          required
-          v-model="password"
+          placeholder="Password"
           autocomplete="current-password"
+          v-model="password"
         />
       </div>
       <button
         type="submit"
-        class="bg-[#f8ceb7] p-2 w-full rounded-lg drop-shadow-md font-semibold transition-colors duration-200 hover:bg-[#f0bb9e]"
+        class="bg-whiskey-300 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-semibold transition-colors duration-200 hover:bg-whiskey-400"
       >
         Log in
       </button>
@@ -87,7 +136,7 @@ const handleSubmit = async () => {
       <NuxtLink to="/user/register">
         <button
           type="submit"
-          class="bg-white p-2 w-full border-2 border-[#c5c5c5] rounded-lg drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-[#efefef]"
+          class="bg-concrete-800 text-white p-2 w-[50%] min-w-20 rounded-full drop-shadow-md font-normal text-sm transition-colors duration-200 hover:bg-concrete-900"
         >
           Register
         </button>

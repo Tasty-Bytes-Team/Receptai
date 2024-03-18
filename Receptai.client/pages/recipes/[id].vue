@@ -1,19 +1,15 @@
-<script setup>
+<script setup lang="ts">
+import RecipePage from "@/components/RecipePage/RecipePage.vue";
+
 definePageMeta({
-  layout: 'empty',
-})
+  layout: "empty",
+});
 
-    import RecipePage from '@/components/RecipePage/RecipePage.vue';
-
-    const route = useRoute()
+const route = useRoute();
 </script>
 
 <template>
-    <div>
-        <RecipePage :id="route.params.id" />
-    </div>
+  <RecipePage :id="route.params.id" />
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

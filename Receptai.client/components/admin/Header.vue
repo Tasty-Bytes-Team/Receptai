@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UserBannerVue from "@/components/Header/UserBanner.vue";
+import Logo from "@/components/Header/Logo.vue";
 
 interface Navigation {
   to: string;
@@ -22,15 +23,9 @@ const headerNav: Array<Navigation> = [
   <header class="bg-white shadow-md">
     <div class="max-w-screen-lg m-auto px-3 flex items-center justify-between">
       <div class="flex items-center justify-between">
-        <div class="py-4">
-          <NuxtLink to="/">
-            <h1 class="font-semibold sm:text-3xl text-2xl sm:w-40 w-36">
-              Tasty Bytes
-            </h1>
-          </NuxtLink>
-        </div>
+        <Logo />
         <div
-          class="w-full justify-center gap-6 ml-6 items-center sm:flex hidden"
+          class="w-full justify-center gap-6 items-center sm:flex hidden"
         >
           <NuxtLink
             v-for="nav in headerNav"
@@ -40,7 +35,7 @@ const headerNav: Array<Navigation> = [
           >
         </div>
       </div>
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-5 items-center">
         <NuxtLink to="/user/dashboard/my-recipes/create">
           <button
             class="p-1 px-3 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"

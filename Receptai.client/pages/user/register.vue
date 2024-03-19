@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
+import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
@@ -70,7 +70,10 @@ const onSubmit = handleSubmit(async () => {
 
     navigateTo("/user/login");
 
-    addNotification("Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.", "Success");
+    addNotification(
+      "Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.",
+      "Success"
+    );
   } catch (e) {
     console.error("Error during registration:", e);
     errorText.value = "An error occurred during registration.";
@@ -78,13 +81,16 @@ const onSubmit = handleSubmit(async () => {
 
     window?.scrollTo(0, 0);
 
-    addNotification("Oops! Something went wrong with your registration. Please try again.", "Error");
+    addNotification(
+      "Oops! Something went wrong with your registration. Please try again.",
+      "Error"
+    );
   }
 });
 </script>
 
 <template>
-  <div class="text-center w-96 m-auto">
+  <div class="text-center max-w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-4">Register</h1>
     <ErrorBaner v-if="error" :error-text="errorText" />
     <form @submit="onSubmit" class="flex flex-col items-start gap-3">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from "vue";
 
 defineProps({
   imageLink: String,
@@ -16,13 +16,13 @@ const error = ref(false);
 </script>
 
 <template>
-  <div class="lg:basis-1/4 sm:basis-1/3 basis-1/2">
+  <div class="lg:basis-1/4 sm:basis-1/3 xsm:basis-1/2 basis-full">
     <div class="m-3">
       <NuxtLink :to="link">
         <div class="relative">
           <NuxtImg
             :src="!error ? imageLink : '/assets/TastyBytes_Fallback.webp'"
-            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3]"
+            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full"
             @error="() => (error = true)"
           />
           <span

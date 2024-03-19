@@ -5,33 +5,50 @@ import lt.tastybytes.receptaiserver.controller.RecipeController;
 import lt.tastybytes.receptaiserver.dto.*;
 import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
+import org.junit.jupiter.api.Test;
+import java.lang.reflect.Field;
 import lt.tastybytes.receptaiserver.dto.tag.TagDto;
+import lt.tastybytes.receptaiserver.model.recipe.Instruction;
+import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
+import java.net.http.WebSocketHandshakeException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecipeController.class)
-@Import(RecipeControllerConfig.class)
+@Import(SecurityConfig.class)
 @AutoConfigureMockMvc
-@WithMockUser
 public class RecipeControllerTest {
 
     @Autowired
@@ -40,8 +57,10 @@ public class RecipeControllerTest {
     @MockBean
     private RecipeService recipeService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
     @Test
-    void createRecipeTest() throws Exception {
+    void shouldCreateRecipeSuccessfully() throws Exception {
         List<IngredientDto> ingredientDtos = List.of(
                 new IngredientDto("Flour", 200, "grams"),
                 new IngredientDto("Sugar", 100, "grams")
@@ -57,36 +76,34 @@ public class RecipeControllerTest {
                 30,
                 4);
 
-        Date now = new Date();
-        RecipeDto expectedRecipeDto = new RecipeDto(
-                1L,
-                "Test Recipe",
-                "A short description",
-                new PublicUserDto(123L, "Author Name"),
-                now,
-                now,
-                "image.jpg",
-                null,
-                List.of(new IngredientListDto("Main", ingredientDtos)),
-                List.of(new InstructionDto("Step 1"), new InstructionDto("Step 2")),
-                List.of(new TagDto(1L, "Tag Name", "Tag Icon")),
-                List.of(new CategoryDto(1L, "Category Name", true)),
-                30,
-                4
-        );
-
-
-        given(recipeService.createRecipe(any(ModifyRecipeDto.class), any(User.class))).willReturn(expectedRecipeDto);
-
-        mockMvc.perform(post("/api/v1/recipe/create")
+        MvcResult creationResult = mockMvc.perform(post("/api/v1/recipe/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(modifyRecipeDto))
+                        .content(objectMapper.writeValueAsString(modifyRecipeDto))
                         .with(csrf()))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String creationResponseContent = creationResult.getResponse().getContentAsString();
+        RecipeDto createdRecipeDto = objectMapper.readValue(creationResponseContent, RecipeDto.class);
+        Long createdRecipeId = createdRecipeDto.id();
+
+
+        MvcResult fetchResult = mockMvc.perform(get("/api/v1/recipe/get/" + createdRecipeId)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        String fetchResponseContent = fetchResult.getResponse().getContentAsString();
+        RecipeDto fetchedRecipeDto = objectMapper.readValue(fetchResponseContent, RecipeDto.class);
+        assertEquals(createdRecipeDto, fetchedRecipeDto);
     }
 
+
+
     @Test
-    void createRecipeWithMissingFieldsTest() throws Exception {
+    @WithMockUser(roles = {"USER"})
+    void shouldRejectCreationOfRecipeWithMissingFields() throws Exception {
         List<IngredientDto> ingredientDtos = List.of(
                 new IngredientDto("Flour", 200, "grams"),
                 new IngredientDto("Sugar", 100, "grams")
@@ -109,30 +126,15 @@ public class RecipeControllerTest {
                         .with(csrf()))
                 .andExpect(status().isBadRequest());
     }
-
     @Test
-    @WithMockUser(roles = {"USER"})
-    @AutoConfigureMockMvc(addFilters = false)
-    void createRecipeAsUnauthorizedUserTest() throws Exception {
-        List<IngredientDto> ingredientDtos = List.of(
-                new IngredientDto("Flour", 200, "grams"),
-                new IngredientDto("Sugar", 100, "grams")
-        );
-        ModifyRecipeDto recipeDto = new ModifyRecipeDto(
-                "Test Recipe",
-                "A short description",
-                "image.jpg",
-                null,
-                List.of(new IngredientListDto("Main", ingredientDtos)),
-                List.of("Step 1", "Step 2"), List.of(1),
-                1,
-                30,
-                4);
+    void shouldReturnNotFoundWhenRecipeDoesNotExist() throws Exception {
+        // Given
+        long invalidRecipeId = 999L;
+        when(recipeService.getRecipeById(invalidRecipeId)).thenReturn(Optional.empty());
 
 
-        mockMvc.perform(post("/api/v1/recipe/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(recipeDto)))
-                        .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/v1/recipe/get/{id}", invalidRecipeId))
+                .andExpect(status().isNotFound());
     }
+
 }

@@ -1,6 +1,9 @@
 package lt.tastybytes.receptaiserver;
 
+import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
+import lt.tastybytes.receptaiserver.service.impl.RecipeServiceImpl;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,18 +14,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.mockito.Mockito.mock;
+
+
 @TestConfiguration
-public class CategoryControllerConfig {
+public class SecurityConfig {
 
     @Bean
     public JwtServiceImpl jwtService() {
         return mock(JwtServiceImpl.class);
-
-
     }
     @TestConfiguration
     @EnableWebSecurity
-    static class SecurityConfig {
+    static class TestWebSecirity {
 
         @Bean
         public UserDetailsService userDetailsService() {
@@ -49,3 +52,4 @@ public class CategoryControllerConfig {
         }
     }
 }
+

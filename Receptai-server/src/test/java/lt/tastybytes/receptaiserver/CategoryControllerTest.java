@@ -6,15 +6,22 @@ import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 
+import lt.tastybytes.receptaiserver.service.RecipeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Field;
 
@@ -25,7 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CategoryController.class)
-@Import(CategoryControllerConfig.class)
+@Import(SecurityConfig.class)
+@AutoConfigureMockMvc
 public class CategoryControllerTest {
 
     @Autowired
@@ -35,10 +43,13 @@ public class CategoryControllerTest {
     private CategoryService categoryService;
 
     @Autowired
+    private WebApplicationContext context;
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    void createCategoryTest() throws Exception {
+    @WithMockUser(roles = {"ADMIN"})
+    void shouldSuccessfullyCreateCategory() throws Exception {
         CreateCategoryDto createCategoryDto = new CreateCategoryDto("Test Category");
 
         Category mockedCategory = new Category("Test Category");
@@ -51,7 +62,9 @@ public class CategoryControllerTest {
         mockMvc.perform(post("/api/v1/category/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createCategoryDto)))
-                .andExpect(status().isOk());
+                        .andExpect(status().isOk());
+
+
     }
 
 }

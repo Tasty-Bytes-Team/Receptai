@@ -35,8 +35,6 @@ services:
       timeout: 10s
       retries: 10
 
-
-
   nginx:
     image: nginx:1.25.4
     # Insecure, for now

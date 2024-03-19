@@ -21,8 +21,8 @@ export const store = reactive<Message>({
 export const addNotification = (text: string, label?: "Error" | "Success", links?: Link[]) => {
   store.text = text;
   store.show = true;
-  label ? store.label = label : null;
-  links ? store.links = links : null;
+  label && (store.label = label);
+  links && (store.links = links);
 }
 
 export const resetNotification = () => {

@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: true },
-  modules: ["nuxt-icon", "@nuxt/image"],
+  modules: ["nuxt-icon", "@nuxt/image", "@nuxt/test-utils/module"],
   css: ["~/assets/css/main.css"],
   pages: true,
   postcss: {

@@ -1,8 +1,9 @@
-package lt.tastybytes.receptaiserver;
+package lt.tastybytes.receptaiserver.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.tastybytes.receptaiserver.TestDatabaseConfig;
 import lt.tastybytes.receptaiserver.controller.UserController;
 import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
 import org.junit.jupiter.api.Test;

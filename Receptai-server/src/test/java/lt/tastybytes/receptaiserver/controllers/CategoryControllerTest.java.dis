@@ -1,6 +1,7 @@
-package lt.tastybytes.receptaiserver;
+package lt.tastybytes.receptaiserver.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.tastybytes.receptaiserver.SecurityConfig;
 import lt.tastybytes.receptaiserver.controller.CategoryController;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
 import lt.tastybytes.receptaiserver.model.category.Category;

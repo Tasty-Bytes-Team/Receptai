@@ -11,6 +11,7 @@ defineProps<{
 </script>
 
 <template>
+  <div>
   <label class="font-semibold text-sm">Ingredients</label>
   <FieldArray
     :name="`ingredients[${groupIndex}].ingredients`"
@@ -58,6 +59,7 @@ defineProps<{
       "
     />
   </FieldArray>
+</div>
 </template>
 
 <style scoped></style>

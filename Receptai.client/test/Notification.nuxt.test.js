@@ -17,12 +17,5 @@ test('renders a notification', async () => {
         }
     })
     
-    console.log(wrapper.html())
-//     expect(wrapper).toMatchInlineSnapshot(`
-//     "<div id="test-wrapper">
-//       <div>This is an auto-imported component</div>
-//       <div> I am a global component </div>
-//       <div>Index page</div><a href="/test"> Test link </a>
-//     </div>"
-//   `)
+    //console.log(wrapper.html())
 })

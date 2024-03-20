@@ -185,7 +185,6 @@ try {
 const onSubmit = async (values: GenericObject) => {
   error.value = false;
   errorText.value = "";
-  console.log(values);
 
   if (TastyBytes_user.value) {
     try {
@@ -293,4 +292,3 @@ const onSubmit = async (values: GenericObject) => {
 </template>
 
 <style scoped></style>
-..../components/InputTextarea.vue../components/Instructions.vue../components/MultipleOptionSelect.vue../components/OptionSelect.vue/components/IngredientsGroups.vue../components/InputField.vue

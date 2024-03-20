@@ -63,4 +63,3 @@ defineProps<{
 </template>
 
 <style scoped></style>
-./DeleteButton.vue./AddButton.vue

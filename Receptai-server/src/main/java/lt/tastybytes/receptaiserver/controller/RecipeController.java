@@ -55,9 +55,7 @@ public class RecipeController {
             throw new NotFoundException("Recipe by specified ID not found");
         }
 
-        if (!recipe.get().getAuthor().getId().equals(user.getId())) {
-            throw new MissingRightsException("You cannot edit a recipe that is not yours!");
-        }
+        recipe.get().assertCanBeManagedBy(user);
 
         var newDto = recipeService.editRecipe(recipe.get(), dto);
 
@@ -74,16 +72,12 @@ public class RecipeController {
             throw new NotFoundException("Recipe by specified ID not found");
         }
 
-        if (!recipe.get().getAuthor().getId().equals(user.getId())) {
-            throw new MissingRightsException("You cannot remove a recipe that is not yours!");
-        }
+        recipe.get().assertCanBeManagedBy(user);
 
         var ok = recipeService.deleteRecipeById(id);
-
         if (ok) {
             return ResponseEntity.ok(new MessageResponseDto("Recipe deleted successfully"));
         }
-
         return ResponseEntity.badRequest().body(new MessageResponseDto("Recipe deletion failed"));
     }
 

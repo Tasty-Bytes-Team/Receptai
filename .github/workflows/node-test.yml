@@ -20,13 +20,18 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      working-directory: ./Receptai.client
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm run build
-    - run: npm run test
-    - run: npm run coverage
+        - uses: actions/checkout@v3
+        - name: Use Node.js ${{ matrix.node-version }}
+        - uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+        - name: Build
+          working-directory: ./Receptai.client
+          run: npm run build
+        - name: Run tests
+          working-directory: ./Receptai.client
+          run: npm run test
+        - name: Display coverage
+          working-directory: ./Receptai.client
+          run: npm run coverage

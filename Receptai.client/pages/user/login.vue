@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import { Field, Form, ErrorMessage, useForm, useField } from "vee-validate";
+import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
@@ -92,7 +92,7 @@ const onSubmit = handleSubmit(async () => {
 </script>
 
 <template>
-  <div class="text-center w-96 m-auto">
+  <div class="text-center max-w-96 m-auto">
     <h1 class="text-3xl font-bold uppercase mb-3">Log in</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
     <form @submit="onSubmit" class="flex flex-col items-start gap-3">

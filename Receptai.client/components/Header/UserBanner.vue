@@ -36,7 +36,7 @@ const logout = () => {
 </script>
 
 <template>
-  <div v-if="user_name" class="flex gap-3 items-center">
+  <div v-if="user_name" class="flex flex-col items-end">
     <NuxtLink to="/user/dashboard" class="font-bold">{{ user_name }}</NuxtLink>
     <div @click="logout" class="cursor-pointer">Logout</div>
   </div>

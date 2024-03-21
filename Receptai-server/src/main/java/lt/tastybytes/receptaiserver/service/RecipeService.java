@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.service;
 
+import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.exception.ValidationException;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeService {
-    RecipeDto createRecipe(ModifyRecipeDto dto, User author) throws ValidationException;
+    RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author) throws ValidationException;
     RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto) throws ValidationException;
     List<Recipe> getAllRecipes();
     List<Recipe> getAllUserRecipes(User user);

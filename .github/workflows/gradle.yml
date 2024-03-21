@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Package
-        path: ./Receptai-server/build/libs
+        path: ./Receptai-server/build/reports/tests/test

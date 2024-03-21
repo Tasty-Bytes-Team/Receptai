@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive } from "vue";
 
 interface Message {
   text: string;
@@ -7,7 +7,7 @@ interface Message {
   links?: Link[];
 }
 
-interface Link{
+interface Link {
   text: string;
   link: string;
   type?: "Black" | "Gray";
@@ -15,19 +15,26 @@ interface Link{
 
 export const store = reactive<Message>({
   text: "",
-  show: false
+  show: false,
 });
 
-export const addNotification = (text: string, label?: "Error" | "Success", links?: Link[]) => {
+export const addNotification = (
+  text: string,
+  label?: "Error" | "Success",
+  links?: Link[]
+) => {
+  //Delete old notification if it is visible
+  resetNotification();
+
   store.text = text;
   store.show = true;
   label && (store.label = label);
   links && (store.links = links);
-}
+};
 
 export const resetNotification = () => {
   store.text = "";
   store.show = false;
   store.label = undefined;
   store.links = undefined;
-}
+};

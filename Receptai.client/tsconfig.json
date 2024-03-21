@@ -4,5 +4,6 @@
   "compilerOptions": {
     "types": ["vitest/jsdom", "vitest/globals"],
     "allowImportingTsExtensions": true,
+    "lib": ["dom", "ESNext"]
   },
 }

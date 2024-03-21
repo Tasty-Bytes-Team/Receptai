@@ -58,13 +58,48 @@ const navigation: Array<Navigation> = [
     title: "Create new recipe",
   },
 ];
+
+const vClickOutside = {
+  mounted(el: any, binding: { value: (event: Event) => void }) {
+    const toggleListener = () => {
+      if (hover.value) {
+        el.__ClickOutsideHandler__ = (event: Event) => {
+          if (!(el === event.target || el.contains(event.target as Node))) {
+            binding.value(event);
+          }
+        };
+        document.body.addEventListener("click", el.__ClickOutsideHandler__);
+      } else {
+        document.body.removeEventListener(
+          "click",
+          el.__ClickOutsideHandler__ as EventListener
+        );
+        el.__ClickOutsideHandler__ = undefined;
+      }
+    };
+
+    toggleListener();
+
+    watch(hover, toggleListener);
+  },
+  unmounted(el: any) {
+    document.body.removeEventListener(
+      "click",
+      el.__ClickOutsideHandler__ as EventListener
+    );
+  },
+};
 </script>
 
 <template>
-  <div v-if="user_name" class="flex flex-col items-end">
-    <div class="font-bold" @click="hover = !hover">
+  <div
+    v-if="user_name"
+    class="flex flex-col items-end"
+    v-click-outside="() => (hover = false)"
+  >
+    <div class="font-bold" @click="() => hover = !hover">
       <ProfilePicture
-        class="hover:shadow-[0px_0px_0_6px_#00000020] transition-shadow duration-100 cursor-pointer"
+        class="hover:shadow-[0px_0px_0_6px_#00000020] hover:scale-105 transition-shadow duration-150 cursor-pointer"
         :class="hover ? 'shadow-[0px_0px_0_6px_#00000010]' : null"
         :size="8"
         :user_name
@@ -72,10 +107,9 @@ const navigation: Array<Navigation> = [
     </div>
     <div
       v-if="hover"
-      class="absolute z-10 translate-y-9 w-64 bg-white shadow-[0_2px_2px_1px] shadow-concrete-500 rounded-sm border-[1px] border-gray-400"
-      @mouseleave="hover = false"
+      class="absolute z-10 translate-y-9 xsm:translate-x-0 translate-x-[10px] max-w-64 w-full bg-white shadow-[0_2px_2px_1px] shadow-concrete-500 rounded-sm border-[1px] border-gray-400"
     >
-      <div class="border-b-2 border-gray-300">
+      <div class="my-1">
         <div class="uppercase font-bold text-sm p-3">Account</div>
         <div class="px-4 flex flex-row items-center gap-3 py-2">
           <ProfilePicture :size="10" :user_name />
@@ -84,11 +118,19 @@ const navigation: Array<Navigation> = [
             <div class="text-xs">{{ user_email }}</div>
           </div>
         </div>
-        <div class="px-3 py-2 text-sm hover:bg-concrete-100">
+        <div
+          class="px-3 py-2 text-sm hover:bg-concrete-100 cursor-pointer"
+          @click="
+            {
+              navigateTo('/user/profile');
+              hover = false;
+            }
+          "
+        >
           Manage account
         </div>
       </div>
-      <div>
+      <div class="border-b-2 border-t-2 border-gray-300">
         <div class="uppercase font-bold text-sm p-3">Links</div>
         <div
           v-for="nav in navigation"
@@ -105,7 +147,7 @@ const navigation: Array<Navigation> = [
       </div>
       <div
         @click="logout"
-        class="px-3 py-2 hover:bg-concrete-100 cursor-pointer border-t-2 border-gray-300 font-semibold text-sm"
+        class="px-3 py-2 my-1 hover:bg-concrete-100 cursor-pointer font-semibold text-sm"
       >
         Log out
       </div>

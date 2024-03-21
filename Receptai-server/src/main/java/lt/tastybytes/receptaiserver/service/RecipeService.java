@@ -15,4 +15,10 @@ public interface RecipeService {
     List<Recipe> getAllRecipes();
     List<Recipe> getAllUserRecipes(User user);
     Optional<Recipe> getRecipeById(long id);
+
+    /**
+     * @param id ID of the recipe to delete.
+     * @return True if recipe was deleted successfully. False otherwise.
+     */
+    boolean deleteRecipeById(long id);
 }

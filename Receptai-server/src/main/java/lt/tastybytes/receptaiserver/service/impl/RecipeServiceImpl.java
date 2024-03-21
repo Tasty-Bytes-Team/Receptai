@@ -166,4 +166,14 @@ public class RecipeServiceImpl implements RecipeService {
     public Optional<Recipe> getRecipeById(long id) {
         return recipeRepository.findById(id);
     }
+
+    @Override
+    public boolean deleteRecipeById(long id) {
+        var recipe = getRecipeById(id);
+        if (recipe.isPresent()) {
+            recipeRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

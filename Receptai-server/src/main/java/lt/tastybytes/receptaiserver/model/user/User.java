@@ -28,6 +28,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = true)
+    private String profileUrl;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="users_roles",

@@ -2,6 +2,7 @@ package lt.tastybytes.receptaiserver.service.impl;
 
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.ValidationException;
 import lt.tastybytes.receptaiserver.model.recipe.Ingredient;
 import lt.tastybytes.receptaiserver.model.recipe.IngredientType;
@@ -34,7 +35,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto createRecipe(ModifyRecipeDto dto, User author) throws ValidationException {
+    public RecipeDto createRecipe(ModifyRecipeDto dto, User author) {
         var recipe = new Recipe();
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());
@@ -44,20 +45,12 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setPortionCount(dto.portions());
         recipe.setPreviewImage(dto.previewImage());
 
-        recipe.setCategory(categoryService.getCategoryById(dto.categoryId())
-                .orElseThrow(() -> new ValidationException("Invalid category ID, such category does not exist"))
-        );
+        recipe.setCategory(categoryService.getCategoryById(dto.categoryId()).orElseThrow());
 
         for (var tagId : dto.tagIds()) {
-
-            if (tagId == null) {
-                throw new ValidationException("Invalid tags specified");
+            if (tagId != null) {
+                recipe.addTag(tagService.getTagById(tagId).orElseThrow());
             }
-
-            var tagObj = tagService.getTagById(tagId);
-            recipe.addTag(tagObj
-                    .orElseThrow(() -> new ValidationException("Tag with ID of '%s' does not exist".formatted(tagId)))
-            );
         }
 
         if (dto.tutorialVideo() == null || dto.tutorialVideo().isBlank()) {
@@ -92,7 +85,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto) throws ValidationException {
+    public RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto) {
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());
         recipe.setDateModified(new Date());
@@ -100,9 +93,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipe.setPortionCount(dto.portions());
         recipe.setPreviewImage(dto.previewImage());
 
-        recipe.setCategory(categoryService.getCategoryById(dto.categoryId())
-                .orElseThrow(() -> new ValidationException("Invalid category ID, such category does not exist"))
-        );
+        recipe.setCategory(categoryService.getCategoryById(dto.categoryId()).orElseThrow());
 
         if (dto.tutorialVideo() == null || dto.tutorialVideo().isBlank()) {
             recipe.setTutorialVideo(null);
@@ -112,14 +103,9 @@ public class RecipeServiceImpl implements RecipeService {
 
         recipe.clearTags();
         for (var tagId : dto.tagIds()) {
-            if (tagId == null) {
-                throw new ValidationException("Invalid tags specified");
+            if (tagId != null) {
+                recipe.addTag(tagService.getTagById(tagId).orElseThrow());
             }
-
-            var tagObj = tagService.getTagById(tagId);
-            recipe.addTag(tagObj
-                    .orElseThrow(() -> new ValidationException("Tag with ID of '%s' does not exist".formatted(tagId)))
-            );
         }
 
         // TODO: figure out
@@ -165,5 +151,15 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Optional<Recipe> getRecipeById(long id) {
         return recipeRepository.findById(id);
+    }
+
+    @Override
+    public boolean deleteRecipeById(long id) {
+        var recipe = getRecipeById(id);
+        if (recipe.isPresent()) {
+            recipeRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

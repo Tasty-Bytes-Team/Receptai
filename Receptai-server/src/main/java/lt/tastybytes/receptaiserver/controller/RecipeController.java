@@ -1,8 +1,8 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
-import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
@@ -23,7 +23,7 @@ public class RecipeController {
     public ResponseEntity<?> createNewRecipe(
             @Valid @RequestBody ModifyRecipeDto dto,
             @AuthenticationPrincipal User user
-    ) throws Exception {
+    ) {
         var newRecipe = recipeService.createRecipe(dto, user);
         return ResponseEntity.ok(newRecipe);
     }
@@ -54,13 +54,30 @@ public class RecipeController {
             throw new NotFoundException("Recipe by specified ID not found");
         }
 
-        if (!recipe.get().getAuthor().getId().equals(user.getId())) {
-            throw new MissingRightsException("You cannot edit a recipe that is not yours!");
-        }
+        recipe.get().assertCanBeManagedBy(user);
 
         var newDto = recipeService.editRecipe(recipe.get(), dto);
 
         return ResponseEntity.ok(newDto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<MessageResponseDto> deleteRecipe(
+            @PathVariable(value = "id") long id,
+            @AuthenticationPrincipal User user
+    ) throws Exception {
+        var recipe =  recipeService.getRecipeById(id);
+        if (recipe.isEmpty()) {
+            throw new NotFoundException("Recipe by specified ID not found");
+        }
+
+        recipe.get().assertCanBeManagedBy(user);
+
+        var ok = recipeService.deleteRecipeById(id);
+        if (ok) {
+            return ResponseEntity.ok(new MessageResponseDto("Recipe deleted successfully"));
+        }
+        return ResponseEntity.badRequest().body(new MessageResponseDto("Recipe deletion failed"));
     }
 
 }

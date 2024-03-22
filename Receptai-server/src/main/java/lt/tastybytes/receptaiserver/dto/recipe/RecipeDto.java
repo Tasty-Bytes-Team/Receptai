@@ -1,6 +1,6 @@
 package lt.tastybytes.receptaiserver.dto.recipe;
 
-import lt.tastybytes.receptaiserver.dto.PublicUserDto;
+import lt.tastybytes.receptaiserver.dto.user.PublicUserDto;
 import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.tag.TagDto;
 import org.springframework.lang.Nullable;

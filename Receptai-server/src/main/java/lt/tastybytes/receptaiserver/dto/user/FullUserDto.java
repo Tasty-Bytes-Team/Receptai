@@ -1,4 +1,11 @@
 package lt.tastybytes.receptaiserver.dto.user;
 
-public record FullUserDto(String name, String email) {
+import jakarta.annotation.Nullable;
+
+public record FullUserDto(
+        long id,
+        String name,
+        String email,
+        @Nullable String avatarUrl
+) {
 }

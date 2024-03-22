@@ -1,8 +1,8 @@
 package lt.tastybytes.receptaiserver.model.user;
 
 import jakarta.persistence.*;
-import lt.tastybytes.receptaiserver.dto.PublicUserDto;
-import lt.tastybytes.receptaiserver.dto.ShortUserDto;
+import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
+import lt.tastybytes.receptaiserver.dto.user.PublicUserDto;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +27,13 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    @Column(nullable = true)
+    private String profileUrl;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -101,10 +108,10 @@ public class User implements UserDetails {
     }
 
     public PublicUserDto toPublicUserDto() {
-        return new PublicUserDto(id, name);
+        return new PublicUserDto(id, name, profileUrl);
     }
-    public ShortUserDto toShortUserDto() {
-        return new ShortUserDto(id, name, email);
+    public FullUserDto toFullUserDto() {
+        return new FullUserDto(id, name, email, profileUrl);
     }
 
     public Long getId() {

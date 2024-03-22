@@ -2,6 +2,7 @@ package lt.tastybytes.receptaiserver.model.recipe;
 
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
+import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.model.user.User;
@@ -211,5 +212,15 @@ public class Recipe {
         }
         ingredients.add(ingredientType);
         ingredientType.setRecipe(this);
+    }
+
+    public void assertCanBeManagedBy(User user) throws MissingRightsException {
+        if (getAuthor().getId().equals(user.getId())) {
+            return;
+        }
+
+        // TODO: Implement overrides for admins
+
+        throw new MissingRightsException("You are missing the required rights to manage this recipe!");
     }
 }

@@ -1,5 +1,3 @@
 package lt.tastybytes.receptaiserver.dto.user;
 
-import lt.tastybytes.receptaiserver.dto.ShortUserDto;
-
-public record LoginResponseDto(String token, long expiresIn, ShortUserDto user) { }
+public record LoginResponseDto(String token, long expiresIn, FullUserDto user) { }

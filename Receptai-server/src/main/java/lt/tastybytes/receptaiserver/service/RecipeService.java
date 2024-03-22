@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeService {
-    RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author) throws ValidationException;
-    RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto) throws ValidationException;
+    RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author);
+    RecipeDto editRecipe(Recipe recipe, ModifyRecipeDto dto);
     List<Recipe> getAllRecipes();
     List<Recipe> getAllUserRecipes(User user);
     Optional<Recipe> getRecipeById(long id);

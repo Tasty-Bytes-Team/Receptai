@@ -4,11 +4,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lt.tastybytes.receptaiserver.validation.recipe.RecipeV;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
+@RecipeV.ModifyRecipeDtoValidation
+@Valid
 public record ModifyRecipeDto(
         @NotEmpty
         @NonNull String name,

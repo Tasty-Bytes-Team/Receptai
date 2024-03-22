@@ -66,13 +66,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var builder = new StringBuilder();
-
         ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
+
             String message = error.getDefaultMessage();
-            builder.append('"' + fieldName + '"' +  " field " + message + "\n");
+            if (error instanceof FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                builder.append('"').append(fieldName).append('"').append(" field ").append(message).append("\n");
+            } else {
+                builder.append(message).append("\n");
+            }
         });
-        return new ResponseEntity<>(new ErrorResponseDto(builder.toString()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponseDto(builder.toString().strip()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

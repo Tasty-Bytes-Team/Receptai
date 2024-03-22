@@ -3,7 +3,6 @@ package lt.tastybytes.receptaiserver.controller;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
-import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
@@ -24,7 +23,7 @@ public class RecipeController {
     public ResponseEntity<?> createNewRecipe(
             @Valid @RequestBody ModifyRecipeDto dto,
             @AuthenticationPrincipal User user
-    ) throws Exception {
+    ) {
         var newRecipe = recipeService.createRecipe(dto, user);
         return ResponseEntity.ok(newRecipe);
     }

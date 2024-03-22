@@ -61,6 +61,8 @@ const props = defineProps<{
   recipes: Recipe[] | null;
 }>();
 
+const emit = defineEmits(["reload"]);
+
 const confirmBox = ref<boolean>(false);
 const toBeDeleted = ref<number | null>(null);
 
@@ -71,18 +73,18 @@ const recipeSelection = props.recipes?.map((recipe) => ({
   dateCreated: recipe.dateCreated.split("T")[0],
 }));
 
-const deleteRecipe = () => {
+const deleteRecipe = async () => {
   try {
     if (TastyBytes_user.value && toBeDeleted.value != null) {
-      axios.delete(
+      await axios.delete(
         `${config.public.baseURL}/api/v1/recipe/delete/${toBeDeleted.value}`,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
         }
       );
 
+      emit("reload");
       confirmBox.value = false;
-      location.reload();
       addNotification(`Your recipe has been deleted!`, "Success");
     } else {
       addNotification(`You are not authorized. Please log in again.`, "Error");
@@ -158,21 +160,25 @@ const columns = [
                 :to="`/recipes/${recipe.id}`"
                 target="_blank"
                 title="Open in browser"
-                ><Icon
+              >
+                <Icon
                   name="material-symbols:globe"
                   class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
                   size="24px"
                   color="black"
-              /></NuxtLink>
+                />
+              </NuxtLink>
               <NuxtLink
                 :to="`/user/dashboard/my-recipes/edit/${recipe.id}`"
                 title="Edit recipe"
-                ><Icon
+              >
+                <Icon
                   name="material-symbols:contract-edit"
                   class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
                   size="24px"
                   color="black"
-              /></NuxtLink>
+                />
+              </NuxtLink>
               <a
                 @click="
                   {
@@ -182,12 +188,14 @@ const columns = [
                 "
                 title="Delete recipe"
                 class="cursor-pointer"
-                ><Icon
+              >
+                <Icon
                   name="material-symbols:delete-outline"
                   class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
                   size="24px"
                   color="black"
-              /></a>
+                />
+              </a>
             </div>
           </td>
         </tr>

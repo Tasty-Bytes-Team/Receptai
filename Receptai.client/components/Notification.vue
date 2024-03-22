@@ -17,7 +17,7 @@ watch(store, (newVal, oldVal) => {
     }
     timeoutId = setTimeout(() => {
       resetNotification();
-    }, 6000);
+    }, 8000);
   } else if (newVal.show === false && timeoutId) {
     cancelTimeout();
   }

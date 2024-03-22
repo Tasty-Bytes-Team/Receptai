@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
 
-import youtube_parser from "@/typescript/youtubeId";
 import NutritionTable from "@/components/RecipePage/components/NutritionTable.vue";
 import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
@@ -68,9 +67,7 @@ try {
     .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
     .then((res) => {
       recipe.value = res.data;
-      video.value = recipe.value?.tutorialVideo
-        ? youtube_parser(recipe.value.tutorialVideo)
-        : null;
+      console.log(recipe.value.tutorialVideo)
       loading.value = false;
     });
 } catch (e) {
@@ -150,14 +147,14 @@ try {
         </div>
       </div>
     </div>
-    <div v-if="video" class="max-w-screen-lg m-auto my-2 px-2">
+    <div v-if="recipe.tutorialVideo" class="max-w-screen-lg m-auto my-2 px-2">
       <h3 class="font-semibold text-xl mb-3">
         Searching for video instructions?
         <span class="font-normal">Find them here!</span>
       </h3>
       <iframe
         class="w-4/6 lg:h-[400px] sm:h-[300px] h-[200px] m-auto"
-        :src="`https://www.youtube.com/embed/${video}`"
+        :src="`https://www.youtube.com/embed/${recipe.tutorialVideo}`"
         title="LASAGNA/LAZANYA (quick and easy)"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

@@ -99,9 +99,8 @@ const vClickOutside = {
   >
     <div class="font-bold" @click="() => hover = !hover">
       <ProfilePicture
-        class="hover:shadow-[0px_0px_0_6px_#00000020] hover:scale-105 transition-shadow duration-150 cursor-pointer"
+        class="hover:shadow-[0px_0px_0_6px_#00000020] hover:scale-105 transition-shadow duration-150 cursor-pointer w-8 h-8"
         :class="hover ? 'shadow-[0px_0px_0_6px_#00000010]' : null"
-        :size="8"
         :user_name
       />
     </div>
@@ -112,7 +111,7 @@ const vClickOutside = {
       <div class="my-1">
         <div class="uppercase font-bold text-sm p-3">Account</div>
         <div class="px-4 flex flex-row items-center gap-3 py-2">
-          <ProfilePicture :size="10" :user_name />
+          <ProfilePicture :user_name class="w-10 h-10" />
           <div>
             <div class="font-semibold text-sm">{{ user_name }}</div>
             <div class="text-xs">{{ user_email }}</div>

@@ -60,6 +60,7 @@ const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const recipes = ref<Recipe[] | null>(null);
+const key = ref(0);
 const error = ref(false);
 
 try {
@@ -69,16 +70,37 @@ try {
       headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
     }
   );
+
   recipes.value = response.data;
 } catch (e) {
   console.log(e);
 }
+
+const getData = async () => {
+  try {
+    const response = await axios.get(
+      `${config.public.baseURL}/api/v1/user/recipes`,
+      {
+        headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
+      }
+    );
+    recipes.value = response.data;
+    key.value++;
+  } catch (e) {
+    console.log(e);
+  }
+};
 </script>
 
 <template>
   <h1 class="text-3xl font-bold text-center m-5">My Recipes</h1>
   <div class="flex flex-col gap-2">
-    <RecipeContainer v-if="recipes?.length !== 0" :recipes="recipes" />
+    <RecipeContainer
+      :key="key"
+      @reload="getData()"
+      v-if="recipes?.length !== 0"
+      :recipes
+    />
     <div v-else class="flex flex-col items-center gap-2">
       <p class="font-medium text-lg text-center">
         Your recipe box is currently empty. Why not add a new recipe today?

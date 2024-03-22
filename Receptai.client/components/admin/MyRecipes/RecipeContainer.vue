@@ -152,7 +152,7 @@ const columns = [
           </td>
           <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
-          <td class="text-center w-full">
+          <td class="text-center max-w-40">
             <div class="w-full flex justify-evenly">
               <NuxtLink
                 :to="`/recipes/${recipe.id}`"

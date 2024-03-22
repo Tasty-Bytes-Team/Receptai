@@ -9,7 +9,7 @@ const validationSchema = toTypedSchema(
   zod.object({
     input: zod
       .string()
-      .min(1, "This is required")
+      .min(1, "Required")
       .refine((value) => value === "DELETE", "Input has to be „DELETE“"),
   })
 );
@@ -27,10 +27,11 @@ const onSubmit = handleSubmit(async () => {
 
 <template>
   <div
-    class="fixed top-0 right-0 left-0 w-full h-full flex justify-center items-center z-50 bg-[#7d7d7d82]"
+    @click.self="emit('cancel')"
+    class="fixed top-0 right-0 left-0 w-full h-full flex justify-center items-center z-30 bg-[#7d7d7d82]"
   >
     <div
-      class="relative p-6 text-center max-w-96 bg-white rounded-md shadow sm:p-7"
+      class="z-50 relative p-6 text-center max-w-96 bg-white rounded-md shadow sm:p-7 m-3"
     >
       <button
         @click="emit('cancel')"

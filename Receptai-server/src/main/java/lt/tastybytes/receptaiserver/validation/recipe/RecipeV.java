@@ -7,6 +7,7 @@ import jakarta.validation.Payload;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.TagService;
+import lt.tastybytes.receptaiserver.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.annotation.Documented;
@@ -46,6 +47,17 @@ public class RecipeV {
                 context.buildConstraintViolationWithTemplate("Null DTO? Something went horribly wrong")
                         .addConstraintViolation();
                 return false;
+            }
+
+            // Validate YouTube URL
+            if (dto.tutorialVideo() != null) {
+                var id = Converter.extractVideoIdFromUrl(dto.tutorialVideo());
+                if (id.isEmpty()) {
+                    context.disableDefaultConstraintViolation();
+                    context.buildConstraintViolationWithTemplate("Invalid YouTube tutorial video URL provided")
+                            .addConstraintViolation();
+                    return false;
+                }
             }
 
             // Validate the category

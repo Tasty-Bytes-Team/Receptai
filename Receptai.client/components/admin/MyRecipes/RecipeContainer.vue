@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import axios from "axios";
+import { addNotification } from "@/store/store";
+
+import ConfirmBox from "./components/ConfirmBox.vue";
 import Image from "./Image.vue";
 
 interface Recipe {
@@ -38,9 +42,27 @@ interface Category {
   link: string;
 }
 
+interface UserCookie {
+  token: string;
+  expiresIn: number;
+  user: User;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const config = useRuntimeConfig();
+const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
 const props = defineProps<{
   recipes: Recipe[] | null;
 }>();
+
+const confirmBox = ref<boolean>(false);
+const toBeDeleted = ref<number | null>(null);
 
 const recipeSelection = props.recipes?.map((recipe) => ({
   id: recipe.id,
@@ -48,6 +70,28 @@ const recipeSelection = props.recipes?.map((recipe) => ({
   name: recipe.name,
   dateCreated: recipe.dateCreated.split("T")[0],
 }));
+
+const deleteRecipe = () => {
+  try {
+    if (TastyBytes_user.value && toBeDeleted.value != null) {
+      axios.delete(
+        `${config.public.baseURL}/api/v1/recipe/delete/${toBeDeleted.value}`,
+        {
+          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+        }
+      );
+
+      confirmBox.value = false;
+      location.reload();
+      addNotification(`Your recipe has been deleted!`, "Success");
+    } else {
+      addNotification(`You are not authorized. Please log in again.`, "Error");
+      navigateTo("/user/login");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 const columns = [
   {
@@ -78,6 +122,11 @@ const columns = [
 </script>
 
 <template>
+  <ConfirmBox
+    v-if="confirmBox"
+    @confirm="deleteRecipe"
+    @cancel="confirmBox = !confirmBox"
+  />
   <div class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right">
       <thead class="text-sm bg-concrete-100">
@@ -103,21 +152,43 @@ const columns = [
           </td>
           <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
-          <td class="text-center">
-            <NuxtLink
-              :to="`/recipes/${recipe.id}`"
-              target="_blank"
-              title="Open in browser"
-              ><Icon name="material-symbols:globe" size="24px" color="black"
-            /></NuxtLink>
-            <NuxtLink
-              :to="`/user/dashboard/my-recipes/edit/${recipe.id}`"
-              title="Edit recipe"
-              ><Icon
-                name="material-symbols:contract-edit"
-                size="24px"
-                color="black"
-            /></NuxtLink>
+          <td class="text-center w-full">
+            <div class="w-full flex justify-evenly">
+              <NuxtLink
+                :to="`/recipes/${recipe.id}`"
+                target="_blank"
+                title="Open in browser"
+                ><Icon
+                  name="material-symbols:globe"
+                  class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
+                  size="24px"
+                  color="black"
+              /></NuxtLink>
+              <NuxtLink
+                :to="`/user/dashboard/my-recipes/edit/${recipe.id}`"
+                title="Edit recipe"
+                ><Icon
+                  name="material-symbols:contract-edit"
+                  class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
+                  size="24px"
+                  color="black"
+              /></NuxtLink>
+              <a
+                @click="
+                  {
+                    confirmBox = true;
+                    toBeDeleted = recipe.id;
+                  }
+                "
+                title="Delete recipe"
+                class="cursor-pointer"
+                ><Icon
+                  name="material-symbols:delete-outline"
+                  class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
+                  size="24px"
+                  color="black"
+              /></a>
+            </div>
           </td>
         </tr>
       </tbody>

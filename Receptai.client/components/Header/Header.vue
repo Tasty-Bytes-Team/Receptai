@@ -5,6 +5,8 @@ import DefaultHeader from "./DefaultHeader.vue";
 interface Navigation {
   to: string;
   title: string;
+  highlight?: boolean;
+  onlyForMobile?: boolean;
 }
 
 defineProps<{
@@ -30,14 +32,20 @@ const adminHeaderNav: Array<Navigation> = [
   {
     to: "/user/dashboard/my-recipes",
     title: "My Recipes",
-  },
+  }
 ];
 </script>
 
 <template>
   <header class="bg-white shadow-md">
-    <MobileHeader :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav" />
-    <DefaultHeader :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav" />
+    <MobileHeader
+      :header-type
+      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+    />
+    <DefaultHeader
+      :header-type
+      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+    />
   </header>
 </template>
 

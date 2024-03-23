@@ -5,10 +5,13 @@ import Logo from "./components/Logo.vue";
 interface Navigation {
   to: string;
   title: string;
+  highlight?: boolean;
+  onlyForMobile?: boolean;
 }
 
 defineProps<{
   headerNav: Navigation[];
+  headerType?: "ADMIN" | "DEFAULT";
 }>();
 </script>
 
@@ -27,7 +30,17 @@ defineProps<{
         >
       </div>
     </div>
-    <UserBanner />
+    <div class="flex gap-4 items-center">
+      <NuxtLink v-if="headerType === 'ADMIN'" to="/user/dashboard/my-recipes/create">
+
+        <button
+          class="p-1 px-3 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
+        >
+          Create
+        </button>
+      </NuxtLink>
+      <UserBanner />
+    </div>
   </div>
 </template>
 

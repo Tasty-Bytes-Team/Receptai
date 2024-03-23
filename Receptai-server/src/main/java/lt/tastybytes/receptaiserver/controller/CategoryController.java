@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
@@ -36,14 +37,15 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}/recipes")
     public ResponseEntity<?> getRecipesInCategory(
-            @PathVariable(value = "categoryId") long categoryId
+            @PathVariable(value = "categoryId") long categoryId,
+            @Valid PagedRequestDto pageDto
     ) throws NotFoundException {
         var category = categoryService.getCategoryById(categoryId);
         if (category.isEmpty()) {
             throw new NotFoundException("Category by specified ID not found.");
         }
 
-        var page = recipeService.getRecipesByCategory(category.get(), 0);
+        var page = recipeService.getRecipesByCategory(category.get(), pageDto.page());
         return ResponseEntity.ok(
             PagedResponseDto.of(page, Recipe::toDto)
         );

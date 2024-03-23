@@ -155,6 +155,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Page<Recipe> getRecipes(int pageNumber) {
+        return recipeRepository.findAll(PageRequest.of(pageNumber, RECIPES_PER_PAGE));
+    }
+
+    @Override
     public Page<Recipe> getRecipesByCategory(Category category, int pageNumber) {
         return recipeRepository.findAllByCategoriesContaining(
                 category,

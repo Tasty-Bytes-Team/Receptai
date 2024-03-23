@@ -34,14 +34,19 @@ public class SecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/category/list").permitAll()
+                        .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
+
+                        .requestMatchers("/api/v1/recipe/list").permitAll()
+                        .requestMatchers("/api/v1/recipe/list2").permitAll()
+                        .requestMatchers("/api/v1/recipe/get/**").permitAll()
+
+                        .requestMatchers("/api/v1/tag/list").permitAll()
+
                         .requestMatchers("/api/v1/user/register").permitAll()
                         .requestMatchers("/api/v1/user/login").permitAll()
-                        .requestMatchers("/api/v1/recipe/list").permitAll()
-                        .requestMatchers("/api/v1/recipe/get/**").permitAll()
-                        .requestMatchers("/api/v1/category/list").permitAll()
-                        .requestMatchers("/api/v1/tag/list").permitAll()
-                        .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
                         .requestMatchers("/api/v1/user/list").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

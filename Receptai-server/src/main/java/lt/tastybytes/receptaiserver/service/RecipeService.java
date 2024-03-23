@@ -12,11 +12,26 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeService {
+    /**
+     * Returns recipe entity by specified ID.
+     * @param id Recipe ID
+     * @return Optional recipe entity.
+     */
+    Optional<Recipe> getRecipeById(long id);
+
+    /**
+     * Returns recipes for the specified page.
+     * @param pageNumber Recipe page, starts at 0.
+     * @return A page of recipes.
+     */
+    Page<Recipe> getRecipes(int pageNumber);
+
+
     RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author);
     RecipeDto editRecipe(Recipe recipe, @Valid ModifyRecipeDto dto);
     List<Recipe> getAllRecipes();
+
     List<Recipe> getAllUserRecipes(User user);
-    Optional<Recipe> getRecipeById(long id);
 
     Page<Recipe> getRecipesByCategory(Category category, int pageNumber);
 

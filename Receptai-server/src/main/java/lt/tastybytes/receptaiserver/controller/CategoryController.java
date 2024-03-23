@@ -1,7 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
-import lt.tastybytes.receptaiserver.PagedRequestDto;
+import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;

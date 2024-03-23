@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ProfilePicture from "./components/ProfilePicture.vue";
-import ProfileMenu from "./components/ProfileMenu.vue";
+import ProfilePicture from "./ProfilePicture.vue";
+import ProfileMenu from "./ProfileMenu.vue";
 
 import { addNotification } from "@/store/store";
 

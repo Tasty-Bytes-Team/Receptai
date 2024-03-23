@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/recipe/get/**").permitAll()
                         .requestMatchers("/api/v1/category/list").permitAll()
                         .requestMatchers("/api/v1/tag/list").permitAll()
+                        .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
                         .requestMatchers("/api/v1/user/list").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

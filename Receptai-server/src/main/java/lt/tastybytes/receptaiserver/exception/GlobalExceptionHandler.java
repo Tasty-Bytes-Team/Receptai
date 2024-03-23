@@ -46,14 +46,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<?> handleValidationException(ValidationException ex) {
-        return new ResponseEntity<>(
-                new ErrorResponseDto(ex.getMessage()),
-                HttpStatus.BAD_REQUEST
-        );
-    }
-
     @ExceptionHandler({
             HttpRequestMethodNotSupportedException.class,
             HttpMediaTypeNotSupportedException.class,

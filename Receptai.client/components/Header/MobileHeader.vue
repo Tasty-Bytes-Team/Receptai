@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
-import { routeLocationKey } from "vue-router";
 
 interface Navigation {
   to: string;
@@ -39,8 +38,15 @@ watch(
     <div class="flex-1">
       <Icon
         @click="showMobileMenu = !showMobileMenu"
-        name="material-symbols:menu-rounded"
+        :name="
+          !showMobileMenu
+            ? 'material-symbols:menu-rounded'
+            : 'material-symbols:close-rounded'
+        "
         class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
+        :class="
+          !showMobileMenu ? null : 'bg-gray-100 ring-4 ring-gray-100 rounded-sm'
+        "
         size="26px"
         color="black"
       />

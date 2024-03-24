@@ -30,7 +30,6 @@ COPY pages /usr/src/nuxt-app/pages
 COPY public /usr/src/nuxt-app/public
 COPY server /usr/src/nuxt-app/server
 COPY store /usr/src/nuxt-app/store
-COPY typescript /usr/src/nuxt-app/typescript
 RUN npm run build
 
 EXPOSE 3000

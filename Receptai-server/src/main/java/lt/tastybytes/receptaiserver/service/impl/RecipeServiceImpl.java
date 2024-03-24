@@ -2,8 +2,7 @@ package lt.tastybytes.receptaiserver.service.impl;
 
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
-import lt.tastybytes.receptaiserver.exception.NotFoundException;
-import lt.tastybytes.receptaiserver.exception.ValidationException;
+import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.recipe.Ingredient;
 import lt.tastybytes.receptaiserver.model.recipe.IngredientType;
 import lt.tastybytes.receptaiserver.model.recipe.Instruction;
@@ -13,6 +12,8 @@ import lt.tastybytes.receptaiserver.repository.RecipeRepository;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.TagService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,6 +22,8 @@ import java.util.Optional;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
+
+    static final int RECIPES_PER_PAGE = 20;
 
     private final RecipeRepository recipeRepository;
 
@@ -108,8 +111,6 @@ public class RecipeServiceImpl implements RecipeService {
             }
         }
 
-        // TODO: figure out
-
         // Add instructions
         recipe.clearInstructions();
         var instructions = dto.instructions();
@@ -151,6 +152,19 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Optional<Recipe> getRecipeById(long id) {
         return recipeRepository.findById(id);
+    }
+
+    @Override
+    public Page<Recipe> getRecipes(int pageNumber) {
+        return recipeRepository.findAll(PageRequest.of(pageNumber, RECIPES_PER_PAGE));
+    }
+
+    @Override
+    public Page<Recipe> getRecipesByCategory(Category category, int pageNumber) {
+        return recipeRepository.findAllByCategoriesContaining(
+                category,
+                PageRequest.of(pageNumber, RECIPES_PER_PAGE)
+        );
     }
 
     @Override

@@ -2,6 +2,8 @@ package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
+import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
+import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.recipe.*;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
@@ -32,6 +34,16 @@ public class RecipeController {
     public Iterable<RecipeDto> getAllRecipes() {
         var recipes = recipeService.getAllRecipes();
         return recipes.stream().map(Recipe::toDto).toList();
+    }
+
+    @GetMapping("/list2")
+    public ResponseEntity<?> getAllRecipes2(
+            @Valid PagedRequestDto pageDto
+    ) {
+        var recipes = recipeService.getRecipes(pageDto.page());
+        return ResponseEntity.ok(
+                PagedResponseDto.of(recipes, Recipe::toDto)
+        );
     }
 
     @GetMapping("/get/{id}")

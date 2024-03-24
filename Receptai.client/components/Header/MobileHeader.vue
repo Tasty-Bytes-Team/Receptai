@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
+import { routeLocationKey } from "vue-router";
 
 interface Navigation {
   to: string;
@@ -13,8 +14,22 @@ defineProps<{
   headerNav: Navigation[];
   headerType?: "ADMIN" | "DEFAULT";
 }>();
+const route = useRoute();
+
+const updateHref = (): String => {
+  return window.location.href.toString().split(window.location.host)[1];
+};
 
 const showMobileMenu = ref(false);
+const windowHref = ref<String>(updateHref());
+
+watch(
+  () => route.fullPath,
+  () => {
+    showMobileMenu.value = false;
+    windowHref.value = updateHref();
+  }
+);
 </script>
 
 <template>
@@ -53,13 +68,13 @@ const showMobileMenu = ref(false);
     >
       <li v-for="nav in headerNav">
         <a
-          @click="
-            {
-              navigateTo(nav.to);
-              showMobileMenu = false;
-            }
-          "
+          @click="navigateTo(nav.to)"
           class="transition-all duration-100 block py-2 px-3 text-concrete-800 hover:text-concrete-950 rounded-sm hover:bg-concrete-100 cursor-pointer"
+          :class="
+            windowHref === nav.to
+              ? 'border-r-8 !border-primary !bg-whiskey-100'
+              : null
+          "
         >
           {{ nav.title }}
         </a>

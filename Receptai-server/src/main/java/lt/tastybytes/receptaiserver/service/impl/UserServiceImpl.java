@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,21 +65,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUser(User user, PatchUserDto dto) throws NotFoundException {
+    public User editUser(User user, PatchUserDto dto) {
+
+        // Require valid password reauth if changing password or email
+        if (dto.newEmail() != null || dto.newPassword() != null) {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), dto.oldPassword()));
+        }
+
         if (dto.newEmail() != null) {
             user.setEmail(dto.newEmail());
         }
 
         if (dto.newName() != null) {
-            user.setEmail(dto.newName());
+            user.setName(dto.newName());
         }
 
         if (dto.newPassword() != null) {
-
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), dto.oldPassword())
-            );
-
             var passwordEncoder = new BCryptPasswordEncoder();
             user.setPassword(passwordEncoder.encode(dto.newPassword()));
             // TODO: might prompt token refresh in the future

@@ -34,7 +34,7 @@ public class PatchUserRequestValidation {
             dto.newEmail();
             dto.newPassword();
             dto.oldPassword();
-            dto.profileAvatarUrl();
+            dto.newProfileAvatarUrl();
 
             /*
             if (dto.page() < 0) {

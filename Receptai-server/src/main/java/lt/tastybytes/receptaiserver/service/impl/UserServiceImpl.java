@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
+import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.user.Role;
 import lt.tastybytes.receptaiserver.model.user.User;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,6 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findUserById(long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
     public void createUser(String name, String email, String password) {
         var user = new User();
         user.setName(name);
@@ -52,8 +59,37 @@ public class UserServiceImpl implements UserService {
         if (role == null) {
             role = createDefaultRoleIfNotExist();
         }
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(List.of(role));
         userRepository.save(user);
+    }
+
+    @Override
+    public User editUser(User user, PatchUserDto dto) throws NotFoundException {
+        if (dto.newEmail() != null) {
+            user.setEmail(dto.newEmail());
+        }
+
+        if (dto.newName() != null) {
+            user.setEmail(dto.newName());
+        }
+
+        if (dto.newPassword() != null) {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), dto.oldPassword())
+            );
+
+            var passwordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(passwordEncoder.encode(dto.newPassword()));
+            // TODO: might prompt token refresh in the future
+        }
+
+        if (dto.newProfileAvatarUrl() != null) {
+            user.setProfileUrl(dto.newProfileAvatarUrl());
+        }
+
+        userRepository.save(user);
+        return user;
     }
 
     public User authenticate(String email, String password) {

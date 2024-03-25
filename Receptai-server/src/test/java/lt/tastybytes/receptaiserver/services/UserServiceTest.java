@@ -105,6 +105,19 @@ public class UserServiceTest {
     }
 
     @Test
+    void userNameEdit_WithNoOldPassword_ShouldSucceed() throws NotFoundException {
+        createTestUsers();
+        var user = getTestUser1();
+        userService.editUser(user, new PatchUserDto(
+                "New Name",
+                null,
+                null,
+                null,
+                null
+        ));
+    }
+
+    @Test
     void userEmailEdit_WithNoOldPassword_ShouldFail() {
         createTestUsers();
         var user = getTestUser1();
@@ -145,6 +158,29 @@ public class UserServiceTest {
                 "Very Secret Password 123!",
                 null
         ));
+    }
+
+    @Test
+    void userAuthentication_WithInvalidDetails_ShouldFail() {
+        createTestUsers();
+        assertThrows(BadCredentialsException.class, () -> {
+            userService.authenticate("invalidemail@email.co", "invalidpassword");
+        });
+    }
+
+    @Test
+    void userAuthentication_WithValidEmailAndInvalidPassword_ShouldFail() {
+        createTestUsers();
+        assertThrows(BadCredentialsException.class, () -> {
+            userService.authenticate("TestUser1@email.com", "invalidpassword");
+        });
+    }
+
+    @Test
+    void userAuthentication_WithValidEmailAndInvalidPassword_ShouldSucceed() throws Exception {
+        createTestUsers();
+        var user = userService.authenticate("TestUser1@email.com", "Very Secret Password 123!");
+        assertNotNull(user);
     }
 
 }

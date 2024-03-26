@@ -20,6 +20,7 @@ const updateHref = (): String => {
 };
 
 const showMobileMenu = ref(false);
+const disabled = ref(false);
 const windowHref = ref<String>(updateHref());
 
 watch(
@@ -29,6 +30,14 @@ watch(
     windowHref.value = updateHref();
   }
 );
+
+function toggleMobileMenuWithTimeout() {
+  disabled.value = true;
+  showMobileMenu.value = !showMobileMenu.value;
+  setTimeout(() => {
+    disabled.value = false;
+  }, 100);
+}
 </script>
 
 <template>
@@ -36,20 +45,23 @@ watch(
     class="sm:hidden max-w-screen-lg m-auto px-3 flex items-center justify-between"
   >
     <div class="flex-1">
-      <Icon
-        @click="showMobileMenu = !showMobileMenu"
-        :name="
-          !showMobileMenu
-            ? 'material-symbols:menu-rounded'
-            : 'material-symbols:close-rounded'
-        "
-        class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
-        :class="
-          !showMobileMenu ? null : 'bg-gray-100 ring-4 ring-gray-100 rounded-sm'
-        "
-        size="26px"
-        color="black"
-      />
+      <button :disabled="disabled" @click="toggleMobileMenuWithTimeout">
+        <Icon
+          :name="
+            !showMobileMenu
+              ? 'material-symbols:menu-rounded'
+              : 'material-symbols:close-rounded'
+          "
+          class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
+          :class="
+            !showMobileMenu
+              ? null
+              : 'bg-gray-100 ring-4 ring-gray-100 rounded-sm'
+          "
+          size="26px"
+          color="black"
+        />
+      </button>
     </div>
     <Logo class="!m-0" />
     <div class="flex-1">

@@ -8,8 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test": "vitest --pool=forks",
+    "coverage": "vitest run --pool=forks --coverage"
   },
   "dependencies": {
     "@testing-library/vue": "^8.0.3",

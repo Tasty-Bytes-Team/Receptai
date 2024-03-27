@@ -58,10 +58,20 @@ const validationSchema = toTypedSchema(
     name: zod.string().min(1, "Name is required"),
     shortDescription: zod.string().min(1, "Description is required"),
     previewImage: zod.string().url("Preview image must be a valid URL"),
-    tutorialVideo: zod.union([
-      zod.literal(""),
-      zod.string().trim().url("Tutorial video must be a valid URL"),
-    ]),
+    tutorialVideo: zod
+      .string()
+      .transform((val) => (val === "" ? null : val))
+      .refine(
+        (str) =>
+          str === null
+            ? true
+            : /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/.test(
+                str
+              ),
+        "You need to provide a valid YouTube video URL"
+      )
+      .nullable()
+      .optional(),
     instructions: zod.array(
       zod.string().min(1, "Cooking instructions is required")
     ),
@@ -93,7 +103,7 @@ const initialValues = {
   name: "",
   shortDescription: "",
   previewImage: "",
-  tutorialVideo: "",
+  tutorialVideo: null,
   instructions: [""],
   ingredients: [
     { purpose: "", ingredients: [{ name: "", quantity: null, unit: "" }] },

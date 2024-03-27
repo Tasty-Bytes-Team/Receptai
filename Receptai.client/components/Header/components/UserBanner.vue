@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ProfilePicture from "./components/ProfilePicture.vue";
-import ProfileMenu from "./components/ProfileMenu.vue";
+import ProfilePicture from "./ProfilePicture.vue";
+import ProfileMenu from "./ProfileMenu.vue";
 
 import { addNotification } from "@/store/store";
 
@@ -98,8 +98,8 @@ const vClickOutside = {
   >
     <div class="font-bold" @click="() => (hover = !hover)">
       <ProfilePicture
-        class="hover:shadow-[0px_0px_0_6px_#00000020] hover:scale-105 transition-shadow duration-150 cursor-pointer w-8 h-8"
-        :class="hover ? 'shadow-[0px_0px_0_6px_#00000010]' : null"
+        class="hover:ring-[6px] hover:ring-gray-200 hover:scale-105 transition-all duration-150 cursor-pointer w-8 h-8"
+        :class="hover ? 'ring-4 ring-gray-100' : null"
         :user_name="user.name"
       />
     </div>

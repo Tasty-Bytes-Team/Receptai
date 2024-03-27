@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import UserBanner from './UserBanner.vue';
-import Logo from './Logo.vue'
+import MobileHeader from "./MobileHeader.vue";
+import DefaultHeader from "./DefaultHeader.vue";
 
 interface Navigation {
   to: string;
   title: string;
+  highlight?: boolean;
+  onlyForMobile?: boolean;
 }
+
+defineProps<{
+  headerType?: "ADMIN" | "DEFAULT";
+}>();
 
 const headerNav: Array<Navigation> = [
   {
@@ -17,19 +23,29 @@ const headerNav: Array<Navigation> = [
     title: "Recipes",
   },
 ];
+
+const adminHeaderNav: Array<Navigation> = [
+  {
+    to: "/user/dashboard",
+    title: "Dashboard",
+  },
+  {
+    to: "/user/dashboard/my-recipes",
+    title: "My Recipes",
+  }
+];
 </script>
 
 <template>
   <header class="bg-white shadow-md">
-    <div class="max-w-screen-lg m-auto px-3 flex items-center justify-between">
-      <div class="flex items-center justify-between">
-        <Logo />
-        <div class="w-full justify-center gap-6 sm:flex hidden">
-          <NuxtLink v-for="nav in headerNav" :to="nav.to" class="hover:underline">{{ nav.title }}</NuxtLink>
-        </div>
-      </div>
-      <UserBanner />
-    </div>
+    <MobileHeader
+      :header-type
+      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+    />
+    <DefaultHeader
+      :header-type
+      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+    />
   </header>
 </template>
 

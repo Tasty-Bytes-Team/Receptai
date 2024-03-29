@@ -45,7 +45,7 @@ public class RecipeController {
             @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
             SortedRequestDto sortDto
     ) {
-        var recipes = recipeService.getRecipes(1, sortDto);
+        var recipes = recipeService.getRecipes(pageDto.page(), sortDto);
         return ResponseEntity.ok(
                 PagedResponseDto.of(recipes, Recipe::toDto)
         );

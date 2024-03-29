@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   user_name: string;
 }>();
 </script>
@@ -7,8 +7,18 @@ const props = defineProps<{
 <template>
   <div
     class="bg-indigo-300 rounded-full flex justify-center items-center font-semibold"
+    data-testid="profile-picture"
   >
-    {{ user_name.substring(0, 2) }}
+    {{
+      /[a-zA-Z].*\s.*[a-zA-Z]/.test(user_name)
+        ? user_name
+            .trim()
+            .split(" ")
+            .slice(0, 2)
+            .map((word) => word[0].toUpperCase())
+            .join("")
+        : user_name.trim().substring(0, 2).toUpperCase()
+    }}
   </div>
 </template>
 

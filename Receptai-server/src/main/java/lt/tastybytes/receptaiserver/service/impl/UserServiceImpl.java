@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
+import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.user.Role;
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUser(User user, PatchUserDto dto) {
+    public User editUser(User user, @Valid PatchUserDto dto) {
 
         // Require valid password reauth if changing password or email
         if (dto.newEmail() != null || dto.newPassword() != null) {

@@ -63,7 +63,7 @@ public class UserController {
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<FullUserDto> patchUser(
             @PathVariable(value = "userId") long userId,
-            @Valid PatchUserDto dto,
+            @Valid @RequestBody PatchUserDto dto,
             @AuthenticationPrincipal User currentUser
     ) throws NotFoundException, MissingRightsException {
         var maybeUser = userService.findUserById(userId);

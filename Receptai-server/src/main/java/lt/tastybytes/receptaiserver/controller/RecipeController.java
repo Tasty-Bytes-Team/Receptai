@@ -39,8 +39,8 @@ public class RecipeController {
 
     @GetMapping("/list2")
     public ResponseEntity<?> getAllRecipes2(
-            @Valid PagedRequestDto pageDto,
-            @Valid SortedRequestDto sortDto
+            @Valid @RequestBody PagedRequestDto pageDto,
+            @Valid @RequestBody SortedRequestDto sortDto
     ) {
         var recipes = recipeService.getRecipes(pageDto.page());
         return ResponseEntity.ok(

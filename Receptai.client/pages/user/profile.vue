@@ -36,7 +36,13 @@ const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const validationSchema = toTypedSchema(
   zod.object({
-    name: zod.string().min(1, "This is required"),
+    name: zod
+      .string()
+      .min(3, "Name must be at least three characters long.")
+      .regex(
+        /^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$/,
+        "Name can't contain special symbols."
+      ),
   })
 );
 
@@ -101,45 +107,9 @@ const onSubmit = handleSubmit(async () => {
   }
 });
 
-const onFocusCancel = () => {
-  showConfirmation.value = false;
-  name.value = user.name;
-};
-
 const onCancel = () => {
   showConfirmation.value = false;
   name.value = user.name;
-};
-
-const vClickOutside = {
-  mounted(el: any, binding: { value: (event: Event) => void }) {
-    const toggleListener = () => {
-      if (showConfirmation.value) {
-        el.__ClickOutsideHandler__ = (event: Event) => {
-          if (!(el === event.target || el.contains(event.target as Node))) {
-            binding.value(event);
-          }
-        };
-        document.body.addEventListener("click", el.__ClickOutsideHandler__);
-      } else {
-        document.body.removeEventListener(
-          "click",
-          el.__ClickOutsideHandler__ as EventListener
-        );
-        el.__ClickOutsideHandler__ = undefined;
-      }
-    };
-
-    toggleListener();
-
-    watch(showConfirmation, toggleListener);
-  },
-  unmounted(el: any) {
-    document.body.removeEventListener(
-      "click",
-      el.__ClickOutsideHandler__ as EventListener
-    );
-  },
 };
 </script>
 
@@ -170,10 +140,15 @@ const vClickOutside = {
               <span class="text-red-600 text-sm">{{ errors.name }}</span>
             </div>
 
-            <div v-click-outside="onFocusCancel">
+            <div>
               <input
                 @focus="showConfirmation = true"
-                class="outline-none w-full font-normal px-2 py-2 focus:bg-concrete-200 border-2 border-white focus:border-concrete-400 hover:bg-concrete-200 transition-colors duration-150 rounded-sm"
+                class="outline-none w-full font-normal px-2 py-2 border-2 border-white hover:bg-concrete-100 transition-colors duration-150 rounded-sm"
+                :class="
+                  showConfirmation
+                    ? '!bg-concrete-200 !border-concrete-400'
+                    : null
+                "
                 name="name"
                 placeholder="Full name"
                 autocomplete="name"

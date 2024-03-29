@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.services;
 import lt.tastybytes.receptaiserver.TestDatabaseConfig;
 import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
+import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void userEdit_WithValidOldPassword_ShouldBeApplied() throws NotFoundException {
+    void userEdit_WithValidOldPassword_ShouldBeApplied() throws NotFoundException, UserAlreadyExistsException {
         createTestUsers();
         var user = getTestUser1();
         var editedUser = userService.editUser(user, new PatchUserDto(
@@ -105,7 +106,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void userNameEdit_WithNoOldPassword_ShouldSucceed() throws NotFoundException {
+    void userNameEdit_WithNoOldPassword_ShouldSucceed() throws NotFoundException, UserAlreadyExistsException {
         createTestUsers();
         var user = getTestUser1();
         userService.editUser(user, new PatchUserDto(
@@ -148,7 +149,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void userPasswordEdit_WithValidOldPassword_ShouldSucceed() throws NotFoundException {
+    void userPasswordEdit_WithValidOldPassword_ShouldSucceed() throws NotFoundException, UserAlreadyExistsException {
         createTestUsers();
         var user = getTestUser1();
         userService.editUser(user, new PatchUserDto(

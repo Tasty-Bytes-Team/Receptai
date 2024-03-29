@@ -65,7 +65,7 @@ public class UserController {
             @PathVariable(value = "userId") long userId,
             @Valid @RequestBody PatchUserDto dto,
             @AuthenticationPrincipal User currentUser
-    ) throws NotFoundException, MissingRightsException {
+    ) throws NotFoundException, MissingRightsException, UserAlreadyExistsException {
         var maybeUser = userService.findUserById(userId);
         if (maybeUser.isEmpty()) {
             throw new NotFoundException("Specified user was not found");

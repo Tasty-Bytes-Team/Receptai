@@ -4,47 +4,51 @@ import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
-import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public class SortedRequestValidation {
 
-    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+    @Constraint(validatedBy = Validator.class)
     @Retention(RUNTIME)
+    @Target(PARAMETER)
     @Documented
-    @Constraint(validatedBy = ValueOfEnumValidator.class)
-    public @interface ValueOfEnum {
-        Class<? extends Enum<?>> enumClass();
-        String message() default "must be any of enum {enumClass}";
+    public @interface AllowedSortBy {
+        String[] values();
+        String message() default "Validation failed";
         Class<?>[] groups() default {};
         Class<? extends Payload>[] payload() default {};
     }
 
-    public static class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
-        private List<String> acceptedValues;
+    private static class Validator implements ConstraintValidator<AllowedSortBy, SortedRequestDto> {
+
+        private String[] allowedValues;
 
         @Override
-        public void initialize(ValueOfEnum annotation) {
-            acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
-                    .map(Enum::name)
-                    .collect(Collectors.toList());
+        public void initialize(AllowedSortBy constraintAnnotation) {
+            allowedValues = constraintAnnotation.values();
         }
 
         @Override
-        public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-            if (value == null) {
-                return true;
+        public boolean isValid(SortedRequestDto dto, ConstraintValidatorContext context) {
+
+            for (var val : allowedValues) {
+                if (dto.sortBy().equals(val)) {
+                    return true;
+                }
             }
-            return acceptedValues.contains(value.toString());
+
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Specified sortBy key is not valid. Valid keys are " +
+                            String.join(", ", allowedValues))
+                    .addConstraintViolation();
+            return false;
         }
     }
 }

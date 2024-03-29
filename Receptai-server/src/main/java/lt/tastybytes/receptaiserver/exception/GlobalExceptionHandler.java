@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -53,6 +54,19 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<?> handleHttpRequestMethodNotSupportedException(Exception ex) {
         return new ResponseEntity<>(new ErrorResponseDto(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        ex.printStackTrace();
+        var builder = new StringBuilder();
+        for (var result: ex.getAllValidationResults()) {
+            for (var e: result.getResolvableErrors()) {
+                builder.append(e.getDefaultMessage()).append("\n");
+            }
+        }
+        return new ResponseEntity<>(new ErrorResponseDto(builder.toString().strip()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

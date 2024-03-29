@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.service;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
+import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.User;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface UserService {
     void createUser(String name, String email, String password);
 
 
-    User editUser(User user, @Valid PatchUserDto dto) throws NotFoundException;
+    User editUser(User user, @Valid PatchUserDto dto) throws NotFoundException, UserAlreadyExistsException;
 
 
     User findUserByEmail(String email);

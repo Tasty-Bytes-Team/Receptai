@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.service.impl;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
+import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.Role;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.repository.RoleRepository;
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUser(User user, @Valid PatchUserDto dto) {
+    public User editUser(User user, @Valid PatchUserDto dto) throws UserAlreadyExistsException {
 
         // Require valid password reauth if changing password or email
         if (dto.newEmail() != null || dto.newPassword() != null) {
@@ -74,6 +75,10 @@ public class UserServiceImpl implements UserService {
         }
 
         if (dto.newEmail() != null) {
+
+            var userWithEmail = findUserByEmail(dto.newEmail());
+            if (userWithEmail != null)
+                throw new UserAlreadyExistsException();
             user.setEmail(dto.newEmail());
         }
 

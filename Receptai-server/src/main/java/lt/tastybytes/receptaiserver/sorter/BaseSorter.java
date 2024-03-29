@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.sorter;
 
 public interface BaseSorter {
-    public String getColumnName();
+    String getColumnName();
+    BaseSorter findByColumn(String columnName);
 }

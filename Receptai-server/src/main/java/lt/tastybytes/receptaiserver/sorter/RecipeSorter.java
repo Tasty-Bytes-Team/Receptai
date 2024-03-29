@@ -13,4 +13,12 @@ public enum RecipeSorter implements BaseSorter {
     public String getColumnName() {
         return columnName;
     }
+
+    public BaseSorter findByColumn(String columnName) {
+        for (var entry : values()) {
+            if (entry.getColumnName().equals(columnName))
+                return entry;
+        }
+        return null;
+    }
 }

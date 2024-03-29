@@ -1,6 +1,8 @@
 package lt.tastybytes.receptaiserver.service;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.model.category.Category;
@@ -24,7 +26,7 @@ public interface RecipeService {
      * @param pageNumber Recipe page, starts at 0.
      * @return A page of recipes.
      */
-    Page<Recipe> getRecipes(int pageNumber);
+    Page<Recipe> getRecipes(int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
 
 
     RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author);

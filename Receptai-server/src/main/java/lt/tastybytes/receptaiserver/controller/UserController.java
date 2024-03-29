@@ -1,11 +1,10 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.user.*;
+import lt.tastybytes.receptaiserver.exception.MissingRightsException;
+import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
-import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
-import lt.tastybytes.receptaiserver.dto.user.LoginRequestDto;
-import lt.tastybytes.receptaiserver.dto.user.LoginResponseDto;
-import lt.tastybytes.receptaiserver.dto.user.RegisterRequestDto;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
@@ -59,5 +58,24 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<FullUserDto> getCurrentUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.toFullUserDto());
+    }
+
+    @PatchMapping("/edit/{userId}")
+    public ResponseEntity<FullUserDto> patchUser(
+            @PathVariable(value = "userId") long userId,
+            @Valid @RequestBody PatchUserDto dto,
+            @AuthenticationPrincipal User currentUser
+    ) throws NotFoundException, MissingRightsException, UserAlreadyExistsException {
+        var maybeUser = userService.findUserById(userId);
+        if (maybeUser.isEmpty()) {
+            throw new NotFoundException("Specified user was not found");
+        }
+
+        var userToEdit = maybeUser.get();
+        userToEdit.assertCanBeManagedBy(currentUser);
+
+        var editedUser = userService.editUser(userToEdit, dto);
+
+        return ResponseEntity.ok(editedUser.toFullUserDto());
     }
 }

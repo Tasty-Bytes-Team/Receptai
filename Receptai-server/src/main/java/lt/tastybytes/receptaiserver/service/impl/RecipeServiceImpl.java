@@ -1,5 +1,7 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
+import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.model.category.Category;
@@ -14,6 +16,7 @@ import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.TagService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -155,8 +158,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getRecipes(int pageNumber) {
-        return recipeRepository.findAll(PageRequest.of(pageNumber, RECIPES_PER_PAGE));
+    public Page<Recipe> getRecipes(int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
+        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
+        if (sortDto != null) {
+            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
+        }
+        return recipeRepository.findAll(request);
     }
 
     @Override

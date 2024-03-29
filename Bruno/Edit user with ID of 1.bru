@@ -1,0 +1,21 @@
+meta {
+  name: Edit user with ID of 1
+  type: http
+  seq: 13
+}
+
+patch {
+  url: http://localhost:8080/api/v1/user/edit/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "newName": "Dominykas Svetikasss"
+  }
+}

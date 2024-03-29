@@ -30,25 +30,21 @@ public class PatchUserRequestValidation {
         @Override
         public boolean isValid(PatchUserDto dto, ConstraintValidatorContext context) {
 
-            dto.newName();
-            dto.newEmail();
-            dto.newPassword();
-            dto.oldPassword();
-            dto.profileAvatarUrl();
+            int paramsPassed = 0;
+            if (dto.newName() != null) paramsPassed++;
+            if (dto.newEmail() != null) paramsPassed++;
+            if (dto.newPassword() != null) paramsPassed++;
+            if (dto.oldPassword() != null) paramsPassed++;
+            if (dto.newProfileAvatarUrl() != null) paramsPassed++;
 
-            /*
-            if (dto.page() < 0) {
+            if (paramsPassed == 0) {
                 context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate("Page number cannot be less than 0")
-                        .addConstraintViolation();
+                context.buildConstraintViolationWithTemplate(
+                        "Please specify at least one parameter that you are patching."
+                        ).addConstraintViolation();
                 return false;
             }
-             */
-
             return true;
         }
     }
-
-
-
 }

@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.model.user;
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.PublicUserDto;
+import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,9 @@ public class User implements UserDetails {
 
     public String getProfileUrl() {
         return profileUrl;
+    }
+    public void setProfileUrl(String avatarUrl) {
+        profileUrl = avatarUrl;
     }
 
     @Column(nullable = true)
@@ -116,5 +120,15 @@ public class User implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public void assertCanBeManagedBy(User user) throws MissingRightsException {
+        if (getId().equals(user.getId())) {
+            return;
+        }
+
+        // TODO: Implement overrides for admins
+
+        throw new MissingRightsException("You are missing the required rights to manage this user!");
     }
 }

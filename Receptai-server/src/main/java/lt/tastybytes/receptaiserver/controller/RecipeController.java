@@ -10,6 +10,7 @@ import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
+import lt.tastybytes.receptaiserver.sorter.RecipeSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,9 +41,9 @@ public class RecipeController {
     @GetMapping("/list2")
     public ResponseEntity<?> getAllRecipes2(
             @Valid PagedRequestDto pageDto,
-            @Valid SortedRequestDto sortDto
+            @Valid SortedRequestDto<RecipeSorter> sortDto
     ) {
-        var recipes = recipeService.getRecipes(pageDto.page());
+        var recipes = recipeService.getRecipes(pageDto.page(), sortDto);
         return ResponseEntity.ok(
                 PagedResponseDto.of(recipes, Recipe::toDto)
         );

@@ -23,6 +23,7 @@ public record RecipeDto(
         @NonNull String previewImage,
 
         @Nullable String tutorialVideo,
+        @Nullable String tutorialVideoEmbed,
 
         @NonNull List<IngredientListDto> ingredients,
 

@@ -6,6 +6,7 @@ import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.model.user.User;
+import lt.tastybytes.receptaiserver.utils.Converter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +85,14 @@ public class Recipe {
     private int portionCount;
 
     public RecipeDto toDto() {
+
+        String embedUrl = null;
+        if (getTutorialVideo() != null) {
+            var videoId = Converter.extractVideoIdFromUrl(getTutorialVideo());
+            if (videoId.isPresent()) embedUrl = "https://www.youtube.com/embed/" + videoId.get();
+        }
+
+
         return new RecipeDto(
                 id,
                 getName(),
@@ -93,6 +102,7 @@ public class Recipe {
                 getDateModified(),
                 getPreviewImage(),
                 getTutorialVideo(),
+                embedUrl,
                 getIngredients().stream().map(IngredientType::toDto).toList(),
                 getInstructions().stream().map(Instruction::toDto).toList(),
                 getTags().stream().map(Tag::toDto).toList(),

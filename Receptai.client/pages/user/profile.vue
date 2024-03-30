@@ -121,7 +121,7 @@ const onCancel = () => {
     <div v-if="user">
       <div class="flex flex-col justify-center items-center">
         <div
-          class="w-full py-10 flex justify-center items-center rounded-md bg-cover bg-[url(https://th.bing.com/th/id/R.3d35003509104e7b7e0b8e2ac4d1ca2c?rik=dYArdd5RRivs9A&riu=http%3a%2f%2fwww.yurtopic.com%2ffood%2fcooking%2fimages%2fworld-of-gourmet%2fDelicious-field-salad2.jpg&ehk=2NTSPZUV8VCbauRbIZ6stV3ClmYd%2bTHctu7uswVH%2fIk%3d&risl=&pid=ImgRaw&r=0)] shadow-[inset_0_0_0_1000px_#0000004f] bg-center"
+          class="w-full py-10 flex justify-center items-center rounded-md bg-cover bg-[url(/images/food-image.jpg)] shadow-[inset_0_0_0_1000px_#0000004f] bg-center"
         >
           <ProfilePicture
             class="w-20 h-20 border-[3px] border-white text-3xl shadow-[2px_2px_3px_1px_#ffffff82]"

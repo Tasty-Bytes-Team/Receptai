@@ -136,7 +136,7 @@ const onCancel = () => {
         >
           <form class="flex flex-col relative" @submit.prevent="onSubmit">
             <div class="flex gap-2 items-center flex-row">
-              <label class="font-medium text-gray-950">Full name</label>
+              <label class="font-medium text-gray-950">Name</label>
               <span class="text-red-600 text-sm">{{ errors.name }}</span>
             </div>
 

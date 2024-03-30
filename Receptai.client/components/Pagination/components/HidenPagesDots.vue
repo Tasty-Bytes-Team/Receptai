@@ -3,7 +3,7 @@
 <template>
   <li>
     <button
-      class="flex items-center justify-center px-4 h-10 leading-tight text-gray-800 bg-white border border-gray-300"
+      class="flex items-center justify-center px-3 h-9 leading-tight text-gray-800 bg-white border border-gray-300"
       :disabled="true"
     >
       ...

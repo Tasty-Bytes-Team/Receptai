@@ -68,7 +68,6 @@ try {
     .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
     .then((res) => {
       recipe.value = res.data;
-      console.log(recipe.value.tutorialVideo)
       loading.value = false;
     });
 } catch (e) {
@@ -148,7 +147,10 @@ try {
         </div>
       </div>
     </div>
-    <div v-if="recipe.tutorialVideoEmbed" class="max-w-screen-lg m-auto my-2 px-2">
+    <div
+      v-if="recipe.tutorialVideoEmbed"
+      class="max-w-screen-lg m-auto my-2 px-2"
+    >
       <h3 class="font-semibold text-xl mb-3">
         Searching for video instructions?
         <span class="font-normal">Find them here!</span>

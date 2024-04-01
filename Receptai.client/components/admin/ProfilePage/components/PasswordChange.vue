@@ -28,8 +28,7 @@ const user: User = reactive({
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
-const error: Ref<boolean> = ref(false);
-const errorText: Ref<string> = ref("");
+const errorsText: Ref<string | null> = ref(null);
 
 const validationSchema = toTypedSchema(
   zod
@@ -72,6 +71,8 @@ const { value: newPassword } = useField("newPassword");
 const { value: newPasswordRepeat } = useField("newPasswordRepeat");
 
 const onSubmit = handleSubmit(async () => {
+  errorsText.value = null;
+
   if (TastyBytes_user.value) {
     try {
       await axios.patch(
@@ -85,14 +86,20 @@ const onSubmit = handleSubmit(async () => {
         }
       );
 
-      addNotification(
-        "Name change was successful! Keep in mind that your change might take some time to show everywhere.",
-        "Success"
-      );
-    } catch (e) {
+      window.scrollTo(0, 0);
+      password.value = "";
+      newPassword.value = "";
+      newPasswordRepeat.value = "";
+      addNotification("Password change was successful!", "Success");
+    } catch (e: any) {
+      if (/credentials/.test(e.response.data.message as string)) {
+        errorsText.value = "Provided password is incorrect";
+        return;
+      }
+
       console.warn(e);
       addNotification(
-        "There was an error when changing your name. Please try again.",
+        "There was an error when changing your password. Please try again.",
         "Error"
       );
     }
@@ -102,19 +109,35 @@ const onSubmit = handleSubmit(async () => {
 
 <template>
   <div class="max-w-2xl m-auto flex flex-col gap-2 mt-4">
-    <div class="font-bold text-xl">Change password</div>
+    <div>
+        <div class="font-bold text-xl">Change password</div>
+        <p class="text-sm font-base">Time me for a refresh? Update your password to keep your data secure.</p>
+    </div>
     <div
       class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
     >
       <form @submit="onSubmit" class="flex flex-col items-start gap-3">
         <div class="w-full text-left">
+          <div>
+            <input
+              type="text"
+              name="email"
+              value=""
+              autocomplete="email"
+              class="hidden"
+            />
+          </div>
           <div class="flex gap-2 items-center flex-row">
             <label class="font-semibold text-sm">Current password</label>
-            <span class="text-red-600 text-sm">{{ errors.password }}</span>
+            <span class="text-red-600 text-sm">{{
+              errors.password ? errors.password : errorsText ? errorsText : null
+            }}</span>
           </div>
           <input
             class="w-full bg-concrete-50 hover:bg-concrete-100 focus:bg-concrete-100 px-2 py-2 focus:border-concrete-300 border-2 border-concrete-50 transition-colors duration-150 rounded-sm text-gray-950 outline-none"
+            :class="errorsText ? '!border-red-600' : null"
             type="password"
+            @click="errorsText ? (errorsText = null) : null"
             placeholder="Current password"
             v-model="password"
             autocomplete="current-password"
@@ -148,7 +171,6 @@ const onSubmit = handleSubmit(async () => {
             autocomplete="new-password"
           />
         </div>
-        {{ errors }}
         <button
           class="w-full bg-whiskey-300 py-2 rounded-sm font-medium hover:bg-whiskey-400 transition-colors duration-100"
           type="submit"

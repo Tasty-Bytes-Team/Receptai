@@ -133,7 +133,7 @@ const onCancel = () => {
       <div class="max-w-2xl m-auto flex flex-col gap-2 mt-4">
         <div class="font-bold text-xl">User details</div>
         <div
-          class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
+          class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
         >
           <form class="flex flex-col relative" @submit.prevent="onSubmit">
             <div class="flex gap-2 items-center flex-row">
@@ -187,7 +187,7 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Email</label>
             <div
-            class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
+              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
             >
               {{ user.email }}
             </div>
@@ -195,8 +195,8 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Avatar URL</label>
             <div
-            class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
-              :class="user.avatarUrl ? null : '!text-concrete-500'"
+              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
+              :class="user.avatarUrl ? null : '!text-gray-400'"
             >
               {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
             </div>

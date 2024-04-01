@@ -119,7 +119,7 @@ const onSubmit = handleSubmit(async () => {
     <div
       class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
     >
-      <form @submit="onSubmit" class="flex flex-col items-start gap-3">
+      <form @submit="onSubmit" class="flex flex-col items-start gap-4">
         <div class="w-full text-left">
           <div>
             <input

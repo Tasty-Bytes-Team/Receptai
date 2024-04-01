@@ -6,6 +6,7 @@ import * as zod from "zod";
 
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
+import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
 
 definePageMeta({
   middleware: "auth",
@@ -143,10 +144,10 @@ const onCancel = () => {
             <div>
               <input
                 @focus="showConfirmation = true"
-                class="outline-none w-full font-normal px-2 py-2 border-2 border-white hover:bg-concrete-100 transition-colors duration-150 rounded-sm"
+                class="w-full bg-concrete-50 hover:bg-concrete-100 focus:bg-concrete-100 px-2 py-2 focus:border-concrete-300 border-2 border-concrete-50 transition-colors duration-150 rounded-sm text-gray-950 outline-none"
                 :class="
                   showConfirmation
-                    ? '!bg-concrete-200 !border-concrete-400'
+                    ? '!bg-concrete-100 !border-concrete-300'
                     : null
                 "
                 name="name"
@@ -186,7 +187,7 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Email</label>
             <div
-              class="font-normal px-2 py-2 hover:bg-concrete-200 transition-colors duration-150 rounded-sm text-gray-950"
+            class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
             >
               {{ user.email }}
             </div>
@@ -194,14 +195,15 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Avatar URL</label>
             <div
-              class="font-normal px-2 py-2 hover:bg-concrete-200 transition-colors duration-150 rounded-sm"
-              :class="user.avatarUrl ? null : 'text-concrete-500'"
+            class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
+              :class="user.avatarUrl ? null : '!text-concrete-500'"
             >
               {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
             </div>
           </div>
         </div>
       </div>
+      <PasswordChange />
     </div>
   </div>
   <div v-else>Loading...</div>

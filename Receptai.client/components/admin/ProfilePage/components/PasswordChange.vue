@@ -165,7 +165,7 @@ const onSubmit = handleSubmit(async () => {
         </div>
         <div class="w-full text-left">
           <div class="flex gap-2 items-center flex-row">
-            <label class="font-semibold text-sm">Repeat new password</label>
+            <label class="font-semibold text-sm">Re-enter new password</label>
             <span class="text-red-600 text-sm">{{
               errors.newPasswordRepeat
             }}</span>

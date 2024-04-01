@@ -1,5 +1,4 @@
 import { expect, test } from "vitest";
-import { renderSuspended, mountSuspended } from "@nuxt/test-utils/runtime";
 import { screen, render, cleanup } from "@testing-library/vue";
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 

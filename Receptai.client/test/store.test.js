@@ -2,6 +2,10 @@ import { store, addNotification, resetNotification } from "../store/store.ts";
 import { expect, test } from "vitest";
 
 test("adding message shows up in the global store", () => {
+  afterEach(() => {
+    resetNotification();
+  });
+
   addNotification("Test");
   expect(store.text).toBe("Test");
   expect(store.show).toBe(true);

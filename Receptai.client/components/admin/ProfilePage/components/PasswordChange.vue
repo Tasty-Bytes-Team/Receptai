@@ -5,6 +5,7 @@ import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { addNotification } from "@/store/store";
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 interface User {
   id: number | null;
@@ -30,6 +31,9 @@ const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const errorsText: Ref<string | null> = ref(null);
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
 
 const validationSchema = toTypedSchema(
   zod
@@ -99,10 +103,9 @@ const onSubmit = handleSubmit(async () => {
       }
 
       console.warn(e);
-      addNotification(
-        "There was an error when changing your password. Please try again.",
-        "Error"
-      );
+      errorText.value =
+        "There was an error when changing your password. Please try again.";
+      error.value = true;
     }
   }
 });
@@ -119,6 +122,7 @@ const onSubmit = handleSubmit(async () => {
     <div
       class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
     >
+      <ErrorBaner v-if="error" :errorText />
       <form @submit="onSubmit" class="flex flex-col items-start gap-4">
         <div class="w-full text-left">
           <div>

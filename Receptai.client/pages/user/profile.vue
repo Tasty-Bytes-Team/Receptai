@@ -7,6 +7,7 @@ import * as zod from "zod";
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
 import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 definePageMeta({
   middleware: "auth",
@@ -34,6 +35,9 @@ const user: User = reactive({
 });
 const showConfirmation = ref(false);
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
 
 const validationSchema = toTypedSchema(
   zod.object({
@@ -97,13 +101,12 @@ const onSubmit = handleSubmit(async () => {
         "Success"
       );
     } catch (e) {
-      console.log(e);
+      console.warn(e);
 
       name.value = user.name;
-      addNotification(
-        "There was an error when changing your name. Please try again.",
-        "Error"
-      );
+      errorText.value =
+        "There was an error when changing your name. Please try again.";
+      error.value = true;
     }
   }
 });
@@ -135,6 +138,7 @@ const onCancel = () => {
         <div
           class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
         >
+          <ErrorBaner v-if="error" :errorText />
           <form class="flex flex-col relative" @submit.prevent="onSubmit">
             <div class="flex gap-2 items-center flex-row">
               <label class="font-medium text-gray-950">Name</label>

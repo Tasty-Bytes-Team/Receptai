@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
+
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -33,10 +34,10 @@ const errorsText: Ref<string | null> = ref(null);
 const validationSchema = toTypedSchema(
   zod
     .object({
-      password: zod.string().min(1, "This is required"),
+      password: zod.string().min(1, "Required"),
       newPassword: zod
         .string()
-        .min(1, "This is required")
+        .min(1, "Required")
         .min(8, "Password must be at least 8 characters long")
         .regex(new RegExp(".*[A-Z].*"), {
           message: "Password must include one capital letter",
@@ -50,7 +51,7 @@ const validationSchema = toTypedSchema(
         .regex(new RegExp(".*[`~<>?,./!@#$%^&*()\\-_+=\"'|{}\\[\\];:\\\\].*"), {
           message: "Password must include one special letter",
         }),
-      newPasswordRepeat: zod.string().min(1, "This is required"),
+      newPasswordRepeat: zod.string().min(1, "Required"),
     })
     .refine((data) => data.newPassword === data.newPasswordRepeat, {
       message: "Passwords do not match",
@@ -110,8 +111,10 @@ const onSubmit = handleSubmit(async () => {
 <template>
   <div class="max-w-2xl m-auto flex flex-col gap-2 mt-4">
     <div>
-        <div class="font-bold text-xl">Change password</div>
-        <p class="text-sm font-base">Time me for a refresh? Update your password to keep your data secure.</p>
+      <div class="font-bold text-xl">Change password</div>
+      <p class="text-sm font-base">
+        Time me for a refresh? Update your password to keep your data secure.
+      </p>
     </div>
     <div
       class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
@@ -174,6 +177,20 @@ const onSubmit = handleSubmit(async () => {
         <button
           class="w-full bg-whiskey-300 py-2 rounded-sm font-medium hover:bg-whiskey-400 transition-colors duration-100"
           type="submit"
+          :class="
+            Object.keys(errors).length > 0 ||
+            password === undefined ||
+            newPassword === undefined ||
+            newPasswordRepeat === undefined
+              ? '!bg-whiskey-200'
+              : null
+          "
+          :disabled="
+            Object.keys(errors).length > 0 ||
+            password === undefined ||
+            newPassword === undefined ||
+            newPasswordRepeat === undefined
+          "
         >
           Save changes
         </button>

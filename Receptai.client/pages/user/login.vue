@@ -76,17 +76,19 @@ const onSubmit = handleSubmit(async () => {
         type: "Gray",
       },
     ]);
-  } catch (e) {
-    console.error("Error during login", e);
+  } catch (e: any) {
+    if (/credentials/.test(e.response.data.message)) {
+      errorText.value =
+        "The email or password you entered is incorrect. Please check your credentials and try again.";
+      error.value = true;
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    console.warn("Error during login", e);
     errorText.value = "An error occurred during login.";
     error.value = true;
-
-    window?.scrollTo(0, 0);
-
-    addNotification(
-      "Incorrect username or password. Please try again.",
-      "Error"
-    );
+    window.scrollTo(0, 0);
   }
 });
 </script>

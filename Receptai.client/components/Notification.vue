@@ -25,9 +25,7 @@ watch(store, (newVal, oldVal) => {
 </script>
 
 <template>
-  <div
-    class="w-full fixed bottom-2 right-0 left-0 flex sm:justify-end justify-center"
-  >
+  <div class="fixed bottom-2 right-0 flex justify-center">
     <div
       v-if="store.show"
       id="toast-default"

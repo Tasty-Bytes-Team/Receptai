@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <div class="border-2 border-red-600 my-3 p-2 text-red-600">
+    <div class="border-2 border-red-600 my-3 p-2 text-red-600 rounded-sm">
       <p>{{ errorText }}</p>
     </div>
 </template>

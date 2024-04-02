@@ -1,5 +1,4 @@
 import { expect, test } from "vitest";
-import { renderSuspended, mountSuspended } from "@nuxt/test-utils/runtime";
 import { screen, render, cleanup } from "@testing-library/vue";
 import RecipeContainerComponent from "../components/RecipeContainerComponent/RecipeContainerComponent.vue";
 
@@ -109,20 +108,3 @@ describe("Recipe container component", () => {
     expect(screen.getAllByTestId("recipe-image")).toBeDefined();
   });
 });
-
-// describe.each([{
-//     imageLink:
-//       "https://images.food52.com/jgWjO2TMvaNaXzy9ME4PBYV5jyA=/1930x1286/filters:format(webp)/906a901f-6dad-452a-803e-3087c35e3de6--2013-0820_gena_veggie-burgers-062.jpg",
-//     name: "Spicy Black Bean and Corn Burgers",
-//     raiting: 4.5,
-//     about:
-//       "Vegetarian burgers packed with black beans, corn, and a touch of spice.",
-//     link: "/recipes/15",
-//     category: "Burgers",
-//     categoryLink: "/category/burgers",
-//     prepTime: 10,
-//   }])('describe', ({imageLink, name, raiting, about, link, category, categoryLink, prepTime }) => {
-//     test("test", () => {
-//         console.log(name)
-//     })
-//   })

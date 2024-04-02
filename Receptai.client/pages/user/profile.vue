@@ -6,6 +6,8 @@ import * as zod from "zod";
 
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
+import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 
 definePageMeta({
   middleware: "auth",
@@ -33,6 +35,9 @@ const user: User = reactive({
 });
 const showConfirmation = ref(false);
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
 
 const validationSchema = toTypedSchema(
   zod.object({
@@ -96,13 +101,12 @@ const onSubmit = handleSubmit(async () => {
         "Success"
       );
     } catch (e) {
-      console.log(e);
+      console.warn(e);
 
       name.value = user.name;
-      addNotification(
-        "There was an error when changing your name. Please try again.",
-        "Error"
-      );
+      errorText.value =
+        "There was an error when changing your name. Please try again.";
+      error.value = true;
     }
   }
 });
@@ -132,8 +136,9 @@ const onCancel = () => {
       <div class="max-w-2xl m-auto flex flex-col gap-2 mt-4">
         <div class="font-bold text-xl">User details</div>
         <div
-          class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-2 shadow-[0_1px_2px_1px_#828282]"
+          class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
         >
+          <ErrorBaner v-if="error" :errorText />
           <form class="flex flex-col relative" @submit.prevent="onSubmit">
             <div class="flex gap-2 items-center flex-row">
               <label class="font-medium text-gray-950">Name</label>
@@ -143,10 +148,10 @@ const onCancel = () => {
             <div>
               <input
                 @focus="showConfirmation = true"
-                class="outline-none w-full font-normal px-2 py-2 border-2 border-white hover:bg-concrete-100 transition-colors duration-150 rounded-sm"
+                class="w-full bg-concrete-50 hover:bg-concrete-100 focus:bg-concrete-100 px-2 py-2 focus:border-concrete-300 border-2 border-concrete-50 transition-colors duration-150 rounded-sm text-gray-950 outline-none"
                 :class="
                   showConfirmation
-                    ? '!bg-concrete-200 !border-concrete-400'
+                    ? '!bg-concrete-100 !border-concrete-300'
                     : null
                 "
                 name="name"
@@ -186,7 +191,7 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Email</label>
             <div
-              class="font-normal px-2 py-2 hover:bg-concrete-200 transition-colors duration-150 rounded-sm text-gray-950"
+              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
             >
               {{ user.email }}
             </div>
@@ -194,14 +199,15 @@ const onCancel = () => {
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Avatar URL</label>
             <div
-              class="font-normal px-2 py-2 hover:bg-concrete-200 transition-colors duration-150 rounded-sm"
-              :class="user.avatarUrl ? null : 'text-concrete-500'"
+              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
+              :class="user.avatarUrl ? null : '!text-gray-400'"
             >
               {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
             </div>
           </div>
         </div>
       </div>
+      <PasswordChange />
     </div>
   </div>
   <div v-else>Loading...</div>

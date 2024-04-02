@@ -74,17 +74,23 @@ const onSubmit = handleSubmit(async () => {
       "Welcome to Tasty Bytes! Your account has been successfully created. Now, please login.",
       "Success"
     );
-  } catch (e) {
-    console.error("Error during registration:", e);
+  } catch (e: any) {
+    if (/already exists/.test(e.response.data.message)) {
+      errorText.value = "User with this email already exists.";
+      error.value = true;
+      window.scrollTo(0, 0);
+      return;
+    } else if (/field must match/.test(e.response.data.message)) {
+      errorText.value = "Name should include only latin letters.";
+      error.value = true;
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    console.warn("Error during registration:", e);
     errorText.value = "An error occurred during registration.";
     error.value = true;
-
-    window?.scrollTo(0, 0);
-
-    addNotification(
-      "Oops! Something went wrong with your registration. Please try again.",
-      "Error"
-    );
+    window.scrollTo(0, 0);
   }
 });
 </script>

@@ -31,8 +31,13 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public Iterable<CategoryDto> getAllCategories() {
-        return categoryService.getAllCategories().stream().map(Category::toDto).toList();
+    public ResponseEntity<?> getAllCategories(
+            @Valid PagedRequestDto pageDto
+    ) {
+        var page = categoryService.getAllCategories(pageDto.page());
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Category::toDto)
+        );
     }
 
     @GetMapping("/{categoryId}/recipes")

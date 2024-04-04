@@ -5,6 +5,8 @@ import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.repository.CategoryRepository;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final int CATEGORIES_PER_PAGE = 20;
     private final CategoryRepository categoryRepository;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
@@ -20,8 +23,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public Page<Category> getAllCategories(int pageNumber) {
+        return categoryRepository.findAll(
+                PageRequest.of(pageNumber, CATEGORIES_PER_PAGE)
+        );
     }
 
     @Override

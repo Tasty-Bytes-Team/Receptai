@@ -20,7 +20,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -143,16 +142,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
-    }
-
-    @Override
-    public List<Recipe> getAllUserRecipes(User user) {
-        return recipeRepository.findAllByAuthor(user);
-    }
-
-    @Override
     public Optional<Recipe> getRecipeById(long id) {
         return recipeRepository.findById(id);
     }
@@ -170,6 +159,14 @@ public class RecipeServiceImpl implements RecipeService {
     public Page<Recipe> getRecipesByCategory(Category category, int pageNumber) {
         return recipeRepository.findAllByCategoriesContaining(
                 category,
+                PageRequest.of(pageNumber, RECIPES_PER_PAGE)
+        );
+    }
+
+    @Override
+    public Page<Recipe> getRecipesByUser(User user, int pageNumber) {
+        return recipeRepository.findAllByAuthor(
+                user,
                 PageRequest.of(pageNumber, RECIPES_PER_PAGE)
         );
     }

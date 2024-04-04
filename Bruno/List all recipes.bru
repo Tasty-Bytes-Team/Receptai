@@ -5,7 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/v1/recipe/list
+  url: http://localhost:8080/api/v1/recipe/list?page=0&sortBy=dateCreated&sortAsc=false
   body: none
   auth: none
+}
+
+query {
+  page: 0
+  sortBy: dateCreated
+  sortAsc: false
 }

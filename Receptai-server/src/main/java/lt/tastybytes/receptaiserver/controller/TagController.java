@@ -32,7 +32,7 @@ public class TagController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> getAllTags(@Valid PagedRequestDto pageDto) {
+    public ResponseEntity<?> getTags(@Valid PagedRequestDto pageDto) {
         var page = tagService.getTags(pageDto.page());
         return ResponseEntity.ok(
                 PagedResponseDto.of(page, Tag::toDto)

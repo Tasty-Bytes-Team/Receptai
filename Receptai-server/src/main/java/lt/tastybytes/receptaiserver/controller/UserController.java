@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     private JwtServiceImpl jwtService;
 
-    @PostMapping(path="/register") // Map ONLY POST Requests
+    @PostMapping(path="/register")
     public ResponseEntity<FullUserDto> registerNewUser(@Valid @RequestBody RegisterRequestDto dto) throws Exception {
         var user = userService.findUserByEmail(dto.email());
         if (user != null)

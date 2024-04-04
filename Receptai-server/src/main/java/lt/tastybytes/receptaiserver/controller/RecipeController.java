@@ -33,13 +33,7 @@ public class RecipeController {
     }
 
     @GetMapping("/list")
-    public Iterable<RecipeDto> getAllRecipes() {
-        var recipes = recipeService.getAllRecipes();
-        return recipes.stream().map(Recipe::toDto).toList();
-    }
-
-    @GetMapping("/list2")
-    public ResponseEntity<?> getAllRecipes2(
+    public ResponseEntity<?> getRecipes(
             @Valid PagedRequestDto pageDto,
             @Valid
             @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})

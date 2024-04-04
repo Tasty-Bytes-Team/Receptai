@@ -30,7 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> getAllCategories(
+    public ResponseEntity<?> getCategories(
             @Valid PagedRequestDto pageDto
     ) {
         var page = categoryService.getCategories(pageDto.page());

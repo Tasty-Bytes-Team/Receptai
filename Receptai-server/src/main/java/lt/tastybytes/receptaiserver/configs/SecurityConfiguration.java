@@ -46,6 +46,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/user/login").permitAll()
                         .requestMatchers("/api/v1/user/list").hasRole("ADMIN")
 
+                        // A TEST ENDPOINT TO TEST KOTLIN INTEROP
+                        .requestMatchers("/api/v1/test/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

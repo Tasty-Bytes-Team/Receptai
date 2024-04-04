@@ -23,7 +23,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Page<Tag> getAllTags(int pageNumber) {
+    public Page<Tag> getTags(int pageNumber) {
         return tagRepository.findAll(PageRequest.of(pageNumber, TAGS_PER_PAGE));
     }
 

@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<Category> getAllCategories(int pageNumber) {
+    public Page<Category> getCategories(int pageNumber) {
         return categoryRepository.findAll(
                 PageRequest.of(pageNumber, CATEGORIES_PER_PAGE)
         );

@@ -3,7 +3,6 @@ package lt.tastybytes.receptaiserver.controller;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
-import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.category.Category;
@@ -34,7 +33,7 @@ public class CategoryController {
     public ResponseEntity<?> getAllCategories(
             @Valid PagedRequestDto pageDto
     ) {
-        var page = categoryService.getAllCategories(pageDto.page());
+        var page = categoryService.getCategories(pageDto.page());
         return ResponseEntity.ok(
                 PagedResponseDto.of(page, Category::toDto)
         );

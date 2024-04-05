@@ -56,7 +56,7 @@ const getRecipes = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/recipe/list2?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
+        `${config.public.baseURL}/api/v1/recipe/list?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
       )
       .then((res) => {
         recipeList.value = res.data.elements;

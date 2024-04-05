@@ -2,7 +2,8 @@
 defineProps<{
   id: number;
   name: string;
-  primary: boolean;
+  description: string | null;
+  previewImageUrl: string | null;
 }>();
 </script>
 

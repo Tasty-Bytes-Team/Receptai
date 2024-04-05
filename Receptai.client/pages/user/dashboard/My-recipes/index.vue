@@ -63,15 +63,22 @@ const recipes = ref<Recipe[] | null>(null);
 const key = ref(0);
 const error = ref(false);
 
+const pageNumber = ref(0);
+const sortBy = ref("dateCreated");
+const sortAsc = ref(false);
+
+const totalPages = ref(0);
+const siblings = 2;
+
 try {
   const response = await axios.get(
-    `${config.public.baseURL}/api/v1/user/recipes`,
+    `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`,
     {
       headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
     }
   );
 
-  recipes.value = response.data;
+  recipes.value = response.data.elements;
 } catch (e) {
   console.log(e);
 }

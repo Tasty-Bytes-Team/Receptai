@@ -2,6 +2,7 @@
 import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface Recipe {
   id: number;
@@ -81,24 +82,16 @@ getRecipes();
       <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
     </div>
     <div v-if="loading">Loading...</div>
-    <div
+    <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
-      class="flex flex-col items-center gap-3"
-    >
-      <p>
-        This page is dedicated to housing all the delicious recipes you can find
+      description="This page is dedicated to housing all the delicious recipes you can find
         on my website! While there aren't any recipes listed here just yet, stay
         tuned! I'm constantly adding new culinary creations, and soon this will
         be your one-stop shop for finding tasty dishes to whip up in the
-        kitchen.
-      </p>
-      <button
-        @click="navigateTo('/')"
-        class="p-1 px-4 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
-      >
-        Home page
-      </button>
-    </div>
+        kitchen."
+      button-text="Home page"
+      @button-click="navigateTo('/')"
+    />
     <div v-else>
       <div class="flex flex-wrap">
         <RecipeContainer

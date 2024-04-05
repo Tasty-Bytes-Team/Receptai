@@ -2,6 +2,7 @@
 import axios from "axios";
 import CategoryComponent from "@/components/CategoryPage/CategoryComponent/CategoryComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface Category {
   id: number;
@@ -47,22 +48,14 @@ getCategories();
       <h1 class="text-3xl font-bold text-center m-3">Categories</h1>
     </div>
     <div v-if="loading">Loading...</div>
-    <div
-      v-else-if="categoriesList && categoriesList.length === 0"
-      class="flex flex-col items-center gap-3"
-    >
-      <p>
-        This is your launchpad for discovering everything we have to offer!
+    <EmptyListInformation
+    v-else-if="categoriesList && categoriesList.length === 0"
+      description="This is your launchpad for discovering everything we have to offer!
         While our categories are currently under construction and we haven't
-        quite filled the shelves yet, exciting things are coming soon.
-      </p>
-      <button
-        @click="navigateTo('/')"
-        class="p-1 px-4 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
-      >
-        Home page
-      </button>
-    </div>
+        quite filled the shelves yet, exciting things are coming soon."
+      button-text="Home page"
+      @button-click="navigateTo('/')"
+    />
     <div v-else>
       <div class="flex flex-wrap">
         <CategoryComponent

@@ -2,6 +2,7 @@
 import axios from "axios";
 import RecipeContainer from "@/components/admin/MyRecipes/RecipeContainer.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface UserCookie {
   token: string;
@@ -102,20 +103,12 @@ getData();
   <div>
     <h1 class="text-3xl font-bold text-center m-3">My Recipes</h1>
     <div v-if="loading">Loading...</div>
-    <div
+    <EmptyListInformation
       v-else-if="recipes && recipes.length === 0"
-      class="flex flex-col items-center gap-3"
-    >
-      <p class="text-center">
-        Your recipe box is currently empty. Why not add a new recipe today?
-      </p>
-      <button
-        @click="navigateTo('/user/dashboard/my-recipes/create')"
-        class="p-1 px-4 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
-      >
-        Create a new recipe
-      </button>
-    </div>
+      description="Your recipe box is currently empty. Why not add a new recipe today?"
+      button-text="Create a new recipe"
+      @button-click="navigateTo('/user/dashboard/my-recipes/create')"
+    />
     <div v-else>
       <div class="flex flex-col gap-2">
         <RecipeContainer :key="key" @reload="getData()" :recipes />

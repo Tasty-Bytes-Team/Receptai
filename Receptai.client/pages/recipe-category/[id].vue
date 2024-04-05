@@ -2,6 +2,8 @@
 import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import CategoryNameBanner from "@/components/CategoryPage/components/CategoryNameBanner.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface Recipe {
   id: number;
@@ -91,48 +93,15 @@ getRecipes();
 
 <template>
   <div>
-    <div
-      v-if="categoryInfo"
-      class="bg-gray-800 text-white rounded-md m-6 bg-cover bg-center"
-      v-bind:style="
-        categoryInfo.previewImageUrl
-          ? {
-              'background-image': 'url(' + categoryInfo.previewImageUrl + ')',
-            }
-          : null
-      "
-    >
-      <div
-        class="h-full w-full py-10"
-        :class="
-          categoryInfo.previewImageUrl
-            ? 'bg-[#00000070] h-full w-full py-10 rounded-md'
-            : null
-        "
-      >
-        <h1 class="text-2xl font-bold text-center">{{ categoryInfo.name }}</h1>
-        <p v-if="categoryInfo.description" class="text-center">
-          {{ categoryInfo.description }}
-        </p>
-      </div>
-    </div>
-
+    <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
     <div v-if="loading">Loading...</div>
-    <div
+    <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
-      class="flex flex-col items-center gap-3"
-    >
-      <p>
-        While there aren't any recipes here yet, explore our full range of
-        categories below to find something delicious.
-      </p>
-      <button
-        @click="navigateTo('/recipe-category')"
-        class="p-1 px-4 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
-      >
-        All categories
-      </button>
-    </div>
+      description="While there aren't any recipes here yet, we invite you to explore our
+        full range of categories by clicking button below."
+      button-text="All categories"
+      @button-click="navigateTo('/recipe-category')"
+    />
     <div v-else>
       <div class="flex flex-wrap">
         <RecipeContainer

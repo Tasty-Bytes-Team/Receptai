@@ -49,14 +49,14 @@ public class UserServiceTest {
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHave1Role() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(0).orElseThrow();
+        var user = userService.findUserById(1).orElseThrow();
         assertEquals(1, user.getRoles().size());
     }
 
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHaveDefaultRoleOfUser() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(0).orElseThrow();
+        var user = userService.findUserById(1).orElseThrow();
         assertEquals("ROLE_USER", user.getRoles().get(0).getName());
     }
 

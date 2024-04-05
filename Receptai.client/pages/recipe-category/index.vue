@@ -3,6 +3,7 @@ import axios from "axios";
 import CategoryComponent from "@/components/CategoryPage/CategoryComponent/CategoryComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
+import CategoryContainerShimmer from "@/components/ShimmerLoaders/CategoryContainerShimmer.vue";
 
 interface Category {
   id: number;
@@ -47,7 +48,9 @@ getCategories();
     <div>
       <h1 class="text-3xl font-bold text-center m-3">Categories</h1>
     </div>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading" class="flex flex-wrap">
+      <CategoryContainerShimmer v-for="v in 8" />
+    </div>
     <EmptyListInformation
     v-else-if="categoriesList && categoriesList.length === 0"
       description="This is your launchpad for discovering everything we have to offer!

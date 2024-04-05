@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
+import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 
 const config = useRuntimeConfig();
 
@@ -65,7 +66,9 @@ try {
 </script>
 
 <template>
-  <div v-if="loading">Loading...</div>
+  <div v-if="loading" class="flex flex-wrap">
+    <RecipeContainerShimmer v-for="v in 8" />
+  </div>
   <div v-else class="flex flex-wrap">
     <RecipeContainer
       v-for="item in recipeList"

@@ -130,7 +130,14 @@ public class User implements UserDetails, ManageableModel {
             return;
         }
 
+        // If user that is being asserted is admin and not themselves
         if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+            // If the user that's being managed is an admin, dont allow this operation
+            if (this.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                throw new MissingRightsException("You cannot manage another administrator!");
+            }
+
             return;
         }
 

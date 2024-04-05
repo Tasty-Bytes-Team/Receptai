@@ -9,6 +9,8 @@ import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.repository.RoleRepository;
 import lt.tastybytes.receptaiserver.repository.UserRepository;
 import lt.tastybytes.receptaiserver.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,9 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final int USERS_PER_PAGE = 20;
+
 
     final String DefaultRole = "ROLE_USER";
 
@@ -117,8 +122,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public Page<User> getUsers(int pageNumber) {
+        return userRepository.findAll(PageRequest.of(pageNumber, USERS_PER_PAGE));
     }
 
     private Role createDefaultRoleIfNotExist() {

@@ -35,28 +35,28 @@ public class UserServiceTest {
 
     @Test
     void findAllUsers_WhenNoUsersExist_shouldReturn0Elements() {
-        var result = userService.findAllUsers();
-        assertEquals(0, result.size());
+        var result = userService.getUsers(0);
+        assertEquals(0, result.getTotalElements());
     }
 
     @Test
     void findAllUsers_When1UserCreated_shouldReturn1Element() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var result = userService.findAllUsers();
-        assertEquals(1, result.size());
+        var result = userService.getUsers(0);
+        assertEquals(1, result.getTotalElements());
     }
 
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHave1Role() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findAllUsers().get(0);
+        var user = userService.findUserById(0).orElseThrow();
         assertEquals(1, user.getRoles().size());
     }
 
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHaveDefaultRoleOfUser() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findAllUsers().get(0);
+        var user = userService.findUserById(0).orElseThrow();
         assertEquals("ROLE_USER", user.getRoles().get(0).getName());
     }
 

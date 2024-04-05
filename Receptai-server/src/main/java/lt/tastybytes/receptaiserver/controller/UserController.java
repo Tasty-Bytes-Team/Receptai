@@ -48,8 +48,12 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Iterable<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAllUsers());
+    public ResponseEntity<PagedResponseDto<User>> getAllUsers(
+            @Valid PagedRequestDto dto
+    ) {
+        return ResponseEntity.ok(PagedResponseDto.of(
+                userService.getUsers(dto.page())
+        ));
     }
 
     @GetMapping("/recipes")

@@ -3,10 +3,13 @@ package lt.tastybytes.receptaiserver.model.recipe;
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
+import lt.tastybytes.receptaiserver.model.ManageableModel;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.utils.Converter;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe {
+public class Recipe implements ManageableModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -224,12 +227,15 @@ public class Recipe {
         ingredientType.setRecipe(this);
     }
 
-    public void assertCanBeManagedBy(User user) throws MissingRightsException {
+    @Override
+    public void assertCanBeManagedBy(@NotNull User user) throws MissingRightsException {
         if (getAuthor().getId().equals(user.getId())) {
             return;
         }
 
-        // TODO: Implement overrides for admins
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            return;
+        }
 
         throw new MissingRightsException("You are missing the required rights to manage this recipe!");
     }

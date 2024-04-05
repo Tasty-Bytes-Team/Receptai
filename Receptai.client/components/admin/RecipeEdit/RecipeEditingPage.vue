@@ -181,8 +181,8 @@ try {
     initialValues.categoryId = props.recipeData.categories?.[0].id;
   }
 
-  categoryList.value = responseCategory.data;
-  tagList.value = responseTag.data;
+  categoryList.value = responseCategory.data.elements;
+  tagList.value = responseTag.data.elements;
 } catch (e) {
   console.log(e);
 

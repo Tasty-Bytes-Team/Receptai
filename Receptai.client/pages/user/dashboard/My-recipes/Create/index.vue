@@ -126,8 +126,8 @@ try {
     axios.get(`${config.public.baseURL}/api/v1/tag/list`),
   ]);
 
-  categoryList.value = responseCategory.data;
-  tagList.value = responseTag.data;
+  categoryList.value = responseCategory.data.elements;
+  tagList.value = responseTag.data.elements;
 } catch (e) {
   console.log("Get category and tag list", e);
 

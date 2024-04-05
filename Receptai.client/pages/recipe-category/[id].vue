@@ -2,6 +2,7 @@
 import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
+import CategoryNameBanner from "@/components/CategoryPage/components/CategoryNameBanner.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface Recipe {
@@ -44,22 +45,35 @@ interface Category {
 }
 
 const config = useRuntimeConfig();
+const route = useRoute();
 
 const recipeList = ref<Recipe[] | null>(null);
+const categoryInfo = ref<Category | null>(null);
+
 const loading = ref(true);
 
 const pageNumber = ref(0);
-const sortBy = ref("dateCreated");
-const sortAsc = ref(false);
 
 const totalPages = ref(0);
 const siblings = 2;
+
+const getCategory = async () => {
+  try {
+    await axios
+      .get(`${config.public.baseURL}/api/v1/category/${route.params.id}`)
+      .then((res) => {
+        categoryInfo.value = res.data;
+      });
+  } catch (e) {
+    console.error("Error fetching recipes", e);
+  }
+};
 
 const getRecipes = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/recipe/list?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
+        `${config.public.baseURL}/api/v1/category/${route.params.id}/recipes`
       )
       .then((res) => {
         recipeList.value = res.data.elements;
@@ -73,24 +87,20 @@ const getRecipes = async () => {
   window.scrollTo(0, 0);
 };
 
+await getCategory();
 getRecipes();
 </script>
 
 <template>
   <div>
-    <div>
-      <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
-    </div>
+    <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
     <div v-if="loading">Loading...</div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
-      description="This page is dedicated to housing all the delicious recipes you can find
-        on my website! While there aren't any recipes listed here just yet, stay
-        tuned! I'm constantly adding new culinary creations, and soon this will
-        be your one-stop shop for finding tasty dishes to whip up in the
-        kitchen."
-      button-text="Home page"
-      @button-click="navigateTo('/')"
+      description="While there aren't any recipes here yet, we invite you to explore our
+        full range of categories by clicking button below."
+      button-text="All categories"
+      @button-click="navigateTo('/recipe-category')"
     />
     <div v-else>
       <div class="flex flex-wrap">
@@ -107,7 +117,7 @@ getRecipes();
           :categoryId="item.categories[0].id"
           :prepTime="item.minutesToPrepare"
         />
-        <div class="w-full text-center" v-if="totalPages > 0">
+        <div class="w-full text-center">
           <Pagination
             @change="getRecipes"
             v-model="pageNumber"
@@ -120,4 +130,4 @@ getRecipes();
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

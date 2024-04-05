@@ -8,7 +8,7 @@ defineProps({
   about: String,
   link: String,
   category: String,
-  categoryLink: String,
+  categoryId: Number,
   prepTime: Number,
 });
 
@@ -39,7 +39,12 @@ const error = ref(false);
       </NuxtLink>
       <div class="px-3 py-2">
         <div class="text-sm font-normal">
-          <NuxtLink data-testid="recipe-category">{{ category }}</NuxtLink>
+          <NuxtLink
+            :to="`/recipe-category/${categoryId}`"
+            class="hover:underline duration-150 transition-all"
+            data-testid="recipe-category"
+            >{{ category }}</NuxtLink
+          >
         </div>
         <NuxtLink :to="link">
           <div>

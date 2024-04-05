@@ -35,7 +35,7 @@ watch(
   >
     <div class="flex items-center justify-between">
       <Logo />
-      <div class="w-full justify-center gap-6 sm:flex hidden">
+      <div class="w-full justify-center gap-4 sm:flex hidden">
         <NuxtLink
           v-for="nav in headerNav"
           :to="nav.to"

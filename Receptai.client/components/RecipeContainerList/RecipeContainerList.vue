@@ -37,18 +37,28 @@ interface Ingredient {
 }
 
 interface Category {
+  id: number;
   name: string;
-  link: string;
+  description: string | null;
+  previewImageUrl: string | null;
 }
 
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
+const pageNumber = ref(0);
+const sortBy = ref("dateCreated");
+const sortAsc = ref(false);
+
 try {
-  axios.get(`${config.public.baseURL}/api/v1/recipe/list`).then((res) => {
-    recipeList.value = res.data;
-    loading.value = false;
-  });
+  axios
+    .get(
+      `${config.public.baseURL}/api/v1/recipe/list?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
+    )
+    .then((res) => {
+      recipeList.value = res.data.elements.slice(0, 8);
+      loading.value = false;
+    });
 } catch (e) {
   console.error("Error fetching recipe", e);
 }
@@ -65,7 +75,7 @@ try {
       :about="item.shortDescription"
       :link="`/recipes/${item.id}`"
       :category="item.categories.length > 0 ? item.categories[0].name : 'Empty'"
-      :categoryLink="item.categories.length > 0 ? item.categories[0].link : '#'"
+      :categoryId="item.categories[0].id"
       :prepTime="item.minutesToPrepare"
     />
   </div>

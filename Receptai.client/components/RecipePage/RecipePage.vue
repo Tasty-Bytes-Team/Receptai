@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import axios from "axios";
-
 import NutritionTable from "@/components/RecipePage/components/NutritionTable.vue";
 import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
 
-const props = defineProps<{
-  id: string | string[];
+defineProps<{
+  recipe: Recipe;
 }>();
-
-const config = useRuntimeConfig();
 
 interface Recipe {
   id: number;
@@ -47,8 +43,10 @@ interface Ingredient {
 }
 
 interface Category {
+  id: number;
   name: string;
-  link: string;
+  description: string | null;
+  previewImageUrl: string | null;
 }
 
 interface Tag {
@@ -57,30 +55,20 @@ interface Tag {
   name: string;
 }
 
-const recipe = ref<Recipe>(Object.create(null));
-const video = ref<string | null>(null);
-
 const error = ref(false);
-const loading = ref(true);
-
-try {
-  axios
-    .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
-    .then((res) => {
-      recipe.value = res.data;
-      loading.value = false;
-    });
-} catch (e) {
-  console.error("Error fetching recipe", e);
-}
 </script>
 
 <template>
-  <div v-if="loading" class="max-w-screen-lg m-auto my-5 px-2">Loading...</div>
-  <div v-else>
+  <div>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
-        Home > {{ recipe.categories[0].name }} > {{ recipe.name }}
+        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink> >
+        <NuxtLink
+          class="hover:underline font-medium"
+          :to="`/recipe-category/${recipe.categories[0].id}`"
+          >{{ recipe.categories[0].name }}</NuxtLink
+        >
+        > {{ recipe.name }}
       </p>
       <p v-else>Home > {{ recipe.name }}</p>
     </div>

@@ -3,7 +3,6 @@ package lt.tastybytes.receptaiserver.controller;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
-import lt.tastybytes.receptaiserver.dto.category.CategoryDto;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.category.Category;
@@ -31,8 +30,26 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public Iterable<CategoryDto> getAllCategories() {
-        return categoryService.getAllCategories().stream().map(Category::toDto).toList();
+    public ResponseEntity<?> getCategories(
+            @Valid PagedRequestDto pageDto
+    ) {
+        var page = categoryService.getCategories(pageDto.page());
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Category::toDto)
+        );
+    }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<?> getCategories(
+            @PathVariable(value = "categoryId") long categoryId
+    ) throws NotFoundException {
+        var category = categoryService.getCategoryById(categoryId);
+        if (category.isEmpty()) {
+            throw new NotFoundException("Category by specified ID not found.");
+        }
+        return ResponseEntity.ok(
+                category.get().toDto()
+        );
     }
 
     @GetMapping("/{categoryId}/recipes")

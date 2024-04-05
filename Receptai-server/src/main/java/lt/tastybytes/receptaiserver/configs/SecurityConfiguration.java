@@ -35,10 +35,10 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/category/list").permitAll()
+                        .requestMatchers("/api/v1/category/{categoryId}").permitAll()
                         .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
 
                         .requestMatchers("/api/v1/recipe/list").permitAll()
-                        .requestMatchers("/api/v1/recipe/list2").permitAll()
                         .requestMatchers("/api/v1/recipe/get/**").permitAll()
 
                         .requestMatchers("/api/v1/tag/list").permitAll()
@@ -46,6 +46,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/user/register").permitAll()
                         .requestMatchers("/api/v1/user/login").permitAll()
                         .requestMatchers("/api/v1/user/list").hasRole("ADMIN")
+
+                        // A TEST ENDPOINT TO TEST KOTLIN INTEROP
+                        .requestMatchers("/api/v1/test/**").permitAll()
 
                         .anyRequest().authenticated()
                 )

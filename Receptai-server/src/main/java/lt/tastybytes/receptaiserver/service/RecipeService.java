@@ -27,15 +27,13 @@ public interface RecipeService {
      * @return A page of recipes.
      */
     Page<Recipe> getRecipes(int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
+    Page<Recipe> getRecipesByCategory(Category category, int pageNumber);
+    Page<Recipe> getRecipesByUser(User user, int pageNumber);
 
 
     RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author);
     RecipeDto editRecipe(Recipe recipe, @Valid ModifyRecipeDto dto);
-    List<Recipe> getAllRecipes();
 
-    List<Recipe> getAllUserRecipes(User user);
-
-    Page<Recipe> getRecipesByCategory(Category category, int pageNumber);
 
     /**
      * @param id ID of the recipe to delete.

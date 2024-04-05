@@ -4,5 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record CreateCategoryDto(
         @NotEmpty
-        String name
+        String name,
+        String description,
+        @NotEmpty
+        String previewImageUrl
 ) {}

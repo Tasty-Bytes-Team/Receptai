@@ -1,6 +1,8 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
+import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.user.*;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
@@ -27,7 +29,7 @@ public class UserController {
     @Autowired
     private JwtServiceImpl jwtService;
 
-    @PostMapping(path="/register") // Map ONLY POST Requests
+    @PostMapping(path="/register")
     public ResponseEntity<FullUserDto> registerNewUser(@Valid @RequestBody RegisterRequestDto dto) throws Exception {
         var user = userService.findUserByEmail(dto.email());
         if (user != null)
@@ -51,8 +53,13 @@ public class UserController {
     }
 
     @GetMapping("/recipes")
-    public ResponseEntity<?> getUserRecipes(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(recipeService.getAllUserRecipes(user).stream().map(Recipe::toDto).toList());
+    public ResponseEntity<?> getUserRecipes(@AuthenticationPrincipal User user, @Valid PagedRequestDto pageDto) {
+        return ResponseEntity.ok(
+                PagedResponseDto.of(
+                        recipeService.getRecipesByUser(user, pageDto.page()),
+                        Recipe::toDto
+                )
+        );
     }
 
     @GetMapping("/me")

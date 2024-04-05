@@ -2,8 +2,9 @@ package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.ErrorResponseDto;
+import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
+import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.tag.CreateTagDto;
-import lt.tastybytes.receptaiserver.dto.tag.TagDto;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,15 @@ public class TagController {
                     HttpStatus.BAD_REQUEST
             );
         }
-
         var newTag = tagService.createTag(dto);
         return ResponseEntity.ok(newTag.toDto());
     }
 
     @GetMapping("/list")
-    public Iterable<TagDto> getAllTags() {
-        return tagService.getAllTags().stream().map(Tag::toDto).toList();
+    public ResponseEntity<?> getTags(@Valid PagedRequestDto pageDto) {
+        var page = tagService.getTags(pageDto.page());
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Tag::toDto)
+        );
     }
 }

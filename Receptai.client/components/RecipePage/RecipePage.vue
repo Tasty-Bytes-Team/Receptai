@@ -62,7 +62,13 @@ const error = ref(false);
   <div>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
-        Home > {{ recipe.categories[0].name }} > {{ recipe.name }}
+        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink> >
+        <NuxtLink
+          class="hover:underline font-medium"
+          :to="`/recipe-category/${recipe.categories[0].id}`"
+          >{{ recipe.categories[0].name }}</NuxtLink
+        >
+        > {{ recipe.name }}
       </p>
       <p v-else>Home > {{ recipe.name }}</p>
     </div>

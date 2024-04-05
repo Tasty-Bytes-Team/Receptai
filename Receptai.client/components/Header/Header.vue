@@ -22,6 +22,10 @@ const headerNav: Array<Navigation> = [
     to: "/recipes",
     title: "Recipes",
   },
+  {
+    to: "/recipe-category",
+    title: "Categories",
+  },
 ];
 
 const adminHeaderNav: Array<Navigation> = [

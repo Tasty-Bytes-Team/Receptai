@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(CreateCategoryDto dto) {
-        var category = new Category(dto.name().strip());
+        var category = new Category(dto.name().strip(), dto.description(), dto.previewImageUrl());
         categoryRepository.save(category);
         return category;
     }

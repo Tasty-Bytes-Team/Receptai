@@ -39,6 +39,19 @@ public class CategoryController {
         );
     }
 
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<?> getCategories(
+            @PathVariable(value = "categoryId") long categoryId
+    ) throws NotFoundException {
+        var category = categoryService.getCategoryById(categoryId);
+        if (category.isEmpty()) {
+            throw new NotFoundException("Category by specified ID not found.");
+        }
+        return ResponseEntity.ok(
+                category.get().toDto()
+        );
+    }
+
     @GetMapping("/{categoryId}/recipes")
     public ResponseEntity<?> getRecipesInCategory(
             @PathVariable(value = "categoryId") long categoryId,

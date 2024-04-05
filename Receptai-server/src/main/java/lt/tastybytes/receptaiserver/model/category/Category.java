@@ -16,16 +16,22 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
+    @Column(nullable = true)
+    private String description;
+    @Column(nullable = true)
+    private String previewImageUrl;
 
     public Category() {
 
     }
 
-    public Category(String name) {
+    public Category(String name, String description, String previewImageUrl) {
         this.name = name;
+        this.description = description;
+        this.previewImageUrl = previewImageUrl;
     }
 
     public CategoryDto toDto() {
-        return new CategoryDto(id, name, false);
+        return new CategoryDto(id, name, description, previewImageUrl);
     }
 }

@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/category/list").permitAll()
+                        .requestMatchers("/api/v1/category/{categoryId}").permitAll()
                         .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
 
                         .requestMatchers("/api/v1/recipe/list").permitAll()

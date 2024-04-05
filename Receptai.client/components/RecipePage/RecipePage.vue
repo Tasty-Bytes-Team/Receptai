@@ -57,26 +57,31 @@ interface Tag {
   name: string;
 }
 
-const recipe = ref<Recipe>(Object.create(null));
-const video = ref<string | null>(null);
+const recipe = ref<Recipe | null>(null);
 
 const error = ref(false);
 const loading = ref(true);
 
-try {
-  axios
-    .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
-    .then((res) => {
-      recipe.value = res.data;
-      loading.value = false;
-    });
-} catch (e) {
-  console.error("Error fetching recipe", e);
-}
+const getRecipe = async () => {
+  try {
+    axios
+      .get(`${config.public.baseURL}/api/v1/recipe/get/${props.id}`)
+      .then((res) => {
+        recipe.value = res.data;
+        loading.value = false;
+      });
+  } catch (e) {
+    console.error("Error fetching recipe", e);
+  }
+};
+
+await getRecipe();
 </script>
 
 <template>
-  <div v-if="loading" class="max-w-screen-lg m-auto my-5 px-2">Loading...</div>
+  <div v-if="loading || !recipe" class="max-w-screen-lg m-auto my-5 px-2">
+    Loading...
+  </div>
   <div v-else>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">

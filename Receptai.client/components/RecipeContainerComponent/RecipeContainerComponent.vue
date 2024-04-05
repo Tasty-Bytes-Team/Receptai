@@ -8,7 +8,7 @@ defineProps({
   about: String,
   link: String,
   category: String,
-  categoryLink: String,
+  categoryId: Number,
   prepTime: Number,
 });
 

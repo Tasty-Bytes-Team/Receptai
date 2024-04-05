@@ -3,8 +3,6 @@ import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 
-const config = useRuntimeConfig();
-
 interface Recipe {
   id: number;
   name: string;
@@ -38,9 +36,13 @@ interface Ingredient {
 }
 
 interface Category {
+  id: number;
   name: string;
-  link: string;
+  description: string | null;
+  previewImageUrl: string | null;
 }
+
+const config = useRuntimeConfig();
 
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
@@ -64,7 +66,7 @@ const getRecipes = async () => {
         loading.value = false;
       });
   } catch (e) {
-    console.error("Error fetching recipe", e);
+    console.error("Error fetching recipes", e);
   }
 
   window.scrollTo(0, 0);
@@ -75,33 +77,51 @@ getRecipes();
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold text-center m-5">Receptai</h1>
-  </div>
-  <div>
+    <div>
+      <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
+    </div>
     <div v-if="loading">Loading...</div>
-    <div v-else class="flex flex-wrap">
-      <RecipeContainer
-        v-for="item in recipeList"
-        :imageLink="item.previewImage"
-        :name="item.name"
-        :raiting="5"
-        :about="item.shortDescription"
-        :link="`/recipes/${item.id}`"
-        :category="
-          item.categories.length > 0 ? item.categories[0].name : 'Empty'
-        "
-        :categoryLink="
-          item.categories.length > 0 ? item.categories[0].link : '#'
-        "
-        :prepTime="item.minutesToPrepare"
-      />
-      <div class="w-full text-center">
-        <Pagination
-          @change="getRecipes"
-          v-model="pageNumber"
-          :totalPages
-          :siblings
+    <div
+      v-else-if="recipeList && recipeList.length === 0"
+      class="flex flex-col items-center gap-3"
+    >
+      <p>
+        This page is dedicated to housing all the delicious recipes you can find
+        on my website! While there aren't any recipes listed here just yet, stay
+        tuned! I'm constantly adding new culinary creations, and soon this will
+        be your one-stop shop for finding tasty dishes to whip up in the
+        kitchen.
+      </p>
+      <button
+        @click="navigateTo('/')"
+        class="p-1 px-4 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
+      >
+        Home page
+      </button>
+    </div>
+    <div v-else>
+      <div class="flex flex-wrap">
+        <RecipeContainer
+          v-for="item in recipeList"
+          :imageLink="item.previewImage"
+          :name="item.name"
+          :raiting="5"
+          :about="item.shortDescription"
+          :link="`/recipes/${item.id}`"
+          :category="
+            item.categories.length > 0 ? item.categories[0].name : 'Empty'
+          "
+          :categoryId="item.categories[0].id"
+          :prepTime="item.minutesToPrepare"
         />
+        <div class="w-full text-center" v-if="totalPages > 0">
+          <Pagination
+            @change="getRecipes"
+            v-model="pageNumber"
+            :totalPages
+            :siblings
+          />
+        </div>
       </div>
     </div>
   </div>

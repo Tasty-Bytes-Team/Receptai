@@ -15,7 +15,9 @@ interface Category {
 const config = useRuntimeConfig();
 
 const categoriesList = ref<Category[] | null>(null);
+
 const loading = ref(true);
+const loadingTimeout = ref(true);
 
 const pageNumber = ref(0);
 
@@ -40,6 +42,10 @@ const getCategories = async () => {
   window.scrollTo(0, 0);
 };
 
+setTimeout(() => {
+  loadingTimeout.value = false;
+}, 300);
+
 getCategories();
 </script>
 
@@ -48,11 +54,11 @@ getCategories();
     <div>
       <h1 class="text-3xl font-bold text-center m-3">Categories</h1>
     </div>
-    <div v-if="loading" class="flex flex-wrap">
+    <div v-if="loading || loadingTimeout" class="flex flex-wrap">
       <CategoryContainerShimmer v-for="v in 8" />
     </div>
     <EmptyListInformation
-    v-else-if="categoriesList && categoriesList.length === 0"
+      v-else-if="categoriesList && categoriesList.length === 0"
       description="This is your launchpad for discovering everything we have to offer!
         While our categories are currently under construction and we haven't
         quite filled the shelves yet, exciting things are coming soon."

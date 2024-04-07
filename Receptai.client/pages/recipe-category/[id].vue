@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import CategoryNameBanner from "@/components/CategoryPage/components/CategoryNameBanner.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
+import CategoryNameBannerShimmer from "@/components/ShimmerLoaders/CategoryNameBannerShimmer.vue";
 
 interface Recipe {
   id: number;
@@ -52,6 +53,7 @@ const recipeList = ref<Recipe[] | null>(null);
 const categoryInfo = ref<Category | null>(null);
 
 const loading = ref(true);
+const loadingTimeout = ref(true);
 
 const pageNumber = ref(0);
 
@@ -60,52 +62,56 @@ const siblings = 2;
 
 const getCategory = async () => {
   try {
-    await axios
-      .get(`${config.public.baseURL}/api/v1/category/${route.params.id}`)
-      .then((res) => {
-        categoryInfo.value = res.data;
-      });
+    const res = await axios.get(
+      `${config.public.baseURL}/api/v1/category/${route.params.id}`
+    );
+    categoryInfo.value = res.data;
   } catch (e) {
-    console.error("Error fetching recipes", e);
+    console.warn("Error fetching recipes", e);
   }
 };
 
 const getRecipes = async () => {
   try {
-    await axios
-      .get(
-        `${config.public.baseURL}/api/v1/category/${route.params.id}/recipes`
-      )
-      .then((res) => {
-        recipeList.value = res.data.elements;
-        totalPages.value = res.data.totalPageCount;
-        loading.value = false;
-      });
+    const res = await axios.get(
+      `${config.public.baseURL}/api/v1/category/${route.params.id}/recipes`
+    );
+    recipeList.value = res.data.elements;
+    totalPages.value = res.data.totalPageCount;
+    loading.value = false;
   } catch (e) {
-    console.error("Error fetching recipes", e);
+    console.warn("Error fetching recipes", e);
   }
-
   window.scrollTo(0, 0);
 };
 
-await getCategory();
+setTimeout(() => {
+  loadingTimeout.value = false;
+}, 300);
+
+getCategory();
 getRecipes();
 </script>
 
 <template>
   <div>
-    <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
-    <div v-if="loading" class="flex flex-wrap">
-      <RecipeContainerShimmer v-for="v in 8" />
+    <div v-if="loading || loadingTimeout">
+      <CategoryNameBannerShimmer />
+      <div class="flex flex-wrap">
+        <RecipeContainerShimmer v-for="v in 8" />
+      </div>
     </div>
-    <EmptyListInformation
-      v-else-if="recipeList && recipeList.length === 0"
-      description="While there aren't any recipes here yet, we invite you to explore our
+    <div v-else-if="recipeList && recipeList.length === 0">
+      <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
+      <EmptyListInformation
+        description="While there aren't any recipes here yet, we invite you to explore our
         full range of categories by clicking button below."
-      button-text="All categories"
-      @button-click="navigateTo('/recipe-category')"
-    />
+        button-text="All categories"
+        @button-click="navigateTo('/recipe-category')"
+      />
+    </div>
     <div v-else>
+      <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
       <div class="flex flex-wrap">
         <RecipeContainer
           v-for="item in recipeList"

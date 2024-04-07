@@ -103,11 +103,11 @@ getData();
   <div>
     <h1 class="text-3xl font-bold text-center m-3">My Recipes</h1>
     <div v-if="loading">
-      <div role="status" class="flex justify-center items-center">
+      <div role="status" class="flex justify-center items-center my-2">
         <img
           src="/assets/loader.svg"
           alt="Recipe loader"
-          class="w-8 h-8 animate-spin"
+          class="w-9 h-9 animate-spin"
         />
         <span class="sr-only">Loading...</span>
       </div>

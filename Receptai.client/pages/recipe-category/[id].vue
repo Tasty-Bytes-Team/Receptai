@@ -4,6 +4,7 @@ import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContain
 import Pagination from "@/components/Pagination/Pagination.vue";
 import CategoryNameBanner from "@/components/CategoryPage/components/CategoryNameBanner.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
+import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 
 interface Recipe {
   id: number;
@@ -94,7 +95,9 @@ getRecipes();
 <template>
   <div>
     <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading" class="flex flex-wrap">
+      <RecipeContainerShimmer v-for="v in 8" />
+    </div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
       description="While there aren't any recipes here yet, we invite you to explore our

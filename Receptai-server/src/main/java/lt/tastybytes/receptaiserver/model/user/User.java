@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.user.FullUserDto;
 import lt.tastybytes.receptaiserver.dto.user.PublicUserDto;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
+import lt.tastybytes.receptaiserver.model.ManageableModel;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails, ManageableModel {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -122,12 +124,22 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void assertCanBeManagedBy(User user) throws MissingRightsException {
+    @Override
+    public void assertCanBeManagedBy(@NotNull User user) throws MissingRightsException {
         if (getId().equals(user.getId())) {
             return;
         }
 
-        // TODO: Implement overrides for admins
+        // If user that is being asserted is admin and not themselves
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+
+            // If the user that's being managed is an admin, dont allow this operation
+            if (this.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                throw new MissingRightsException("You cannot manage another administrator!");
+            }
+
+            return;
+        }
 
         throw new MissingRightsException("You are missing the required rights to manage this user!");
     }

@@ -5,11 +5,16 @@ import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
+
+    Page<User> getUsers(int pageNumber);
+
+
 
     Optional<User> findUserById(long id);
 
@@ -21,7 +26,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    List<User> findAllUsers();
+
 
     User authenticate(String email, String password) throws Exception;
 }

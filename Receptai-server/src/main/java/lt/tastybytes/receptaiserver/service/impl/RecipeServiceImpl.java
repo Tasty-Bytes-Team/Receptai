@@ -40,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto createRecipe(ModifyRecipeDto dto, User author) {
+    public RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author) {
         var recipe = new Recipe();
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());

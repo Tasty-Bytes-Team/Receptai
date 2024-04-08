@@ -85,9 +85,11 @@ const getRecipes = async () => {
   window.scrollTo(0, 0);
 };
 
-setTimeout(() => {
-  loadingTimeout.value = false;
-}, 300);
+if (process.env.NODE_ENV === "development") {
+  setTimeout(() => {
+    loadingTimeout.value = false;
+  }, 300);
+}
 
 getCategory();
 getRecipes();

@@ -23,7 +23,7 @@ const error = ref(false);
         <div class="relative">
           <NuxtImg
             :src="!error ? imageLink : '/assets/TastyBytes_Fallback.webp'"
-            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full"
+            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full bg-concrete-200"
             @error="() => (error = true)"
             data-testid="recipe-image"
           />

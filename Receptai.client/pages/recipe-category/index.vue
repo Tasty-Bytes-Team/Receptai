@@ -3,6 +3,7 @@ import axios from "axios";
 import CategoryComponent from "@/components/CategoryPage/CategoryComponent/CategoryComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
+import CategoryContainerShimmer from "@/components/ShimmerLoaders/CategoryContainerShimmer.vue";
 
 interface Category {
   id: number;
@@ -13,8 +14,12 @@ interface Category {
 
 const config = useRuntimeConfig();
 
+const shimmerComponentsCount = 8;
+
 const categoriesList = ref<Category[] | null>(null);
+
 const loading = ref(true);
+const loadingTimeout = ref(false);
 
 const pageNumber = ref(0);
 
@@ -39,6 +44,13 @@ const getCategories = async () => {
   window.scrollTo(0, 0);
 };
 
+if (process.env.NODE_ENV === "development") {
+  loadingTimeout.value = true;
+  setTimeout(() => {
+    loadingTimeout.value = false;
+  }, 300);
+}
+
 getCategories();
 </script>
 
@@ -47,9 +59,11 @@ getCategories();
     <div>
       <h1 class="text-3xl font-bold text-center m-3">Categories</h1>
     </div>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading || loadingTimeout" class="flex flex-wrap">
+      <CategoryContainerShimmer v-for="i in shimmerComponentsCount" />
+    </div>
     <EmptyListInformation
-    v-else-if="categoriesList && categoriesList.length === 0"
+      v-else-if="categoriesList && categoriesList.length === 0"
       description="This is your launchpad for discovering everything we have to offer!
         While our categories are currently under construction and we haven't
         quite filled the shelves yet, exciting things are coming soon."

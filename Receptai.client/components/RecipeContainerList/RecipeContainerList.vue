@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
+import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 
 const config = useRuntimeConfig();
 
@@ -43,6 +44,8 @@ interface Category {
   previewImageUrl: string | null;
 }
 
+const shimmerComponentsCount = 8;
+
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
@@ -65,7 +68,9 @@ try {
 </script>
 
 <template>
-  <div v-if="loading">Loading...</div>
+  <div v-if="loading" class="flex flex-wrap">
+    <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+  </div>
   <div v-else class="flex flex-wrap">
     <RecipeContainer
       v-for="item in recipeList"

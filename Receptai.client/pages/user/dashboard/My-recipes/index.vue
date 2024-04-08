@@ -102,7 +102,16 @@ getData();
 <template>
   <div>
     <h1 class="text-3xl font-bold text-center m-3">My Recipes</h1>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading">
+      <div role="status" class="flex justify-center items-center my-2">
+        <img
+          src="/assets/loader.svg"
+          alt="Recipe loader"
+          class="w-9 h-9 animate-spin"
+        />
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
     <EmptyListInformation
       v-else-if="recipes && recipes.length === 0"
       description="Your recipe box is currently empty. Why not add a new recipe today?"

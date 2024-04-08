@@ -8,7 +8,7 @@ const error = ref(false);
 <template>
   <NuxtImg
     :src="!error ? previewImage : '/assets/TastyBytes_Fallback.webp'"
-    class="aspect-[4/3] max-h-24 w-full object-cover"
+    class="aspect-[4/3] max-h-24 w-full object-cover bg-concrete-200"
     @error="() => (error = true)"
   />
 </template>

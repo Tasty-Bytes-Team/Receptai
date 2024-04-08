@@ -3,6 +3,7 @@ import axios from "axios";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
+import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 
 interface Recipe {
   id: number;
@@ -45,6 +46,8 @@ interface Category {
 
 const config = useRuntimeConfig();
 
+const shimmerComponentsCount = 8;
+
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
@@ -81,7 +84,9 @@ getRecipes();
     <div>
       <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
     </div>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading" class="flex flex-wrap">
+      <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+    </div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
       description="This page is dedicated to housing all the delicious recipes you can find

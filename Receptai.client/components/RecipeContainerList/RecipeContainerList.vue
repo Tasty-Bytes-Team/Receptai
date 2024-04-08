@@ -44,6 +44,8 @@ interface Category {
   previewImageUrl: string | null;
 }
 
+const shimmerComponentsCount = 8;
+
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
@@ -67,7 +69,7 @@ try {
 
 <template>
   <div v-if="loading" class="flex flex-wrap">
-    <RecipeContainerShimmer v-for="v in 8" />
+    <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
   </div>
   <div v-else class="flex flex-wrap">
     <RecipeContainer

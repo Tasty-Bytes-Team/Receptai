@@ -46,6 +46,8 @@ interface Category {
 
 const config = useRuntimeConfig();
 
+const shimmerComponentsCount = 8;
+
 const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
@@ -83,7 +85,7 @@ getRecipes();
       <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
     </div>
     <div v-if="loading" class="flex flex-wrap">
-      <RecipeContainerShimmer v-for="v in 8" />
+      <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
     </div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"

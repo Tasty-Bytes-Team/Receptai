@@ -14,10 +14,12 @@ interface Category {
 
 const config = useRuntimeConfig();
 
+const shimmerComponentsCount = 8;
+
 const categoriesList = ref<Category[] | null>(null);
 
 const loading = ref(true);
-const loadingTimeout = ref(true);
+const loadingTimeout = ref(false);
 
 const pageNumber = ref(0);
 
@@ -43,6 +45,7 @@ const getCategories = async () => {
 };
 
 if (process.env.NODE_ENV === "development") {
+  loadingTimeout.value = true;
   setTimeout(() => {
     loadingTimeout.value = false;
   }, 300);
@@ -57,7 +60,7 @@ getCategories();
       <h1 class="text-3xl font-bold text-center m-3">Categories</h1>
     </div>
     <div v-if="loading || loadingTimeout" class="flex flex-wrap">
-      <CategoryContainerShimmer v-for="v in 8" />
+      <CategoryContainerShimmer v-for="i in shimmerComponentsCount" />
     </div>
     <EmptyListInformation
       v-else-if="categoriesList && categoriesList.length === 0"

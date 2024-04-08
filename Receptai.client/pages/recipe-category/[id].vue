@@ -49,11 +49,13 @@ interface Category {
 const config = useRuntimeConfig();
 const route = useRoute();
 
+const shimmerComponentsCount = 8;
+
 const recipeList = ref<Recipe[] | null>(null);
 const categoryInfo = ref<Category | null>(null);
 
 const loading = ref(true);
-const loadingTimeout = ref(true);
+const loadingTimeout = ref(false);
 
 const pageNumber = ref(0);
 
@@ -86,6 +88,7 @@ const getRecipes = async () => {
 };
 
 if (process.env.NODE_ENV === "development") {
+  loadingTimeout.value = true;
   setTimeout(() => {
     loadingTimeout.value = false;
   }, 300);
@@ -100,7 +103,7 @@ getRecipes();
     <div v-if="loading || loadingTimeout">
       <CategoryNameBannerShimmer />
       <div class="flex flex-wrap">
-        <RecipeContainerShimmer v-for="v in 8" />
+        <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
       </div>
     </div>
     <div v-else-if="recipeList && recipeList.length === 0">

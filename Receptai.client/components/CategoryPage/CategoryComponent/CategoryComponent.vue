@@ -20,13 +20,13 @@ const error = ref(false);
           <NuxtImg
             v-if="previewImageUrl"
             :src="!error ? previewImageUrl : '/assets/TastyBytes_Fallback.webp'"
-            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full"
+            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full bg-concrete-200"
             @error="() => (error = true)"
           />
           <NuxtImg
             v-else
             :src="'/assets/TastyBytes_Fallback.webp'"
-            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full"
+            class="m-auto rounded-md lg:h-56 h-48 object-cover aspect-[4/3] w-full bg-concrete-200"
           />
         </div>
         <div class="px-3 py-2">

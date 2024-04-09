@@ -30,6 +30,9 @@ public interface RecipeService {
     Page<Recipe> getRecipesByUser(User user, int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
 
 
+    Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
+
+
     RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author);
     RecipeDto editRecipe(Recipe recipe, @Valid ModifyRecipeDto dto);
 

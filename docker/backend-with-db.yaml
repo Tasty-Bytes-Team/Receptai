@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: Receptai-Database
+    image: mariadb:11.3.2
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: spring
+      MYSQL_PASSWORD: securePassword123
+      MYSQL_DATABASE: production_db
+      MYSQL_ROOT_PASSWORD: securePassword123Root
+    volumes:
+      - "../data/database:/var/lib/mysql:delegated"
+    # WARNING: Exposes 3306 to the world
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  phpmyadmin:
+    container_name: Receptai-PhpMyAdmin
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: securePassword123Root
+    # WARNING: Exposes 8081 to the world
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+  backend:
+    container_name: Receptai-Backend
+    restart: unless-stopped
+    build:
+      context: ../Receptai-server
+      dockerfile: Dockerfile
+    environment:
+        - SPRING_DATASOURCE_URL=jdbc:mariadb://database:3306/production_db
+    depends_on:
+      db:
+        condition: service_healthy
+    # WARNING: Exposes 8080 to the world
+    ports:
+      - "8080:8080"
+    links:
+      - "db:database"

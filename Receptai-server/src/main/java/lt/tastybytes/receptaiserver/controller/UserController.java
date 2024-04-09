@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.controller;
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
 import lt.tastybytes.receptaiserver.dto.user.*;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
@@ -12,6 +13,7 @@ import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
+import lt.tastybytes.receptaiserver.validation.SortedRequestValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,10 +59,16 @@ public class UserController {
     }
 
     @GetMapping("/recipes")
-    public ResponseEntity<?> getUserRecipes(@AuthenticationPrincipal User user, @Valid PagedRequestDto pageDto) {
+    public ResponseEntity<?> getUserRecipes(
+            @AuthenticationPrincipal User user,
+            @Valid PagedRequestDto pageDto,
+            @Valid
+            @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
+            SortedRequestDto sortDto
+    ) {
         return ResponseEntity.ok(
                 PagedResponseDto.of(
-                        recipeService.getRecipesByUser(user, pageDto.page()),
+                        recipeService.getRecipesByUser(user, pageDto.page(), sortDto),
                         Recipe::toDto
                 )
         );

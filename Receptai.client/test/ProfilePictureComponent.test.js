@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { screen, render, cleanup } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 
 describe.each([

@@ -182,7 +182,7 @@ public class RecipeServiceImpl implements RecipeService {
             request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
         }
         return recipeRepository.findAllByNameIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(
-                query, query
+                query, query,
                 request
         );
     }

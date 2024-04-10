@@ -1,6 +1,16 @@
 # Receptai
 
-## Deployment
+## The Team
+
+## Techninė užduotis?
+
+## Architecture
+
+## Testing
+
+## Deployment and development setup guide
+
+### Deployment
 
 To setup a deployment-ready instance of the project, you will need to use Docker.
 After installing it, simply navigate to the project root and run the following command:
@@ -11,15 +21,24 @@ docker compose up --build
 
 After containers start up, the website will be available on http://localhost/ over port 80 by default. The API can be accessed under http://localhost/api/.
 
-## Development
+### Development
 
-...
 
-### Frontend
+#### Frontend
 
-...
+For **frontend** development, you can run the `docker compose -f docker/... up --build` to boot up the database, backend and PHPMyAdmin. Alternatively, follow the steps provided under backend section.
 
-### API
+After you have backend running, you can start the frontend by running these commands:
+
+```sh
+npm install
+```
+
+```sh
+npm run dev
+```
+
+#### Backend
 
 The API backend is written in Java Spring Boot. You need to have at least Java 17 installed to run the backend. The API uses Gradle build system so to boot up a version
 of the backend, you can run the following command:
@@ -43,22 +62,22 @@ The backend uses Liquidbase for database schema versioning. Changelogs are store
 
 For now, the changelogs are created through an Intellij plugin called JPA Buddy by creating a difference between a running database and the current entity models in the code.
 
-## API docs
+### API docs
 
 In the future, documentation will be accessible over Swagger. For the time being, this is contains a short documentation of all endpoints.
 
-### 🔓 POST /api/v1/user/login
+#### 🔓 POST /api/v1/user/login
 Returns a JWT token to be used for authorized requests.
-### 🔓 POST /api/v1/user/register
+#### 🔓 POST /api/v1/user/register
 Registers a user with the specified details and returns some slim account information on success.
-### 🔒 GET  /api/v1/user/me
+#### 🔒 GET  /api/v1/user/me
 Returns personal data of the current user.
 
-### 🔓 GET  /api/v1/recipe/list
+#### 🔓 GET  /api/v1/recipe/list
 Returns an array of all recipe objects.
-### 🔓 GET  /api/v1/recipe/get/{id}
+#### 🔓 GET  /api/v1/recipe/get/{id}
 Returns recipe information for the specified recipe ID.
-### 🔒 POST /api/v1/recipe/create
+#### 🔒 POST /api/v1/recipe/create
 Creates a recipe in the database.
 
 ---

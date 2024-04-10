@@ -177,13 +177,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
-        // TODO: query is not yet used
         var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
         if (sortDto != null) {
             request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
         }
-        return recipeRepository.findAll(
-                //user,
+        return recipeRepository.findAllByNameIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(
+                query, query
                 request
         );
     }

@@ -71,19 +71,20 @@ const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const recipes = ref<Recipe[] | null>(null);
 const key = ref(0);
-const error = ref(false);
 
 const pageNumber = ref(0);
-const sortBy = ref("dateCreated");
-const sortAsc = ref(false);
-const prevItem = ref<null | string>(null);
+
+const activeSortKey = ref("dateCreated");
+const isSortAscending = ref(false);
+
+const previouslySortedColumn = ref<null | string>(null);
 
 const loading = ref(true);
 
 const totalPages = ref(0);
 const siblings = 2;
 
-const columns: column[] = [
+const sortableColumns: column[] = [
   {
     key: "id",
     label: "ID",
@@ -119,7 +120,7 @@ const getData = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`,
+        `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${activeSortKey.value}&sortAsc=${isSortAscending.value}`,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
         }
@@ -138,8 +139,13 @@ const getData = async () => {
 };
 
 const updateDataSort = (item: column) => {
-  if (prevItem.value && prevItem.value !== item.key) {
-    const found = columns.find((e) => e.key === prevItem.value);
+  if (
+    previouslySortedColumn.value &&
+    previouslySortedColumn.value !== item.key
+  ) {
+    const found = sortableColumns.find(
+      (e) => e.key === previouslySortedColumn.value
+    );
 
     if (found) {
       found.curr = false;
@@ -147,7 +153,7 @@ const updateDataSort = (item: column) => {
     }
   }
 
-  prevItem.value = item.key;
+  previouslySortedColumn.value = item.key;
   if (item.curr === true) {
     switch (item.sortBy) {
       case "DESC":
@@ -165,11 +171,12 @@ const updateDataSort = (item: column) => {
     item.sortBy = "DESC";
   }
 
-  sortBy.value = item.key;
-  sortAsc.value =
+  activeSortKey.value = item.key;
+  isSortAscending.value =
     item.sortBy === "DESC" ? false : item.sortBy === "ASC" ? true : false;
 
   getData();
+  pageNumber.value = 0;
 };
 
 getData();
@@ -198,7 +205,7 @@ getData();
       <div class="flex flex-col gap-2">
         <RecipeContainer
           :key="key"
-          :columns="columns"
+          :columns="sortableColumns"
           @reload="getData()"
           @change-sort="updateDataSort"
           :recipes

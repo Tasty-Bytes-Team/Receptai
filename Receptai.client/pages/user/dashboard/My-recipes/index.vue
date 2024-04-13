@@ -52,6 +52,14 @@ interface Category {
   link: string;
 }
 
+interface column {
+  key: string;
+  label: string;
+  sortable: boolean;
+  sortBy?: string;
+  curr?: boolean;
+}
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
@@ -74,6 +82,38 @@ const loading = ref(true);
 const totalPages = ref(0);
 const siblings = 2;
 
+const columns: column[] = [
+  {
+    key: "id",
+    label: "ID",
+    sortable: false,
+  },
+  {
+    key: "image",
+    label: "Image",
+    sortable: false,
+  },
+  {
+    key: "name",
+    label: "Name",
+    sortable: true,
+    sortBy: "DEFAULT",
+    curr: false
+  },
+  {
+    key: "dateCreated",
+    label: "Creaton date",
+    sortable: true,
+    sortBy: "DEFAULT",
+    curr: false
+  },
+  {
+    key: "action",
+    label: "Action",
+    sortable: false,
+  },
+];
+
 const getData = async () => {
   try {
     await axios
@@ -94,6 +134,33 @@ const getData = async () => {
   }
 
   window.scrollTo(0, 0);
+};
+
+const updateDataSort = (item: column) => {
+  console.log(item);
+
+  if (item.curr === true) {
+    switch (item.sortBy) {
+      case "DESC":
+        item.sortBy = "ASC";
+        break;
+      case "ASC":
+        item.sortBy = "DESC";
+        break;
+      case "DEFAULT":
+        item.sortBy = "DESC";
+        break;
+    }
+  } else {
+    item.curr = true;
+    item.sortBy = "DESC";
+  }
+
+  sortBy.value = item.key;
+  sortAsc.value =
+    item.sortBy === "DESC" ? false : item.sortBy === "ASC" ? true : false;
+
+  getData();
 };
 
 getData();
@@ -120,7 +187,13 @@ getData();
     />
     <div v-else>
       <div class="flex flex-col gap-2">
-        <RecipeContainer :key="key" @reload="getData()" :recipes />
+        <RecipeContainer
+          :key="key"
+          :columns="columns"
+          @reload="getData()"
+          @change-sort="updateDataSort"
+          :recipes
+        />
         <div class="w-full text-center" v-if="totalPages > 0">
           <Pagination
             @change="getData"

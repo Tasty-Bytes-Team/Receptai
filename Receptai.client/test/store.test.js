@@ -11,14 +11,14 @@ test("adding message shows up in the global store", () => {
   expect(store.show).toBe(true);
 });
 
-test("adding message with custom label shows up in the global store", () => {
+test("adding message with custom label should show up in the global store", () => {
   addNotification("Testing type", "Error");
   expect(store.text).toBe("Testing type");
   expect(store.label).toBe("Error");
   expect(store.show).toBe(true);
 });
 
-test("adding message with custom label and button shows up in the global store", () => {
+test("adding message with custom label and button should show up in the global store", () => {
   addNotification("Testing button", "Success", [
     { text: "Test", link: "testLink" },
   ]);
@@ -30,7 +30,7 @@ test("adding message with custom label and button shows up in the global store",
   expect(store.show).toBe(true);
 });
 
-test("adding message with multiple buttons shows up in the global store", () => {
+test("adding message with multiple buttons should show up in the global store", () => {
   addNotification("Testing multiple button", undefined, [
     { text: "Button1", link: "testLink1" },
     { text: "Button2", link: "testLink2" },

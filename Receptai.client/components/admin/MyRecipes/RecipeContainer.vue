@@ -169,9 +169,9 @@ const getSortDirection = (value: string): void => {
                 size="16px"
                 :name="
                   item.sortBy === 'ASC'
-                    ? 'heroicons-solid:sort-ascending'
+                    ? 'fa-solid:sort-up'
                     : item.sortBy === 'DESC'
-                    ? 'heroicons-solid:sort-descending'
+                    ? 'fa-solid:sort-down'
                     : 'fa-solid:sort'
                 "
                 :color="

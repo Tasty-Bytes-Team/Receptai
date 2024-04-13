@@ -76,6 +76,7 @@ const error = ref(false);
 const pageNumber = ref(0);
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
+const prevItem = ref<null | string>(null);
 
 const loading = ref(true);
 
@@ -98,14 +99,14 @@ const columns: column[] = [
     label: "Name",
     sortable: true,
     sortBy: "DEFAULT",
-    curr: false
+    curr: false,
   },
   {
     key: "dateCreated",
     label: "Creaton date",
     sortable: true,
     sortBy: "DEFAULT",
-    curr: false
+    curr: false,
   },
   {
     key: "action",
@@ -137,8 +138,16 @@ const getData = async () => {
 };
 
 const updateDataSort = (item: column) => {
-  console.log(item);
+  if (prevItem.value && prevItem.value !== item.key) {
+    const found = columns.find((e) => e.key === prevItem.value);
 
+    if (found) {
+      found.curr = false;
+      found.sortBy = "DEFAULT";
+    }
+  }
+
+  prevItem.value = item.key;
   if (item.curr === true) {
     switch (item.sortBy) {
       case "DESC":

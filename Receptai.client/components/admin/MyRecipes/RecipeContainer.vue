@@ -162,19 +162,25 @@ const getSortDirection = (value: string): void => {
             :class="item.label === 'ID' ? 'min-w-14' : 'min-w-36'"
             v-for="item in columns"
           >
-            <div class="flex flex-row items-center gap-1.5">
+            <div class="flex flex-row items-center justify-between gap-1.5">
               {{ item.label }}
               <Icon
                 v-if="item.sortable"
                 size="16px"
                 :name="
                   item.sortBy === 'ASC'
-                    ? 'fa-solid:sort-down'
+                    ? 'heroicons-solid:sort-ascending'
                     : item.sortBy === 'DESC'
-                    ? 'fa-solid:sort-up'
+                    ? 'heroicons-solid:sort-descending'
                     : 'fa-solid:sort'
                 "
-                color="black"
+                :color="
+                  item.sortBy === 'ASC'
+                    ? 'black'
+                    : item.sortBy === 'DESC'
+                    ? 'black'
+                    : '#626262'
+                "
               />
             </div>
           </th>

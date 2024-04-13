@@ -144,7 +144,7 @@ const updateDataSort = (item: column) => {
     previouslySortedColumn.value !== item.key
   ) {
     const found = sortableColumns.find(
-      (e) => e.key === previouslySortedColumn.value
+      (col) => col.key === previouslySortedColumn.value
     );
 
     if (found) {
@@ -175,8 +175,8 @@ const updateDataSort = (item: column) => {
   isSortAscending.value =
     item.sortBy === "DESC" ? false : item.sortBy === "ASC" ? true : false;
 
-  getData();
   pageNumber.value = 0;
+  getData();
 };
 
 getData();

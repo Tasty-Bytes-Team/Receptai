@@ -2,10 +2,11 @@
 const search = ref<null | string>(null);
 
 const onSearch = async () => {
+  const toSearch = search.value?.toString().trim().toLowerCase();
   await navigateTo({
     path: "/search",
     query: {
-      s: search.value,
+      s: toSearch,
     },
     replace: true,
   });
@@ -31,7 +32,7 @@ const onSearch = async () => {
       <div class="absolute right-2 top-0 h-full flex justify-center">
         <button
           type="submit"
-          class="text-black my-2 p-2 bg-whiskey-100 hover:bg-whiskey-200 rounded-lg flex justify-center items-center transition-colors duration-100"
+          class="text-black my-2 aspect-square bg-whiskey-200 hover:bg-whiskey-300 rounded-lg flex justify-center items-center transition-colors duration-100"
         >
           <Icon name="material-symbols:search-rounded" size="20px" />
         </button>

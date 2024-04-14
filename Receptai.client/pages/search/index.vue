@@ -111,8 +111,9 @@ if (search.value === undefined || search.value === "") {
     </div>
     <div v-else-if="search === '' || !search">
       <h3 class="text-lg font-normal text-center m-1">
-        Search for something specific to find what you're looking for.
+        Search for something specific to find what you're looking for
       </h3>
+      <SearchForm class="mx-auto m-2 max-w-md" />
     </div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
@@ -128,7 +129,6 @@ if (search.value === undefined || search.value === "") {
         <h3 class="text-sm font-normal text-center">
           Found <b>{{ totalElementCount }}</b> recipes
         </h3>
-        <SearchForm class="mx-auto m-2 max-w-md" />
       </div>
       <div class="flex flex-wrap">
         <RecipeContainer

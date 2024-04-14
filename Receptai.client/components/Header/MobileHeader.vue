@@ -35,7 +35,7 @@ watch(
   }
 );
 
-function toggleMobileMenuWithTimeout() {
+const toggleMobileMenuWithTimeout = () => {
   disabledMobileMenu.value = true;
 
   if (showSearch.value === true) {
@@ -45,9 +45,9 @@ function toggleMobileMenuWithTimeout() {
   setTimeout(() => {
     disabledMobileMenu.value = false;
   }, 100);
-}
+};
 
-function toggleMobileSearchWithTimeout() {
+const toggleMobileSearchWithTimeout = () => {
   disabledSearch.value = true;
 
   if (showMobileMenu.value === true) {
@@ -58,7 +58,7 @@ function toggleMobileSearchWithTimeout() {
   setTimeout(() => {
     disabledSearch.value = false;
   }, 100);
-}
+};
 </script>
 
 <template>

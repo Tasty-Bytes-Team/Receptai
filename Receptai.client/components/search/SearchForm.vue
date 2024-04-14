@@ -25,14 +25,14 @@ const onSearch = async () => {
       <input
         v-model="search"
         type="search"
-        class="block w-full p-3 text-sm text-gray-900 border-2 border-concrete-300 focus:border-black outline-none rounded-lg bg-gray-50"
+        class="block w-full p-2.5 text-gray-900 border-2 border-concrete-300 focus:border-black outline-none rounded-md bg-gray-50"
         placeholder="Search recipes..."
         required
       />
       <div class="absolute right-2 top-0 h-full flex justify-center">
         <button
           type="submit"
-          class="text-black my-2 aspect-square bg-whiskey-200 hover:bg-whiskey-300 rounded-lg flex justify-center items-center transition-colors duration-100"
+          class="text-black my-1.5 aspect-square bg-whiskey-200 hover:bg-whiskey-300 rounded-lg flex justify-center items-center transition-colors duration-100"
         >
           <Icon name="material-symbols:search-rounded" size="20px" />
         </button>

@@ -128,7 +128,7 @@ if (search.value === undefined || search.value === "") {
         <h3 class="text-sm font-normal text-center">
           Found <b>{{ totalElementCount }}</b> recipes
         </h3>
-        <SearchForm class="mx-auto m-2" />
+        <SearchForm class="mx-auto m-2 max-w-md" />
       </div>
       <div class="flex flex-wrap">
         <RecipeContainer

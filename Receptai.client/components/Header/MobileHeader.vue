@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
+import SearchForm from "@/components/Search/SearchForm.vue";
 
 interface Navigation {
   to: string;
@@ -20,22 +21,42 @@ const updateHref = (): String => {
 };
 
 const showMobileMenu = ref(false);
-const disabled = ref(false);
+const showSearch = ref(false);
+const disabledMobileMenu = ref(false);
+const disabledSearch = ref(false);
 const windowHref = ref<String>(updateHref());
 
 watch(
   () => route.fullPath,
   () => {
     showMobileMenu.value = false;
+    showSearch.value = false;
     windowHref.value = updateHref();
   }
 );
 
 function toggleMobileMenuWithTimeout() {
-  disabled.value = true;
+  disabledMobileMenu.value = true;
+
+  if (showSearch.value === true) {
+    showSearch.value = false;
+  }
   showMobileMenu.value = !showMobileMenu.value;
   setTimeout(() => {
-    disabled.value = false;
+    disabledMobileMenu.value = false;
+  }, 100);
+}
+
+function toggleMobileSearchWithTimeout() {
+  disabledSearch.value = true;
+
+  if (showMobileMenu.value === true) {
+    showMobileMenu.value = false;
+  }
+  showSearch.value = !showSearch.value;
+
+  setTimeout(() => {
+    disabledSearch.value = false;
   }, 100);
 }
 </script>
@@ -45,23 +66,44 @@ function toggleMobileMenuWithTimeout() {
     class="sm:hidden max-w-screen-lg m-auto px-3 flex items-center justify-between"
   >
     <div class="flex-1">
-      <button :disabled="disabled" @click="toggleMobileMenuWithTimeout">
-        <Icon
-          :name="
-            !showMobileMenu
-              ? 'material-symbols:menu-rounded'
-              : 'material-symbols:close-rounded'
-          "
-          class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
-          :class="
-            !showMobileMenu
-              ? null
-              : 'bg-gray-100 ring-4 ring-gray-100 rounded-sm'
-          "
-          size="26px"
-          color="black"
-        />
-      </button>
+      <div class="flex gap-3 items-center justify-start">
+        <button
+          :disabled="disabledMobileMenu"
+          @click="toggleMobileMenuWithTimeout"
+        >
+          <Icon
+            :name="
+              !showMobileMenu
+                ? 'material-symbols:menu-rounded'
+                : 'material-symbols:close-rounded'
+            "
+            class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
+            :class="
+              !showMobileMenu
+                ? null
+                : 'bg-gray-100 ring-4 ring-gray-100 rounded-sm'
+            "
+            size="26px"
+            color="black"
+          />
+        </button>
+        <button
+          v-if="headerType !== 'ADMIN'"
+          @click="toggleMobileSearchWithTimeout"
+        >
+          <Icon
+            name="material-symbols:search-rounded"
+            class="transition-all duration-150 hover:bg-whiskey-200 hover:ring-4 hover:ring-whiskey-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
+            :class="
+              !showSearch
+                ? null
+                : 'bg-whiskey-100 ring-4 ring-whiskey-100 rounded-sm'
+            "
+            size="26px"
+            color="black"
+          />
+        </button>
+      </div>
     </div>
     <Logo class="!m-0" />
     <div class="flex-1">
@@ -79,6 +121,12 @@ function toggleMobileMenuWithTimeout() {
         <UserBanner />
       </div>
     </div>
+  </div>
+  <div
+    v-show="showSearch"
+    class="sm:hidden w-full p-2 border border-concrete-100 rounded-sm bg-concrete-50"
+  >
+    <SearchForm class="border-none" />
   </div>
   <div v-show="showMobileMenu" class="sm:hidden w-full">
     <ul

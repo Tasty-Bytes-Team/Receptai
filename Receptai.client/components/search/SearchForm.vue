@@ -14,7 +14,7 @@ const onSearch = async () => {
 </script>
 
 <template>
-  <form class="max-w-[300px] w-full" @submit.prevent="onSearch">
+  <form class="w-full" @submit.prevent="onSearch">
     <label
       for="default-search"
       class="mb-2 text-sm font-medium text-gray-900 sr-only"

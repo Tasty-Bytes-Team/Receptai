@@ -4,7 +4,7 @@ import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContain
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
-import SearchForm from "@/components/search/SearchForm.vue";
+import SearchForm from "@/components/Search/SearchForm.vue";
 
 interface Recipe {
   id: number;
@@ -81,17 +81,20 @@ const getRecipes = async () => {
   window.scrollTo(0, 0);
 };
 
-watch(() => route.query, () => {
-  search.value = route.query.s?.toString().trim();
+watch(
+  () => route.query,
+  () => {
+    search.value = route.query.s?.toString().trim();
 
-  if (search.value === undefined || search.value === ''){
-  loading.value = false;
-} else {
-  getRecipes();
-}
-})
+    if (search.value === undefined || search.value === "") {
+      loading.value = false;
+    } else {
+      getRecipes();
+    }
+  }
+);
 
-if (search.value === undefined || search.value === ''){
+if (search.value === undefined || search.value === "") {
   loading.value = false;
 } else {
   getRecipes();
@@ -125,7 +128,7 @@ if (search.value === undefined || search.value === ''){
         <h3 class="text-sm font-normal text-center">
           Found <b>{{ totalElementCount }}</b> recipes
         </h3>
-        <SearchForm />
+        <SearchForm class="mx-auto m-2" />
       </div>
       <div class="flex flex-wrap">
         <RecipeContainer

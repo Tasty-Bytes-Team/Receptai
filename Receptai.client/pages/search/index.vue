@@ -4,7 +4,7 @@ import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContain
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
-import SearchForm from "@/components/Search/SearchForm.vue";
+import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 interface Recipe {
   id: number;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
-import SearchForm from "@/components/Search/SearchForm.vue";
+import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 interface Navigation {
   to: string;

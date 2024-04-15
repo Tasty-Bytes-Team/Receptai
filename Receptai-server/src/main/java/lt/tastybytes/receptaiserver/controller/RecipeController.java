@@ -54,6 +54,20 @@ public class RecipeController {
         return ResponseEntity.ok(recipe.get().toDto());
     }
 
+    @GetMapping("/find/{query}")
+    public ResponseEntity<PagedResponseDto<RecipeDto>> findRecipeByQuery(
+            @PathVariable(value = "query") String query,
+            @Valid PagedRequestDto pageDto,
+            @Valid
+            @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
+            SortedRequestDto sortDto
+    ) {
+        var recipes = recipeService.findRecipeByQuery(query, pageDto.page(), sortDto);
+        return ResponseEntity.ok(
+                PagedResponseDto.of(recipes, Recipe::toDto)
+        );
+    }
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<RecipeDto> editRecipe(
             @Valid @RequestBody ModifyRecipeDto dto,

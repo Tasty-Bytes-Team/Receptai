@@ -40,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeDto createRecipe(ModifyRecipeDto dto, User author) {
+    public RecipeDto createRecipe(@Valid ModifyRecipeDto dto, User author) {
         var recipe = new Recipe();
         recipe.setName(dto.name());
         recipe.setDescription(dto.shortDescription());
@@ -164,10 +164,26 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getRecipesByUser(User user, int pageNumber) {
+    public Page<Recipe> getRecipesByUser(User user, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
+        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
+        if (sortDto != null) {
+            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
+        }
         return recipeRepository.findAllByAuthor(
                 user,
-                PageRequest.of(pageNumber, RECIPES_PER_PAGE)
+                request
+        );
+    }
+
+    @Override
+    public Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
+        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
+        if (sortDto != null) {
+            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
+        }
+        return recipeRepository.findAllByNameIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(
+                "%" + query + "%", "%" + query + "%",
+                request
         );
     }
 

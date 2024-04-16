@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
+import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 interface Navigation {
   to: string;
@@ -31,21 +32,22 @@ watch(
 
 <template>
   <div
-    class="sm:flex hidden max-w-screen-lg m-auto px-3 items-center justify-between"
+    class="sm:flex hidden max-w-screen-lg m-auto px-3 items-center justify-between gap-6"
   >
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between w-full">
       <Logo />
-      <div class="w-full justify-center gap-4 sm:flex hidden">
+      <div class="w-full gap-4 sm:flex hidden justify-start">
         <NuxtLink
           v-for="nav in headerNav"
           :to="nav.to"
-          class="hover:underline"
+          class="hover:underline whitespace-nowrap"
           :class="windowHref === nav.to ? 'underline' : null"
           >{{ nav.title }}</NuxtLink
         >
       </div>
     </div>
-    <div class="flex gap-4 items-center">
+    <div class="flex gap-4 items-center w-full justify-end">
+      <SearchForm v-if="headerType !== 'ADMIN'" />
       <NuxtLink
         v-if="headerType === 'ADMIN'"
         to="/user/dashboard/my-recipes/create"

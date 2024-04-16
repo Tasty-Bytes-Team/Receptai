@@ -52,6 +52,14 @@ interface Category {
   link: string;
 }
 
+interface column {
+  key: string;
+  label: string;
+  sortable: boolean;
+  sortBy?: string;
+  curr?: boolean;
+}
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
@@ -63,22 +71,56 @@ const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const recipes = ref<Recipe[] | null>(null);
 const key = ref(0);
-const error = ref(false);
 
 const pageNumber = ref(0);
-const sortBy = ref("dateCreated");
-const sortAsc = ref(false);
+
+const activeSortKey = ref("dateCreated");
+const isSortAscending = ref(false);
+
+const previouslySortedColumn = ref<null | string>(null);
 
 const loading = ref(true);
 
 const totalPages = ref(0);
 const siblings = 2;
 
+const sortableColumns: column[] = [
+  {
+    key: "id",
+    label: "ID",
+    sortable: false,
+  },
+  {
+    key: "image",
+    label: "Image",
+    sortable: false,
+  },
+  {
+    key: "name",
+    label: "Name",
+    sortable: true,
+    sortBy: "DEFAULT",
+    curr: false,
+  },
+  {
+    key: "dateCreated",
+    label: "Creaton date",
+    sortable: true,
+    sortBy: "DEFAULT",
+    curr: false,
+  },
+  {
+    key: "action",
+    label: "Action",
+    sortable: false,
+  },
+];
+
 const getData = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`,
+        `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${activeSortKey.value}&sortAsc=${isSortAscending.value}`,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
         }
@@ -94,6 +136,47 @@ const getData = async () => {
   }
 
   window.scrollTo(0, 0);
+};
+
+const updateDataSort = (item: column) => {
+  if (
+    previouslySortedColumn.value &&
+    previouslySortedColumn.value !== item.key
+  ) {
+    const found = sortableColumns.find(
+      (col) => col.key === previouslySortedColumn.value
+    );
+
+    if (found) {
+      found.curr = false;
+      found.sortBy = "DEFAULT";
+    }
+  }
+
+  previouslySortedColumn.value = item.key;
+  if (item.curr === true) {
+    switch (item.sortBy) {
+      case "DESC":
+        item.sortBy = "ASC";
+        break;
+      case "ASC":
+        item.sortBy = "DESC";
+        break;
+      case "DEFAULT":
+        item.sortBy = "DESC";
+        break;
+    }
+  } else {
+    item.curr = true;
+    item.sortBy = "DESC";
+  }
+
+  activeSortKey.value = item.key;
+  isSortAscending.value =
+    item.sortBy === "DESC" ? false : item.sortBy === "ASC" ? true : false;
+
+  pageNumber.value = 0;
+  getData();
 };
 
 getData();
@@ -120,7 +203,13 @@ getData();
     />
     <div v-else>
       <div class="flex flex-col gap-2">
-        <RecipeContainer :key="key" @reload="getData()" :recipes />
+        <RecipeContainer
+          :key="key"
+          :columns="sortableColumns"
+          @reload="getData()"
+          @change-sort="updateDataSort"
+          :recipes
+        />
         <div class="w-full text-center" v-if="totalPages > 0">
           <Pagination
             @change="getData"

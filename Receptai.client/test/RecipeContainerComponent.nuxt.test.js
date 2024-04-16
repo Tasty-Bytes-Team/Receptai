@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { screen, render, cleanup } from "@testing-library/vue";
-import RecipeContainerComponent from "../components/RecipeContainerComponent/RecipeContainerComponent.vue";
+import { render } from "@testing-library/vue";
+import RecipeContainerComponent from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 
 export const mockNuxtImg = {
   template: "<img :src='src' />",
@@ -18,12 +18,8 @@ export const mockNuxtLink = {
 };
 
 describe("Recipe container component", () => {
-  afterEach(() => {
-    cleanup();
-  });
-
-  test("should display all provided data", async () => {
-    render(RecipeContainerComponent, {
+  test("should display all provided data", () => {
+    const { getByTestId } = render(RecipeContainerComponent, {
       props: {
         imageLink:
           "https://images.food52.com/jgWjO2TMvaNaXzy9ME4PBYV5jyA=/1930x1286/filters:format(webp)/906a901f-6dad-452a-803e-3087c35e3de6--2013-0820_gena_veggie-burgers-062.jpg",
@@ -44,42 +40,46 @@ describe("Recipe container component", () => {
       },
     });
 
-    expect(screen.getByTestId("recipe-name").textContent).toBe(
+    expect(getByTestId("recipe-name").textContent).toBe(
       "Spicy Black Bean and Corn Burgers"
     );
-    expect(screen.getByTestId("recipe-description").textContent).toBe(
+    expect(getByTestId("recipe-description").textContent).toBe(
       "Vegetarian burgers packed with black beans, corn, and a touch of spice."
     );
-    expect(screen.getByTestId("recipe-category").textContent).toBe("Burgers");
-    expect(screen.getByTestId("recipe-cooking-time").textContent).toBe(
-      "10 min."
-    );
-    expect(screen.getByTestId("recipe-url").getAttribute("href")).toBe(
-      "/recipes/15"
-    );
-    expect(screen.getByTestId("recipe-image").getAttribute("src")).toBe(
+    expect(getByTestId("recipe-category").textContent).toBe("Burgers");
+    expect(getByTestId("recipe-cooking-time").textContent).toBe("10 min.");
+    expect(getByTestId("recipe-url").getAttribute("href")).toBe("/recipes/15");
+    expect(getByTestId("recipe-image").getAttribute("src")).toBe(
       "https://images.food52.com/jgWjO2TMvaNaXzy9ME4PBYV5jyA=/1930x1286/filters:format(webp)/906a901f-6dad-452a-803e-3087c35e3de6--2013-0820_gena_veggie-burgers-062.jpg"
     );
   });
 
-  test("should validate prop types", async () => {
+  test("should throw error when image link is null", () => {
     expect(() =>
       render(RecipeContainerComponent, {
-        imageLink: null,
-        name: "Spicy Black Bean and Corn Burgers",
-        raiting: 4.5,
-        about:
-          "Vegetarian burgers packed with black beans, corn, and a touch of spice.",
-        link: "/recipes/15",
-        category: "Burgers",
-        categoryLink: "/category/burgers",
-        prepTime: 10,
-      })
-    ).toThrowError(/input.*string/);
+        props: {
+          imageLink: null,
+          name: "Spicy Black Bean and Corn Burgers",
+          rating: 4.5,
+          about:
+            "Vegetarian burgers packed with black beans, corn, and a touch of spice.",
+          link: "/recipes/15",
+          category: "Burgers",
+          categoryLink: "/category/burgers",
+          prepTime: 10,
+        },
+        global: {
+          stubs: {
+            NuxtImg: mockNuxtImg,
+            NuxtLink: mockNuxtLink,
+          },
+        },
+      }).toThrowError(/invalid prop/)
+    );
   });
 
   test("should display all provided data", async () => {
-    render(RecipeContainerComponent, {
+    const { getByTestId } = render(RecipeContainerComponent, {
       props: {
         imageLink:
           "https://images.food52.com/jgWjO2TMvaNaXzy9ME4PBYV5jyA=/1930x1286/filters:format(webp)/906a901f-6dad-452a-803e-3087c35e3de6--2013-0820_gena_veggie-burgers-062.jpg",
@@ -100,11 +100,11 @@ describe("Recipe container component", () => {
       },
     });
 
-    expect(screen.getAllByTestId("recipe-name")).toBeDefined();
-    expect(screen.getAllByTestId("recipe-description")).toBeDefined();
-    expect(screen.getAllByTestId("recipe-category")).toBeDefined();
-    expect(screen.getAllByTestId("recipe-cooking-time")).toBeDefined();
-    expect(screen.getAllByTestId("recipe-url")).toBeDefined();
-    expect(screen.getAllByTestId("recipe-image")).toBeDefined();
+    expect(getByTestId("recipe-name")).toBeDefined();
+    expect(getByTestId("recipe-description")).toBeDefined();
+    expect(getByTestId("recipe-category")).toBeDefined();
+    expect(getByTestId("recipe-cooking-time")).toBeDefined();
+    expect(getByTestId("recipe-url")).toBeDefined();
+    expect(getByTestId("recipe-image")).toBeDefined();
   });
 });

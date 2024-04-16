@@ -1,15 +1,9 @@
 import { expect, test } from "vitest";
-import {
-  screen,
-  render,
-  cleanup,
-  fireEvent,
-  getByRole,
-} from "@testing-library/vue";
+import { render, fireEvent } from "@testing-library/vue";
 import InputField from "@/components/admin/components/InputField.vue";
 
 describe("Input field", () => {
-  test("should display all prop values with text input", async () => {
+  test("should display all prop values with text input", () => {
     const { getByText, getByPlaceholderText } = render(InputField, {
       props: {
         name: "test_text",
@@ -27,7 +21,7 @@ describe("Input field", () => {
     expect(input.name).toBe("test_text");
   });
 
-  test("should display all prop values with number input", async () => {
+  test("should display all prop values with number input", () => {
     const { getByText, getByPlaceholderText } = render(InputField, {
       props: {
         name: "test_number",

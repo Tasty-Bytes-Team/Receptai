@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { screen, render, cleanup, fireEvent } from "@testing-library/vue";
+import { render, fireEvent } from "@testing-library/vue";
 import profileMenu from "@/components/Header/components/ProfileMenu.vue";
 
 describe("Profile menu component", () => {

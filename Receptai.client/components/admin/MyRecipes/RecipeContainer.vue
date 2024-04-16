@@ -54,14 +54,23 @@ interface User {
   email: string;
 }
 
+interface column {
+  key: string;
+  label: string;
+  sortable: boolean;
+  sortBy?: string;
+  curr?: boolean;
+}
+
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const props = defineProps<{
   recipes: Recipe[] | null;
+  columns: column[];
 }>();
 
-const emit = defineEmits(["reload"]);
+const emit = defineEmits(["reload", "changeSort"]);
 
 const confirmBox = ref<boolean>(false);
 const toBeDeleted = ref<number | null>(null);
@@ -95,32 +104,41 @@ const deleteRecipe = async () => {
   }
 };
 
-const columns = [
-  {
-    key: "id",
-    label: "ID",
-    sortable: true,
-  },
-  {
-    key: "image",
-    label: "Image",
-  },
-  {
-    key: "name",
-    label: "Name",
-    sortable: true,
-  },
-  {
-    key: "dateCreated",
-    label: "Creaton date",
-    sortable: true,
-  },
-  {
-    key: "action",
-    label: "Action",
-    sortable: true,
-  },
-];
+interface sortOptions {
+  currSort: string | null;
+  sort: "DEFAULT" | "ASC" | "DESC";
+}
+
+let sort: sortOptions = {
+  currSort: null,
+  sort: "DEFAULT",
+};
+
+const sortCurrValue = ref<null | string>(null);
+const sortByValue = ref<"DEFAULT" | "ASC" | "DESC">("DEFAULT");
+
+const getSortDirection = (value: string): void => {
+  console.log(sortByValue.value);
+  if (sortCurrValue.value === value) {
+    switch (sortByValue.value) {
+      case "DESC":
+        sortByValue.value = "ASC";
+        break;
+      case "ASC":
+        sortByValue.value = "DESC";
+        break;
+      case "DEFAULT":
+        sortByValue.value = "DESC";
+        break;
+    }
+  } else {
+    sortCurrValue.value = value;
+    sortByValue.value = "DESC";
+  }
+
+  sort.currSort = sortCurrValue.value;
+  sort.sort = sortByValue.value;
+};
 </script>
 
 <template>
@@ -134,12 +152,37 @@ const columns = [
       <thead class="text-sm bg-concrete-100">
         <tr>
           <th
+            @click="
+              if (item.sortable) {
+                $emit('changeSort', item);
+              }
+            "
             scope="col"
             class="px-3 py-3 border-concrete-300 border-2"
             :class="item.label === 'ID' ? 'min-w-14' : 'min-w-36'"
             v-for="item in columns"
           >
-            {{ item.label }}
+            <div class="flex flex-row items-center justify-between gap-1.5">
+              {{ item.label }}
+              <Icon
+                v-if="item.sortable"
+                size="16px"
+                :name="
+                  item.sortBy === 'ASC'
+                    ? 'fa-solid:sort-up'
+                    : item.sortBy === 'DESC'
+                    ? 'fa-solid:sort-down'
+                    : 'fa-solid:sort'
+                "
+                :color="
+                  item.sortBy === 'ASC'
+                    ? 'black'
+                    : item.sortBy === 'DESC'
+                    ? 'black'
+                    : '#626262'
+                "
+              />
+            </div>
           </th>
         </tr>
       </thead>

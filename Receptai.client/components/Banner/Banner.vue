@@ -2,46 +2,140 @@
 import axios from "axios";
 import RecipeBannerComponent from "@/components/Banner/RecipeBannerComponent.vue";
 
-const config = useRuntimeConfig();
-
 interface Recipe {
     id: number;
     name: string;
     shortDescription: string;
+    author: Author;
+    dateCreated: string;
+    dateModified: string | null;
     previewImage: string;
+    tutorialVideo?: string;
+    ingredients: Ingredients[];
+    instructions: string[];
+    tags: string[];
+    categories: Category[];
+    minutesToPrepare: number;
+    portions: number;
 }
 
-const recipeList = ref<Recipe[] | null>(null);
-
-try {
-    axios
-        .get(
-            `${config.public.baseURL}/api/v1/recipe/list?page=0&sortBy=dateCreated&sortAsc=false`
-        )
-        .then((res) => {
-            recipeList.value = res.data.elements.slice(0, 5);
-        });
-} catch (e) {
-    console.error("Error fetching recipes", e);
+interface Author {
+    name: string;
 }
+
+interface Ingredients {
+    purpose: string;
+    ingredients: Ingredient[];
+}
+
+interface Ingredient {
+    name: string;
+    quantity: number;
+    unit: string;
+}
+
+interface Category {
+    id: number;
+    name: string;
+    description: string | null;
+    previewImageUrl: string | null;
+}
+
+const recipeList = ref<Recipe[]>([]);
+const bannerOffset = ref(0);
+const bannerComponentWidth = 192;
+const bannerWidth = ref(0);
+let dragStartX = 0;
+let isDragging = false;
+let moveBannersInterval: NodeJS.Timeout | null = null;
+
+async function fetchRecipes() {
+    try {
+        const response = await axios.get("/api/v1/recipe/list?page=0&sortBy=dateCreated&sortAsc=false");
+        recipeList.value = response.data.elements.slice(0, 20);
+    } catch (error) {
+        console.error("Error fetching recipes", error);
+    }
+}
+
+fetchRecipes();
+
+function startDrag(event: MouseEvent | TouchEvent): void {
+    isDragging = true;
+    dragStartX = getEventX(event);
+
+    if (moveBannersInterval) {
+        clearInterval(moveBannersInterval);
+        moveBannersInterval = null;
+    }
+}
+
+function drag(event: MouseEvent | TouchEvent): void {
+    if (!isDragging) return;
+    const currentX = getEventX(event);
+    const delta = currentX - dragStartX;
+    bannerOffset.value += delta;
+    dragStartX = currentX;
+}
+
+function endDrag(): void {
+    isDragging = false;
+    if (!moveBannersInterval) {
+        moveBannersInterval = setInterval(nextSlide, 2000);
+    }
+}
+
+function nextSlide(): void {
+    const maxOffset = recipeList.value.length * -bannerComponentWidth + bannerWidth.value;
+    const nextOffset = bannerOffset.value - bannerComponentWidth;
+    bannerOffset.value = bannerOffset.value == maxOffset ? 0 : bannerOffset.value > 0 ? 0 : Math.max(maxOffset, nextOffset);
+}
+
+
+function prevSlide(): void {
+    bannerOffset.value = Math.min(bannerOffset.value + bannerComponentWidth, 0);
+}
+
+function getEventX(event: MouseEvent | TouchEvent): number {
+    return event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+}
+
+const bannerTransformStyle = computed(() => `translateX(${bannerOffset.value}px)`);
+
+
+onMounted(() => {
+    nextTick(() => {
+        const bannerContainer = document.querySelector('.w-full.mx-auto.overflow-hidden');
+        if (bannerContainer) {
+            bannerWidth.value = bannerContainer.clientWidth;
+        }
+    });
+});
 </script>
 
 <template>
-    <div v-if="recipeList" class="banner flex flex-wrap">
-        <RecipeBannerComponent v-for="item in recipeList" :key="item.id" :imageLink="item.previewImage"
-            :name="item.name" :about="item.shortDescription" :link="`/recipes/${item.id}`" />
+    <div class="relative" @mousedown.prevent="startDrag" @touchstart.prevent="startDrag" @mousemove="drag"
+        @touchmove="drag" @mouseup="endDrag" @touchend="endDrag" @mouseleave="endDrag" @touchcancel="endDrag">
+        <div class="w-full mx-auto overflow-hidden rounded-lg border border-gray-800 bg-gray-50" ref="bannerContainer">
+            <div class="flex"
+                :style="{ transform: bannerTransformStyle, transition: isDragging ? 'none' : 'transform 0.5s ease' }">
+                <!-- Recipes -->
+                <div v-for="item in recipeList" :key="item.id" class="flex-shrink-0 mt-4">
+                    <RecipeBannerComponent :imageLink="item.previewImage" :name="item.name"
+                        :about="item.shortDescription" :link="`/recipes/${item.id}`" />
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Arrows -->
+        <div class="absolute top-1/2 -left-10 transform -translate-y-1/2 cursor-pointer" @click="prevSlide">
+            <svg class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </div>
+        <div class="absolute top-1/2 -right-10 transform -translate-y-1/2 cursor-pointer" @click="nextSlide">
+            <svg class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </div>
     </div>
-    <div v-else>
-        <p>Failed to load recipes.</p>
-    </div>
-
 </template>
-<style scoped>
-.banner {
-    background-color: #f3f4f6;
-    border-radius: 12px;
-    border: 2px solid #333;
-    padding: 20px;
-    justify-content: center;
-}
-</style>

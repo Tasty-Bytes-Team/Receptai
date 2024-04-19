@@ -52,6 +52,36 @@ const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
 const pageNumber = ref(0);
+const totalElements = ref(0);
+const elementsPerPage = ref(0);
+const currentElementCount = ref(0);
+const selectionValue = ref("DateDesc");
+
+watch(selectionValue, () => {
+  switch (selectionValue.value) {
+    case "nameDesc":
+      sortBy.value = "dateCreated";
+      sortAsc.value = false;
+      getRecipes();
+      break;
+    case "nameAsc":
+      sortBy.value = "dateCreated";
+      sortAsc.value = true;
+      getRecipes();
+      break;
+    case "DateDesc":
+      sortBy.value = "name";
+      sortAsc.value = false;
+      getRecipes();
+      break;
+    case "DateAsc":
+      sortBy.value = "name";
+      sortAsc.value = true;
+      getRecipes();
+      break;
+  }
+});
+
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
@@ -67,6 +97,9 @@ const getRecipes = async () => {
       .then((res) => {
         recipeList.value = res.data.elements;
         totalPages.value = res.data.totalPageCount;
+        totalElements.value = res.data.totalElementCount;
+        elementsPerPage.value = res.data.elementsPerPage;
+        currentElementCount.value = res.data.currentElementCount;
         loading.value = false;
       });
   } catch (e) {
@@ -98,6 +131,38 @@ getRecipes();
       @button-click="navigateTo('/')"
     />
     <div v-else>
+      <div class="border-2 border-black bg-concrete-100">
+        <div class="flex flex-row border-b-2 border-black">
+          <div class="flex flex-1 gap-2 items-center p-2">
+            <Icon name="solar:filter-bold" color="black" size="26px" />
+            Filter
+          </div>
+          <div
+            class="flex flex-1 gap-2 items-center p-2 border-l-2 border-black"
+          >
+            <Icon name="solar:sort-vertical-linear" color="black" size="26px" />
+            <div class="w-full">
+              <select
+                v-model="selectionValue"
+                class="outline-none bg-concrete-100 w-full"
+              >
+                <option class="h-5" value="nameDesc">Name from A to Z</option>
+                <option value="nameAsc">Name from Z to A</option>
+                <option value="DateDesc">Newest first</option>
+                <option value="DateAsc">Oldest first</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="p-2">
+          Showing:
+          <b
+            >{{ pageNumber * elementsPerPage }} -
+            {{ pageNumber * elementsPerPage + currentElementCount }}</b
+          >
+          out of <b>{{ totalElements }}</b> recipes
+        </div>
+      </div>
       <div class="flex flex-wrap">
         <RecipeContainer
           v-for="item in recipeList"

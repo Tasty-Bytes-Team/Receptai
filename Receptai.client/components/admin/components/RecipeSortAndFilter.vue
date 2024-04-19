@@ -49,7 +49,7 @@ const selectionOptions = [
     <div class="p-2">
       Showing:
       <b
-        >{{ pageNumber * elementsPerPage }} -
+        >{{ pageNumber * elementsPerPage + 1 }} -
         {{ pageNumber * elementsPerPage + currentElementCount }}</b
       >
       out of <b>{{ totalElements }}</b> recipes

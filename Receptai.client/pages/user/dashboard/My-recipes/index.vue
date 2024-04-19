@@ -52,7 +52,7 @@ interface Category {
   link: string;
 }
 
-interface column {
+interface Column {
   key: string;
   label: string;
   sortable: boolean;
@@ -84,7 +84,7 @@ const loading = ref(true);
 const totalPages = ref(0);
 const siblings = 2;
 
-const sortableColumns: column[] = [
+const sortableColumns: Column[] = [
   {
     key: "id",
     label: "ID",
@@ -138,7 +138,7 @@ const getData = async () => {
   window.scrollTo(0, 0);
 };
 
-const updateDataSort = (item: column) => {
+const updateDataSort = (item: Column) => {
   if (
     previouslySortedColumn.value &&
     previouslySortedColumn.value !== item.key

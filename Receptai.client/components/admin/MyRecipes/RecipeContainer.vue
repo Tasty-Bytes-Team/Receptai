@@ -103,42 +103,6 @@ const deleteRecipe = async () => {
     console.error(e);
   }
 };
-
-interface sortOptions {
-  currSort: string | null;
-  sort: "DEFAULT" | "ASC" | "DESC";
-}
-
-let sort: sortOptions = {
-  currSort: null,
-  sort: "DEFAULT",
-};
-
-const sortCurrValue = ref<null | string>(null);
-const sortByValue = ref<"DEFAULT" | "ASC" | "DESC">("DEFAULT");
-
-const getSortDirection = (value: string): void => {
-  console.log(sortByValue.value);
-  if (sortCurrValue.value === value) {
-    switch (sortByValue.value) {
-      case "DESC":
-        sortByValue.value = "ASC";
-        break;
-      case "ASC":
-        sortByValue.value = "DESC";
-        break;
-      case "DEFAULT":
-        sortByValue.value = "DESC";
-        break;
-    }
-  } else {
-    sortCurrValue.value = value;
-    sortByValue.value = "DESC";
-  }
-
-  sort.currSort = sortCurrValue.value;
-  sort.sort = sortByValue.value;
-};
 </script>
 
 <template>

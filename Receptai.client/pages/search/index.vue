@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 import SearchForm from "@/components/SearchForm/SearchForm.vue";
+import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
 
 interface Recipe {
   id: number;
@@ -55,6 +56,36 @@ const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
 const pageNumber = ref(0);
+const totalElements = ref(0);
+const elementsPerPage = ref(0);
+const currentElementCount = ref(0);
+const selectionValue = ref("DateDesc");
+
+watch(selectionValue, () => {
+  switch (selectionValue.value) {
+    case "nameDesc":
+      sortBy.value = "dateCreated";
+      sortAsc.value = false;
+      getRecipes();
+      break;
+    case "nameAsc":
+      sortBy.value = "dateCreated";
+      sortAsc.value = true;
+      getRecipes();
+      break;
+    case "DateDesc":
+      sortBy.value = "name";
+      sortAsc.value = false;
+      getRecipes();
+      break;
+    case "DateAsc":
+      sortBy.value = "name";
+      sortAsc.value = true;
+      getRecipes();
+      break;
+  }
+});
+
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
@@ -68,13 +99,18 @@ search.value = route.query.s?.toString().trim();
 
 const getRecipes = async () => {
   try {
-    const res = await axios.get(
-      `${config.public.baseURL}/api/v1/recipe/find/${search.value}?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
-    );
-    recipeList.value = res.data.elements;
-    totalPages.value = res.data.totalPageCount;
-    totalElementCount.value = res.data.totalElementCount;
-    loading.value = false;
+    await axios
+      .get(
+        `${config.public.baseURL}/api/v1/recipe/find/${search.value}?page=${pageNumber.value}&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
+      )
+      .then((res) => {
+        recipeList.value = res.data.elements;
+        totalPages.value = res.data.totalPageCount;
+        totalElements.value = res.data.totalElementCount;
+        elementsPerPage.value = res.data.elementsPerPage;
+        currentElementCount.value = res.data.currentElementCount;
+        loading.value = false;
+      });
   } catch (e) {
     console.warn("Error fetching recipes", e);
   }
@@ -104,7 +140,7 @@ if (search.value === undefined || search.value === "") {
 <template>
   <div>
     <div>
-      <h1 class="text-3xl font-bold text-center m-3">Recipes search page</h1>
+      <h1 class="text-3xl font-bold text-center m-2">Recipes search page</h1>
     </div>
     <div v-if="loading" class="flex flex-wrap">
       <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
@@ -126,10 +162,14 @@ if (search.value === undefined || search.value === "") {
         <h3 class="text-lg font-normal text-center">
           Searching by: <b>„{{ search }}“</b>
         </h3>
-        <h3 class="text-sm font-normal text-center">
-          Found <b>{{ totalElementCount }}</b> recipes
-        </h3>
       </div>
+      <RecipeSortAndFilter
+        :pageNumber
+        :elementsPerPage
+        :currentElementCount
+        :totalElements
+        v-model="selectionValue"
+      />
       <div class="flex flex-wrap">
         <RecipeContainer
           v-for="item in recipeList"

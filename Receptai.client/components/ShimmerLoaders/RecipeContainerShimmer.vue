@@ -3,7 +3,6 @@
 <template>
   <div
     class="lg:basis-1/4 sm:basis-1/3 xsm:basis-1/2 basis-full"
-    data-testid="recipe-container"
   >
     <div class="m-3 animate-pulse">
       <div class="m-auto rounded-md lg:h-56 h-48 bg-concrete-300"></div>

@@ -6,6 +6,7 @@ import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 import SearchForm from "@/components/SearchForm/SearchForm.vue";
 import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
+import RecipeSortAndFilterShimmer from "@/components/ShimmerLoaders/RecipeSortAndFilterShimmer.vue";
 
 interface Recipe {
   id: number;
@@ -142,8 +143,11 @@ if (search.value === undefined || search.value === "") {
     <div>
       <h1 class="text-3xl font-bold text-center m-2">Recipes search page</h1>
     </div>
-    <div v-if="loading" class="flex flex-wrap">
-      <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+    <div v-if="loading">
+      <RecipeSortAndFilterShimmer />
+      <div class="flex flex-wrap">
+        <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+      </div>
     </div>
     <div v-else-if="search === '' || !search">
       <h3 class="text-lg font-normal text-center m-1">

@@ -7,6 +7,7 @@ import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerS
 import SearchForm from "@/components/SearchForm/SearchForm.vue";
 import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
 import RecipeSortAndFilterShimmer from "@/components/ShimmerLoaders/RecipeSortAndFilterShimmer.vue";
+import sortOptionSelector from "@/typescript/sortOptionSelector.ts";
 
 interface Recipe {
   id: number;
@@ -63,27 +64,11 @@ const currentElementCount = ref(0);
 const selectionValue = ref("DateDesc");
 
 watch(selectionValue, () => {
-  switch (selectionValue.value) {
-    case "nameDesc":
-      sortBy.value = "dateCreated";
-      sortAsc.value = false;
-      getRecipes();
-      break;
-    case "nameAsc":
-      sortBy.value = "dateCreated";
-      sortAsc.value = true;
-      getRecipes();
-      break;
-    case "DateDesc":
-      sortBy.value = "name";
-      sortAsc.value = false;
-      getRecipes();
-      break;
-    case "DateAsc":
-      sortBy.value = "name";
-      sortAsc.value = true;
-      getRecipes();
-      break;
+  const resultsArray = sortOptionSelector(selectionValue.value);
+  if (resultsArray) {
+    sortBy.value = resultsArray[0] as string;
+    sortAsc.value = resultsArray[1] as boolean;
+    getRecipes();
   }
 });
 
@@ -91,7 +76,6 @@ const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
 const totalPages = ref(0);
-const totalElementCount = ref(0);
 const siblings = 2;
 
 const search = ref<string | undefined>(undefined);

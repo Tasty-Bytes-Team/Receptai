@@ -94,6 +94,7 @@ const printDownload = (recipe: Recipe) => {
   `);
 
   printablePage.write("</head><body>");
+  printablePage.write(`<h1 style="font-size: 2.5em">Tasty Bytes recipes</h1>`);
   printablePage.write("<div>");
   printablePage.write(`<h1>${recipe.name}</h1>`);
   printablePage.write(
@@ -106,10 +107,10 @@ const printDownload = (recipe: Recipe) => {
 
   printablePage.write("<div>");
   printablePage.write(
-    `<p class="tags">Preparation time: <b>${recipe.minutesToPrepare}</b></p>`
+    `<p class="tags"><b>Preparation time:</b> ${recipe.minutesToPrepare}</p>`
   );
   printablePage.write(
-    `<p class="tags">Number of servings: <b>${recipe.portions}</b></p>`
+    `<p class="tags"><b>Number of servings: </b>${recipe.portions}</p>`
   );
   printablePage.write("</div>");
 

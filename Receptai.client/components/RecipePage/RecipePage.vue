@@ -29,7 +29,7 @@ interface Recipe {
 }
 
 interface Instruction {
-    text: string;
+  text: string;
 }
 
 interface Author {
@@ -96,12 +96,21 @@ const error = ref(false);
           </div>
           <div class="lg:basis-3/5 md:basis-1/2 basis-full">
             <div class="p-4">
-              <div class="mb-3">
+              <div>
                 <h1 class="font-bold text-4xl">{{ recipe.name }}</h1>
                 <div class="text-sm font-light">
                   <span class="font-medium">{{ recipe.author.name }}, </span
                   ><span>{{ recipe.dateCreated.split("T")[0] }}</span>
                 </div>
+              </div>
+              <div class="m-2">
+                <button
+                  class="p-2 rounded-sm flex flex-row gap-2 bg-concrete-200 hover:bg-white border transition-colors duration-100"
+                  @click.prevent="printDownload(recipe)"
+                >
+                  <Icon name="fa6-solid:print" color="black" size="24px" />
+                  <span class="font-medium">Print recipe</span>
+                </button>
               </div>
               <p>
                 {{ recipe.shortDescription }}
@@ -130,9 +139,6 @@ const error = ref(false);
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <button @click.prevent="printDownload(recipe)">Print</button>
     </div>
     <div class="max-w-screen-lg m-auto my-3 px-2">
       <div class="flex flex-wrap">

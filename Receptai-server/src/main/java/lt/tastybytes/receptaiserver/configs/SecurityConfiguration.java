@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/category/{categoryId}").permitAll()
                         .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
 
-                        .requestMatchers("/api/v1/feedback/getfakefeedback").permitAll()
+                        .requestMatchers("/api/v1/feedback/list/**").permitAll()
 
                         .requestMatchers("/api/v1/recipe/list").permitAll()
                         .requestMatchers("/api/v1/recipe/get/**").permitAll()

@@ -1,0 +1,22 @@
+meta {
+  name: Create new feedback
+  type: http
+  seq: 17
+}
+
+post {
+  url: http://localhost:8080/api/v1/feedback/leave/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "rating": 10,
+    "content": "5 zvaigzdes, super"
+  }
+}

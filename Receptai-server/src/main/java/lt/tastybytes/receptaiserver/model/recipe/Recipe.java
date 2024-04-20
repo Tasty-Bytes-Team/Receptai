@@ -8,7 +8,9 @@ import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.utils.Converter;
+import org.hibernate.annotations.Formula;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ public class Recipe implements ManageableModel {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
+
+    // TODO: WARNING, this is sensitive to schema changes, investigate a better way in the future
+    @Formula("(SELECT AVG(f.rating) FROM feedback f WHERE f.recipe_id = id)")
+    private Double averageRating;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientType> ingredients = new ArrayList<>();
@@ -88,13 +94,14 @@ public class Recipe implements ManageableModel {
     private int portionCount;
 
     public RecipeDto toDto() {
-
         String embedUrl = null;
         if (getTutorialVideo() != null) {
             var videoId = Converter.extractVideoIdFromUrl(getTutorialVideo());
             if (videoId.isPresent()) embedUrl = "https://www.youtube.com/embed/" + videoId.get();
         }
 
+        var ratingForDisplay = averageRating;
+        if (ratingForDisplay == null) ratingForDisplay = -1.0;
 
         return new RecipeDto(
                 id,
@@ -111,7 +118,8 @@ public class Recipe implements ManageableModel {
                 getTags().stream().map(Tag::toDto).toList(),
                 getCategories().stream().map(Category::toDto).toList(),
                 getMinutesToPrepare(),
-                getPortionCount()
+                getPortionCount(),
+                ratingForDisplay
         );
     }
 

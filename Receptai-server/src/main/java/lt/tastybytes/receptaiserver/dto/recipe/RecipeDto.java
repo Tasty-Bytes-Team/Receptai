@@ -35,7 +35,6 @@ public record RecipeDto(
 
         int minutesToPrepare,
         int portions,
-
         double averageRating
 ) { }
 

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.jvm.optionals.getOrDefault
 
 const val FEEDBACK_PER_PAGE = 20
 
@@ -42,9 +43,9 @@ class FeedbackServiceImpl(
         )
     }
 
-    override fun getAverageRecipeRating(recipeId: Long) {
-        val recipe = recipeService.getRecipeById(recipeId)
-        TODO("Not yet implemented")
+    override fun getAverageRecipeRating(recipeId: Long): Double {
+        val rating = feedbackRepository.averageOfRatings(recipeId)
+        return rating.getOrDefault(-1.0)
     }
 
     override fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback {

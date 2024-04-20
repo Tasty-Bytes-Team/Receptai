@@ -11,15 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
-
-    @Query("SELECT AVG(rating) FROM Feedback WHERE id = ?1")
-    void averageOfRatings(int recipeId);
+    @Query("SELECT AVG(rating) FROM Feedback WHERE recipe.id = ?1")
+    Optional<Double> averageOfRatings(long recipeId);
 
     Page<Feedback> findAllByRecipe(Recipe recipe, Pageable pageable);
 
     Optional<Feedback> findByRecipeAndAuthor(Recipe recipe, User author);
-
-
-    //fun findAllByAuthor(author: User, pageable: Pageable): Page<Feedback>
-    //fun findAllBy(author: User, pageable: Pageable): Page<Feedback>
 }

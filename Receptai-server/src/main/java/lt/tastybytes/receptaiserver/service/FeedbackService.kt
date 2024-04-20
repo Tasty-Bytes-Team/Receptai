@@ -22,7 +22,7 @@ interface FeedbackService {
     /**
      * Returns average recipe rating for the specified recipe ID.
      */
-    fun getAverageRecipeRating(recipeId: Long)
+    fun getAverageRecipeRating(recipeId: Long): Double
 
     /**
      * Leave feedback on the specified recipe ID with the specified user.

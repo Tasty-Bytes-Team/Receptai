@@ -1,6 +1,9 @@
 package lt.tastybytes.receptaiserver.service.impl
 
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto
+import lt.tastybytes.receptaiserver.exception.EntryAlreadyExistsException
+import lt.tastybytes.receptaiserver.exception.NotFoundException
+import lt.tastybytes.receptaiserver.exception.RuntimeValidationException
 import lt.tastybytes.receptaiserver.model.Feedback
 import lt.tastybytes.receptaiserver.model.user.User
 import lt.tastybytes.receptaiserver.repository.FeedbackRepository
@@ -44,6 +47,28 @@ class FeedbackServiceImpl(
     }
 
     override fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback {
-        TODO("Not yet implemented")
+        // Don't allow to create feedback if it already was created before
+        if (findFeedbackByRecipeAndUser(recipeId, author.id).isPresent) {
+            throw EntryAlreadyExistsException("User has already left feedback on this recipe")
+        }
+
+        val recipe = recipeService.getRecipeById(recipeId)
+        if (recipe.isEmpty) {
+            throw NotFoundException("Cannot leave feedback for a recipe that does not exist")
+        }
+
+        // TODO: move this check to a validator
+        if (dto.rating < 1 || dto.rating > 10) {
+            throw RuntimeValidationException("Rating must be an integer in ranges of 1-10")
+        }
+
+        val feedbackObj = Feedback()
+        feedbackObj.recipe = recipe.orElseThrow()
+        feedbackObj.author = author
+        feedbackObj.rating = dto.rating
+        feedbackObj.content = dto.content
+        feedbackObj.dateCreated = Date()
+        feedbackRepository.save(feedbackObj)
+        return feedbackObj
     }
 }

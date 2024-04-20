@@ -31,6 +31,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler({EntryAlreadyExistsException.class, RuntimeValidationException.class})
+    public ResponseEntity<?> handleCustomExceptions(Exception ex) {
+        return new ResponseEntity<>(
+                new ErrorResponseDto(ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
         return new ResponseEntity<>(

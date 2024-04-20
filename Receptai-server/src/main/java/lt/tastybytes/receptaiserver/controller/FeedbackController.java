@@ -46,8 +46,8 @@ public class FeedbackController {
     public ResponseEntity<FeedbackDto> leaveFeedback(
             @PathVariable long recipeId,
             @AuthenticationPrincipal User currentUser,
-            @Valid CreateFeedbackDto dto
-            ) throws NotFoundException {
+            @Valid @RequestBody CreateFeedbackDto dto
+    ) throws NotFoundException {
         var optionalRecipe = recipeService.getRecipeById(recipeId);
         if (optionalRecipe.isEmpty()) {
             throw new NotFoundException("Recipe with provided ID not found");

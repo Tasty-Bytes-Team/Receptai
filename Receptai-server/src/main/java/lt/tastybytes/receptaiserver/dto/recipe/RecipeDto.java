@@ -34,6 +34,8 @@ public record RecipeDto(
         @NonNull List<CategoryDto> categories,
 
         int minutesToPrepare,
-        int portions
+        int portions,
+
+        double averageRating
 ) { }
 

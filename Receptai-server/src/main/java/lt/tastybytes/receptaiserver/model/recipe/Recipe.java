@@ -88,13 +88,11 @@ public class Recipe implements ManageableModel {
     private int portionCount;
 
     public RecipeDto toDto() {
-
         String embedUrl = null;
         if (getTutorialVideo() != null) {
             var videoId = Converter.extractVideoIdFromUrl(getTutorialVideo());
             if (videoId.isPresent()) embedUrl = "https://www.youtube.com/embed/" + videoId.get();
         }
-
 
         return new RecipeDto(
                 id,
@@ -111,7 +109,8 @@ public class Recipe implements ManageableModel {
                 getTags().stream().map(Tag::toDto).toList(),
                 getCategories().stream().map(Category::toDto).toList(),
                 getMinutesToPrepare(),
-                getPortionCount()
+                getPortionCount(),
+                -1 // TODO: figure out how to acquire this
         );
     }
 

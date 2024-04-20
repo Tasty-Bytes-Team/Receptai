@@ -43,6 +43,7 @@ class FeedbackServiceImpl(
     }
 
     override fun getAverageRecipeRating(recipeId: Long) {
+        val recipe = recipeService.getRecipeById(recipeId)
         TODO("Not yet implemented")
     }
 

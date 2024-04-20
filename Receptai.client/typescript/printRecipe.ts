@@ -107,7 +107,7 @@ const printDownload = (recipe: Recipe) => {
 
   printablePage.write("<div>");
   printablePage.write(
-    `<p class="tags"><b>Preparation time:</b> ${recipe.minutesToPrepare}</p>`
+    `<p class="tags"><b>Preparation time:</b> ${recipe.minutesToPrepare} minutes</p>`
   );
   printablePage.write(
     `<p class="tags"><b>Number of servings: </b>${recipe.portions}</p>`

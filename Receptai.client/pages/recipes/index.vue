@@ -4,6 +4,9 @@ import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContain
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
+import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
+import RecipeSortAndFilterShimmer from "@/components/ShimmerLoaders/RecipeSortAndFilterShimmer.vue";
+import sortOptionSelector from "@/typescript/sortOptionSelector.ts";
 
 interface Recipe {
   id: number;
@@ -52,6 +55,20 @@ const recipeList = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
 const pageNumber = ref(0);
+const totalElements = ref(0);
+const elementsPerPage = ref(0);
+const currentElementCount = ref(0);
+const selectionValue = ref("DateDesc");
+
+watch(selectionValue, () => {
+  const resultsArray = sortOptionSelector(selectionValue.value);
+  if (resultsArray) {
+    sortBy.value = resultsArray[0] as string;
+    sortAsc.value = resultsArray[1] as boolean;
+    getRecipes();
+  }
+});
+
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
@@ -67,6 +84,9 @@ const getRecipes = async () => {
       .then((res) => {
         recipeList.value = res.data.elements;
         totalPages.value = res.data.totalPageCount;
+        totalElements.value = res.data.totalElementCount;
+        elementsPerPage.value = res.data.elementsPerPage;
+        currentElementCount.value = res.data.currentElementCount;
         loading.value = false;
       });
   } catch (e) {
@@ -84,8 +104,11 @@ getRecipes();
     <div>
       <h1 class="text-3xl font-bold text-center m-3">Recipes</h1>
     </div>
-    <div v-if="loading" class="flex flex-wrap">
-      <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+    <div v-if="loading">
+      <RecipeSortAndFilterShimmer />
+      <div class="flex flex-wrap">
+        <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
+      </div>
     </div>
     <EmptyListInformation
       v-else-if="recipeList && recipeList.length === 0"
@@ -98,6 +121,13 @@ getRecipes();
       @button-click="navigateTo('/')"
     />
     <div v-else>
+      <RecipeSortAndFilter
+        :pageNumber
+        :elementsPerPage
+        :currentElementCount
+        :totalElements
+        v-model="selectionValue"
+      />
       <div class="flex flex-wrap">
         <RecipeContainer
           v-for="item in recipeList"

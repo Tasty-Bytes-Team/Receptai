@@ -4,6 +4,7 @@ import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
+import printDownload from "@/typescript/printRecipe";
 
 defineProps<{
   recipe: Recipe;
@@ -20,11 +21,15 @@ interface Recipe {
   tutorialVideo: string | null;
   tutorialVideoEmbed: string | null;
   ingredients: Ingredients[];
-  instructions: string[];
+  instructions: Instruction[];
   tags: Tag[];
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+}
+
+interface Instruction {
+    text: string;
 }
 
 interface Author {
@@ -62,7 +67,8 @@ const error = ref(false);
   <div>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
-        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink> >
+        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink>
+        >
         <NuxtLink
           class="hover:underline font-medium"
           :to="`/recipe-category/${recipe.categories[0].id}`"
@@ -124,6 +130,9 @@ const error = ref(false);
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <button @click.prevent="printDownload(recipe)">Print</button>
     </div>
     <div class="max-w-screen-lg m-auto my-3 px-2">
       <div class="flex flex-wrap">

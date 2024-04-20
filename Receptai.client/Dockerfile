@@ -26,6 +26,7 @@ COPY assets /usr/src/nuxt-app/assets
 COPY components /usr/src/nuxt-app/components
 COPY layouts /usr/src/nuxt-app/layouts
 COPY middleware /usr/src/nuxt-app/middleware
+COPY typescript /usr/src/nuxt-app/typescript
 COPY pages /usr/src/nuxt-app/pages
 COPY public /usr/src/nuxt-app/public
 COPY server /usr/src/nuxt-app/server

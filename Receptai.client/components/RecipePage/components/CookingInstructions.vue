@@ -1,7 +1,11 @@
 <script setup lang="ts">
-defineProps({
-  cookingInstructions: Object,
-});
+interface Instruction {
+  text: string;
+}
+
+defineProps<{
+  cookingInstructions: Instruction[];
+}>();
 </script>
 
 <template>

@@ -13,11 +13,15 @@ interface Recipe {
   tutorialVideo: string | null;
   tutorialVideoEmbed: string | null;
   ingredients: Ingredients[];
-  instructions: string[];
+  instructions: Instruction[];
   tags: Tag[];
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+}
+
+interface Instruction {
+    text: string;
 }
 
 interface Author {

@@ -4,6 +4,7 @@ import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
+import printDownload from "@/typescript/printRecipe";
 
 defineProps<{
   recipe: Recipe;
@@ -20,11 +21,15 @@ interface Recipe {
   tutorialVideo: string | null;
   tutorialVideoEmbed: string | null;
   ingredients: Ingredients[];
-  instructions: string[];
+  instructions: Instruction[];
   tags: Tag[];
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+}
+
+interface Instruction {
+  text: string;
 }
 
 interface Author {
@@ -62,7 +67,8 @@ const error = ref(false);
   <div>
     <div class="max-w-screen-lg m-auto my-5 px-2">
       <p v-if="recipe.categories.length > 0">
-        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink> >
+        <NuxtLink class="hover:underline font-extrabold" to="/">Home</NuxtLink>
+        >
         <NuxtLink
           class="hover:underline font-medium"
           :to="`/recipe-category/${recipe.categories[0].id}`"
@@ -90,12 +96,21 @@ const error = ref(false);
           </div>
           <div class="lg:basis-3/5 md:basis-1/2 basis-full">
             <div class="p-4">
-              <div class="mb-3">
+              <div>
                 <h1 class="font-bold text-4xl">{{ recipe.name }}</h1>
                 <div class="text-sm font-light">
                   <span class="font-medium">{{ recipe.author.name }}, </span
                   ><span>{{ recipe.dateCreated.split("T")[0] }}</span>
                 </div>
+              </div>
+              <div class="m-2">
+                <button
+                  class="p-2 rounded-sm flex flex-row gap-2 bg-concrete-200 hover:bg-white border transition-colors duration-100"
+                  @click.prevent="printDownload(recipe)"
+                >
+                  <Icon name="fa6-solid:print" color="black" size="24px" />
+                  <span class="font-medium">Print recipe</span>
+                </button>
               </div>
               <p>
                 {{ recipe.shortDescription }}

@@ -20,6 +20,12 @@ interface FeedbackService {
     fun findFeedbackByRecipeAndUser(recipeId: Long, userId: Long): Optional<Feedback>
 
     /**
+     * Returns a page of feedback for specified recipe author.
+     */
+    fun getFeedbackByRecipeAuthor(userId: Long, pageNumber: Long): Page<Feedback>
+
+
+    /**
      * Returns average recipe rating for the specified recipe ID.
      */
     fun getAverageRecipeRating(recipeId: Long): Double

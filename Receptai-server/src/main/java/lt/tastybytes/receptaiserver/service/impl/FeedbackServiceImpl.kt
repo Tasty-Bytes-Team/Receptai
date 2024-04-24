@@ -43,6 +43,14 @@ class FeedbackServiceImpl(
         )
     }
 
+    override fun getFeedbackByRecipeAuthor(userId: Long, pageNumber: Long): Page<Feedback> {
+        val user = userService.findUserById(userId);
+        return feedbackRepository.findAllByAuthor(
+            user.orElseThrow(),
+            PageRequest.of(pageNumber.toInt(), 5)
+        )
+    }
+
     override fun getAverageRecipeRating(recipeId: Long): Double {
         val rating = feedbackRepository.averageOfRatings(recipeId)
         return rating.getOrDefault(-1.0)

@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.DashboardDto;
 import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
@@ -8,13 +9,14 @@ import lt.tastybytes.receptaiserver.dto.user.*;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
+import lt.tastybytes.receptaiserver.model.Feedback;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
+import lt.tastybytes.receptaiserver.service.FeedbackService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import lt.tastybytes.receptaiserver.validation.SortedRequestValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +24,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path="/api/v1/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private RecipeService recipeService;
+    private final UserService userService;
 
-    @Autowired
-    private JwtServiceImpl jwtService;
+    private final RecipeService recipeService;
+
+    private final JwtServiceImpl jwtService;
+
+    private final FeedbackService feedbackService;
+
+    public UserController(
+            UserService userService,
+            RecipeService recipeService,
+            JwtServiceImpl jwtService,
+            FeedbackService feedbackService
+    ) {
+        this.userService = userService;
+        this.recipeService = recipeService;
+        this.jwtService = jwtService;
+        this.feedbackService = feedbackService;
+    }
 
     @PostMapping(path="/register")
     public ResponseEntity<FullUserDto> registerNewUser(@Valid @RequestBody RegisterRequestDto dto) throws Exception {
@@ -77,6 +91,20 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<FullUserDto> getCurrentUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.toFullUserDto());
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardDto> getCurrentUserDashboard(@AuthenticationPrincipal User user) {
+        var recipePage = recipeService.getRecipesByUser(user, 0, new SortedRequestDto("dateCreated", false));
+        var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(user.getId(), 0);
+        return ResponseEntity.ok(
+                new DashboardDto(
+                        recipePage.getTotalElements(),
+                        recipePage.getContent().stream().map(Recipe::toDto).toList(), // TODO: limit to 5
+                        feedbackPage.getContent().stream().map(Feedback::toDto).toList(),
+                        -1 // TODO: figure out how to obtain this
+                )
+        );
     }
 
     @PatchMapping("/edit/{userId}")

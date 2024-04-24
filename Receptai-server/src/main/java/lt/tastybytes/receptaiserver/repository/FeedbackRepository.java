@@ -17,4 +17,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     Page<Feedback> findAllByRecipe(Recipe recipe, Pageable pageable);
 
     Optional<Feedback> findByRecipeAndAuthor(Recipe recipe, User author);
+
+    Page<Feedback> findAllByAuthor(User author, Pageable pageable);
 }

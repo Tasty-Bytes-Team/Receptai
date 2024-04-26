@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
-import StarRaiting from "../components/StarRaiting.vue";
+import StarRaiting from "../components/StarRating.vue";
+import { addNotification } from "@/store/store";
 
 interface Feedback {
   content: string;
@@ -23,23 +24,62 @@ interface UserCookie {
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+const emit = defineEmits(['newReview'])
 
 const props = defineProps<{
   recipeId: string;
 }>();
 
-const feedback = ref<Feedback | null>(null);
+const rating = ref<number | null>(null);
+const content = ref<string | null>(null);
 
-const getFeedback = async () => {
+const onSubmit = async () => {
+  if(!TastyBytes_user.value){
+    addNotification(
+        "Sorry, you have to be logged in to leave a review.",
+        "Error"
+      );
+    return;
+  }
+
+  if(!rating.value || !content.value){
+    addNotification(
+        "Raiting and comment fields are required.",
+        "Error"
+      );
+    return;
+  }
+  
   try {
-    await axios
-      .get(`${config.public.baseURL}/api/v1/feedback/list/${props.recipeId}`)
-      .then((res) => {
-        console.log(res.data.elements);
-        feedback.value = res.data.elements;
-      });
+    await axios.post(
+      `${config.public.baseURL}/api/v1/feedback/leave/${props.recipeId}`,
+      { rating: rating.value*2, content: content.value },
+      {
+          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+        }
+    );
+    addNotification(
+        "Your review has been added successfully.",
+        "Success"
+      );
+      rating.value = null;
+      content.value = null;
+      emit('newReview');
   } catch (e) {
     console.error("Error fetching recipe", e);
+    if(e instanceof Error){
+      if(e.message.search('has already left')){
+        addNotification(
+        "Sorry, one user can only leave one review for the same recipe.",
+        "Error"
+      );
+      } else {
+        addNotification(
+        "Sorry, something went wrong. Please try again.",
+        "Error"
+      );
+      }
+    }
   }
 };
 </script>
@@ -51,15 +91,17 @@ const getFeedback = async () => {
     <h3 class="font-semibold text-lg mb-2">Made it? Leave a review!</h3>
     <form
       v-if="TastyBytes_user"
+      @submit.prevent="onSubmit"
       class="flex flex-col w-full items-center gap-2"
     >
       <div class="flex flex-col w-full m-auto justify-center">
-        <label class="font-bold">Raiting</label>
-        <StarRaiting />
+        <label class="font-bold">Rating</label>
+        <StarRaiting v-model="rating" />
       </div>
       <div class="flex flex-col w-full m-auto justify-center">
         <label class="font-bold">Comment</label>
         <textarea
+          v-model="content"
           placeholder="Write your experience about making the recipe..."
           class="border-2 border-black rounded-sm p-2 w-full"
         ></textarea>

@@ -1,42 +1,57 @@
 <script setup lang="ts">
 const props = defineProps<{
-  setRaiting?: number;
+  setRating?: number;
 }>();
 
 const readOnly = ref(false);
 const stars = ref([
   {
-    raiting: 1,
+    rating: 1,
     active: false,
   },
   {
-    raiting: 2,
+    rating: 2,
     active: false,
   },
   {
-    raiting: 3,
+    rating: 3,
     active: false,
   },
   {
-    raiting: 4,
+    rating: 4,
     active: false,
   },
   {
-    raiting: 5,
+    rating: 5,
     active: false,
   },
 ]);
 
-const updateStarRaiting = (raiting: number) => {
+const model = defineModel<number | null>();
+
+const updateModel = (rating: number) => {
+  model.value = rating;
+};
+
+const updateStarRaiting = (rating: number) => {
   stars.value.map((star) => {
-    star.raiting <= raiting ? (star.active = true) : (star.active = false);
+    star.rating <= rating ? (star.active = true) : (star.active = false);
   });
 };
 
-if (props.setRaiting != undefined) {
+if (props.setRating != undefined) {
   readOnly.value = true;
-  updateStarRaiting(props.setRaiting);
+  updateStarRaiting(props.setRating);
 }
+
+watch(model, (newVal, oldVal) => {
+  let raitingToSet = 0;
+  if (newVal){
+    raitingToSet = newVal;
+  }
+
+  updateStarRaiting(raitingToSet);
+})
 </script>
 
 <template>
@@ -44,9 +59,9 @@ if (props.setRaiting != undefined) {
     <Icon
       v-if="!readOnly"
       v-for="star1 in stars"
-      @click="readOnly ? null : updateStarRaiting(star1.raiting)"
+      @click="readOnly ? null : updateModel(star1.rating)"
       :name="star1.active ? 'streamline:star-1-solid' : 'streamline:star-1'"
-      :key="star1.raiting"
+      :key="star1.rating"
       class="cursor-pointer"
       :class="star1.active ? '!text-yellow-400' : null"
     />
@@ -54,7 +69,7 @@ if (props.setRaiting != undefined) {
       v-else
       v-for="star2 in stars"
       :name="star2.active ? 'streamline:star-1-solid' : 'streamline:star-1'"
-      :key="star2.raiting"
+      :key="star2.rating"
       :class="star2.active ? '!text-yellow-400' : null"
     />
   </div>

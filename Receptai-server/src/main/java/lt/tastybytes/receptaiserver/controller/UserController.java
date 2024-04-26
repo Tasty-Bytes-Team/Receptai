@@ -101,7 +101,7 @@ public class UserController {
                 new DashboardDto(
                         recipePage.getTotalElements(),
                         recipePage.getContent().stream().map(Recipe::toDto).toList(), // TODO: limit to 5
-                        feedbackPage.getContent().stream().map(Feedback::toDto).toList(),
+                        feedbackPage.getContent().stream().map(Feedback::toDto).toList(), // TODO: sort
                         -1 // TODO: figure out how to obtain this
                 )
         );

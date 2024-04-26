@@ -10,11 +10,11 @@ defineProps<{
 
 const selectionOptions = [
   {
-    value: "nameDesc",
+    value: "nameAsc",
     name: "Name from A to Z",
   },
   {
-    value: "nameAsc",
+    value: "nameDesc",
     name: "Name from Z to A",
   },
   {

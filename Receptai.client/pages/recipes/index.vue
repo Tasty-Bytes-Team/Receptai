@@ -60,20 +60,21 @@ const elementsPerPage = ref(0);
 const currentElementCount = ref(0);
 const selectionValue = ref("DateDesc");
 
-watch(selectionValue, () => {
-  const resultsArray = sortOptionSelector(selectionValue.value);
-  if (resultsArray) {
-    sortBy.value = resultsArray[0] as string;
-    sortAsc.value = resultsArray[1] as boolean;
-    getRecipes();
-  }
-});
-
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
 const totalPages = ref(0);
 const siblings = 2;
+
+watch(selectionValue, async () => {
+  const resultsArray = sortOptionSelector(selectionValue.value);
+  if (resultsArray) {
+    sortBy.value = resultsArray[0] as string;
+    sortAsc.value = resultsArray[1] as boolean;
+
+    await getRecipes();
+  }
+});
 
 const getRecipes = async () => {
   try {

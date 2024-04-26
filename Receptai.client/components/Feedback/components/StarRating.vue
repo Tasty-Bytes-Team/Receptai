@@ -63,6 +63,7 @@ watch(model, (newVal, oldVal) => {
       :name="star1.active ? 'streamline:star-1-solid' : 'streamline:star-1'"
       :key="star1.rating"
       class="cursor-pointer"
+      size="18px"
       :class="star1.active ? '!text-yellow-400' : null"
     />
     <Icon
@@ -71,6 +72,7 @@ watch(model, (newVal, oldVal) => {
       :name="star2.active ? 'streamline:star-1-solid' : 'streamline:star-1'"
       :key="star2.rating"
       :class="star2.active ? '!text-yellow-400' : null"
+      size="18px"
     />
   </div>
 </template>

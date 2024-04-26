@@ -62,6 +62,12 @@ class FeedbackServiceImpl(
         return rating.getOrDefault(-1.0)
     }
 
+    override fun getAverageRecipeAuthorRating(userId: Long): Double {
+        val user = userService.findUserById(userId)
+        val rating = feedbackRepository.averageOfRatings(user.orElseThrow())
+        return rating.getOrDefault(-1.0)
+    }
+
     override fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback {
         // Don't allow to create feedback if it already was created before
         if (findFeedbackByRecipeAndUser(recipeId, author.id).isPresent) {

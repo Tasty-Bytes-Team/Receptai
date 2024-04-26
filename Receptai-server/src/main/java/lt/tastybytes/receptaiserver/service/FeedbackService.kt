@@ -33,6 +33,11 @@ interface FeedbackService {
     fun getAverageRecipeRating(recipeId: Long): Double
 
     /**
+     * Returns average recipe rating for the specified recipe author.
+     */
+    fun getAverageRecipeAuthorRating(userId: Long): Double
+
+    /**
      * Leave feedback on the specified recipe ID with the specified user.
      * The feedback contents are to be provided through a DTO object.
      */

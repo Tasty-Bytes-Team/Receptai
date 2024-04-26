@@ -111,7 +111,7 @@ public class UserController {
                         recipePage.getTotalElements(),
                         recipePage.getContent().stream().map(Recipe::toDto).toList(),
                         feedbackPage.getContent().stream().map(Feedback::toDto).toList(),
-                        -1 // TODO: figure out how to obtain this
+                        feedbackService.getAverageRecipeAuthorRating(user.getId())
                 )
         );
     }

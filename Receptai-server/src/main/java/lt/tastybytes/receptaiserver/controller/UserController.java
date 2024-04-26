@@ -16,6 +16,7 @@ import lt.tastybytes.receptaiserver.service.FeedbackService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import lt.tastybytes.receptaiserver.validation.SortedRequestValidation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -82,7 +83,7 @@ public class UserController {
     ) {
         return ResponseEntity.ok(
                 PagedResponseDto.of(
-                        recipeService.getRecipesByUser(user, pageDto.page(), sortDto),
+                        recipeService.getRecipesByUser(user, new Pager(pageDto), sortDto),
                         Recipe::toDto
                 )
         );
@@ -95,13 +96,21 @@ public class UserController {
 
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardDto> getCurrentUserDashboard(@AuthenticationPrincipal User user) {
-        var recipePage = recipeService.getRecipesByUser(user, 0, new SortedRequestDto("dateCreated", false));
-        var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(user.getId(), 0);
+        var recipePage = recipeService.getRecipesByUser(
+                user,
+                new Pager(0, 5),
+                new SortedRequestDto("dateCreated", false)
+        );
+        var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(
+                user.getId(),
+                new Pager(0, 5),
+                new SortedRequestDto("dateCreated", false)
+        );
         return ResponseEntity.ok(
                 new DashboardDto(
                         recipePage.getTotalElements(),
-                        recipePage.getContent().stream().map(Recipe::toDto).toList(), // TODO: limit to 5
-                        feedbackPage.getContent().stream().map(Feedback::toDto).toList(), // TODO: sort
+                        recipePage.getContent().stream().map(Recipe::toDto).toList(),
+                        feedbackPage.getContent().stream().map(Feedback::toDto).toList(),
                         -1 // TODO: figure out how to obtain this
                 )
         );

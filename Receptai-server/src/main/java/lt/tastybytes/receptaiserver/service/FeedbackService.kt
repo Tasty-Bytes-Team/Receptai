@@ -1,8 +1,10 @@
 package lt.tastybytes.receptaiserver.service
 
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto
 import lt.tastybytes.receptaiserver.model.Feedback
 import lt.tastybytes.receptaiserver.model.user.User
+import lt.tastybytes.receptaiserver.utils.Pager
 import org.springframework.data.domain.Page
 import java.util.Optional
 
@@ -11,7 +13,7 @@ interface FeedbackService {
     /**
      * Return a page containing feedback for the specified recipe ID.
      */
-    fun getFeedbackByRecipe(recipeId: Long, pageNumber: Long): Page<Feedback>
+    fun getFeedbackByRecipe(recipeId: Long, pager: Pager): Page<Feedback>
 
     /**
      * Returns optional Feedback object for the specified recipe made by the specified user.
@@ -22,7 +24,7 @@ interface FeedbackService {
     /**
      * Returns a page of feedback for specified recipe author.
      */
-    fun getFeedbackByRecipeAuthor(userId: Long, pageNumber: Long): Page<Feedback>
+    fun getFeedbackByRecipeAuthor(userId: Long, pager: Pager, sortDto: SortedRequestDto?): Page<Feedback>
 
 
     /**

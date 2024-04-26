@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/api/v1/recipe")
 public class RecipeController {
 
-    @Autowired
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
+
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @PostMapping(path="/create")
     public ResponseEntity<?> createNewRecipe(

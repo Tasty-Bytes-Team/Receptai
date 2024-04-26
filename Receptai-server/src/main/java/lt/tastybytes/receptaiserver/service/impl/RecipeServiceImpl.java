@@ -14,6 +14,7 @@ import lt.tastybytes.receptaiserver.repository.RecipeRepository;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.TagService;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.lang.Nullable;
@@ -164,8 +165,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getRecipesByUser(User user, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
-        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
+    public Page<Recipe> getRecipesByUser(User user, Pager pager, @Valid @Nullable SortedRequestDto sortDto) {
+        var request = pager.toPageRequest(RECIPES_PER_PAGE);
         if (sortDto != null) {
             request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
         }

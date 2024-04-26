@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/api/v1/category")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
+
+    public CategoryController(CategoryService categoryService, RecipeService recipeService) {
+        this.categoryService = categoryService;
+        this.recipeService = recipeService;
+    }
 
     @PostMapping(path="/create")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CreateCategoryDto dto) {

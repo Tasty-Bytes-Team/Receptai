@@ -1,5 +1,6 @@
 package lt.tastybytes.receptaiserver.service.impl
 
+import lt.tastybytes.receptaiserver.dto.SortedRequestDto
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto
 import lt.tastybytes.receptaiserver.exception.EntryAlreadyExistsException
 import lt.tastybytes.receptaiserver.exception.NotFoundException
@@ -10,13 +11,14 @@ import lt.tastybytes.receptaiserver.repository.FeedbackRepository
 import lt.tastybytes.receptaiserver.service.FeedbackService
 import lt.tastybytes.receptaiserver.service.RecipeService
 import lt.tastybytes.receptaiserver.service.UserService
+import lt.tastybytes.receptaiserver.utils.Pager
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.jvm.optionals.getOrDefault
 
-const val FEEDBACK_PER_PAGE = 20
+const val FEEDBACK_PER_PAGE = 20L
 
 @Service
 class FeedbackServiceImpl(
@@ -25,9 +27,9 @@ class FeedbackServiceImpl(
     private var userService: UserService
 ) : FeedbackService {
 
-    override fun getFeedbackByRecipe(recipeId: Long, pageNumber: Long): Page<Feedback> {
+    override fun getFeedbackByRecipe(recipeId: Long, pager: Pager): Page<Feedback> {
         val recipe = recipeService.getRecipeById(recipeId)
-        val request = PageRequest.of(pageNumber.toInt(), FEEDBACK_PER_PAGE)
+        val request = pager.toPageRequest(FEEDBACK_PER_PAGE)
         return feedbackRepository.findAllByRecipe(
             recipe.orElseThrow(),
             request
@@ -43,11 +45,15 @@ class FeedbackServiceImpl(
         )
     }
 
-    override fun getFeedbackByRecipeAuthor(userId: Long, pageNumber: Long): Page<Feedback> {
-        val user = userService.findUserById(userId);
+    override fun getFeedbackByRecipeAuthor(userId: Long, pager: Pager, sortDto: SortedRequestDto?): Page<Feedback> {
+        val user = userService.findUserById(userId)
+        var request = pager.toPageRequest(FEEDBACK_PER_PAGE)
+        if (sortDto != null) {
+            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy())
+        }
         return feedbackRepository.findAllByAuthor(
             user.orElseThrow(),
-            PageRequest.of(pageNumber.toInt(), 5)
+            request
         )
     }
 

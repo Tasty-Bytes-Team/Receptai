@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import RecipePage from "@/components/RecipePage/RecipePage.vue";
+import Feedback from "@/components/Feedback/Feedback.vue";
 
 interface Recipe {
   id: number;
@@ -82,6 +83,7 @@ await getRecipe();
   <div v-if="!recipe || loading">Loading...</div>
   <div v-else>
     <RecipePage :recipe="recipe" />
+    <Feedback :recipeId="route.params.id as string" />
   </div>
 </template>
 

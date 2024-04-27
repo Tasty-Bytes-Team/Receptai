@@ -24,7 +24,7 @@ interface UserCookie {
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
-const emit = defineEmits(['newReview'])
+const emit = defineEmits(["newReview"]);
 
 const props = defineProps<{
   recipeId: string;
@@ -34,50 +34,44 @@ const rating = ref<number | null>(null);
 const content = ref<string | null>(null);
 
 const onSubmit = async () => {
-  if(!TastyBytes_user.value){
+  if (!TastyBytes_user.value) {
     addNotification(
-        "Sorry, you have to be logged in to leave a review.",
-        "Error"
-      );
+      "Sorry, you have to be logged in to leave a review.",
+      "Error"
+    );
     return;
   }
 
-  if(!rating.value || !content.value){
-    addNotification(
-        "Raiting and comment fields are required.",
-        "Error"
-      );
+  if (!rating.value || !content.value) {
+    addNotification("Raiting and comment fields are required.", "Error");
     return;
   }
-  
+
   try {
     await axios.post(
       `${config.public.baseURL}/api/v1/feedback/leave/${props.recipeId}`,
-      { rating: rating.value*2, content: content.value },
+      { rating: rating.value * 2, content: content.value },
       {
-          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
-        }
+        headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+      }
     );
-    addNotification(
-        "Your review has been added successfully.",
-        "Success"
-      );
-      rating.value = null;
-      content.value = null;
-      emit('newReview');
+    addNotification("Your review has been added successfully.", "Success");
+    rating.value = null;
+    content.value = null;
+    emit("newReview");
   } catch (e) {
     console.error("Error fetching recipe", e);
-    if(e instanceof Error){
-      if(e.message.search('has already left')){
+    if (e instanceof Error) {
+      if (e.message.search("has already left")) {
         addNotification(
-        "Sorry, one user can only leave one review for the same recipe.",
-        "Error"
-      );
+          "Sorry, one user can only leave one review for the same recipe.",
+          "Error"
+        );
       } else {
         addNotification(
-        "Sorry, something went wrong. Please try again.",
-        "Error"
-      );
+          "Sorry, something went wrong. Please try again.",
+          "Error"
+        );
       }
     }
   }
@@ -107,7 +101,7 @@ const onSubmit = async () => {
         ></textarea>
       </div>
       <button
-        class="bg-whiskey-300 w-fit px-3 py-1.5 rounded-sm text-md font-medium"
+        class="bg-whiskey-200 hover:bg-whiskey-300 w-fit px-3 py-1.5 rounded-sm text-md font-medium transition-colors duration-100"
       >
         Post review
       </button>

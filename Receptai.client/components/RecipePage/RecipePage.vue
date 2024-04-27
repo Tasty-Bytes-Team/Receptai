@@ -34,6 +34,10 @@ interface Instruction {
   text: string;
 }
 
+interface Instruction {
+  text: string;
+}
+
 interface Author {
   name: string;
 }

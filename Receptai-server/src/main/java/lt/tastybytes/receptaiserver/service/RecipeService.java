@@ -8,6 +8,7 @@ import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -27,7 +28,7 @@ public interface RecipeService {
      */
     Page<Recipe> getRecipes(int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
     Page<Recipe> getRecipesByCategory(Category category, int pageNumber);
-    Page<Recipe> getRecipesByUser(User user, int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
+    Page<Recipe> getRecipesByUser(User user, Pager pager, @Valid @Nullable SortedRequestDto sortDto);
 
 
     Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto);

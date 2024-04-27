@@ -10,6 +10,7 @@ import lt.tastybytes.receptaiserver.model.Feedback;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.FeedbackService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class FeedbackController {
             throw new NotFoundException("Recipe with provided ID not found");
         }
 
-        var page = feedbackService.getFeedbackByRecipe(recipeId, pageDto.page());
+        var page = feedbackService.getFeedbackByRecipe(recipeId, new Pager(pageDto));
         return ResponseEntity.ok(
                 PagedResponseDto.of(page, Feedback::toDto)
         );

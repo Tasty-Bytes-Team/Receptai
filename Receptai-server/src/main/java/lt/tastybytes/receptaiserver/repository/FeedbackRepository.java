@@ -14,7 +14,12 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     @Query("SELECT AVG(rating) FROM Feedback WHERE recipe.id = ?1")
     Optional<Double> averageOfRatings(long recipeId);
 
+    @Query("SELECT AVG(rating) FROM Feedback WHERE recipe.author = ?1")
+    Optional<Double> averageOfRatings(User author);
+
     Page<Feedback> findAllByRecipe(Recipe recipe, Pageable pageable);
 
     Optional<Feedback> findByRecipeAndAuthor(Recipe recipe, User author);
+
+    Page<Feedback> findAllByAuthor(User author, Pageable pageable);
 }

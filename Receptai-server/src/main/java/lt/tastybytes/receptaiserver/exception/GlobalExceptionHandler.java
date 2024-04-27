@@ -24,7 +24,7 @@ import java.util.HashMap;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> handleUserAlreadyExistsException(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExistsException(Exception ex) {
         return new ResponseEntity<>(
                 new ErrorResponseDto("User with specified details already exists"),
                 HttpStatus.BAD_REQUEST
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({EntryAlreadyExistsException.class, RuntimeValidationException.class})
-    public ResponseEntity<?> handleCustomExceptions(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleCustomExceptions(Exception ex) {
         return new ResponseEntity<>(
                 new ErrorResponseDto(ex.getMessage()),
                 HttpStatus.BAD_REQUEST
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException ex) {
         return new ResponseEntity<>(
                 new ErrorResponseDto(ex.getMessage()),
                 HttpStatus.NOT_FOUND
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingRightsException.class)
-    public ResponseEntity<?> handleMissingRightsException(MissingRightsException ex) {
+    public ResponseEntity<ErrorResponseDto> handleMissingRightsException(MissingRightsException ex) {
         return new ResponseEntity<>(
                 new ErrorResponseDto(ex.getMessage()),
                 HttpStatus.FORBIDDEN
@@ -60,13 +60,13 @@ public class GlobalExceptionHandler {
             HttpMediaTypeNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    public ResponseEntity<?> handleHttpRequestMethodNotSupportedException(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleHttpRequestMethodNotSupportedException(Exception ex) {
         return new ResponseEntity<>(new ErrorResponseDto(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+    protected ResponseEntity<ErrorResponseDto> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
         ex.printStackTrace();
         var builder = new StringBuilder();
         for (var result: ex.getAllValidationResults()) {
@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    protected ResponseEntity<ErrorResponseDto> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var builder = new StringBuilder();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
 
@@ -94,7 +94,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    protected ResponseEntity<Object> handleHttpMessageNotReadableException(
+    protected ResponseEntity<ErrorResponseDto> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex,
             WebRequest request
     ) {
@@ -105,24 +105,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    protected ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
+    protected ResponseEntity<ErrorResponseDto> handleExpiredJwtException(ExpiredJwtException ex) {
         return new ResponseEntity<>(new ErrorResponseDto("Authentication token expired"), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    protected ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+    protected ResponseEntity<ErrorResponseDto> handleBadCredentialsException(BadCredentialsException ex) {
         return new ResponseEntity<>(new ErrorResponseDto(ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(JwtException.class)
-    protected ResponseEntity<Object> handleGenericJWTException(JwtException ex) {
+    protected ResponseEntity<ErrorResponseDto> handleGenericJWTException(JwtException ex) {
         System.out.println("Unhandled JWT exception");
         ex.printStackTrace();
         return new ResponseEntity<>(new ErrorResponseDto("Invalid authentication token"), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleException(Exception ex) {
+    public ResponseEntity<ErrorResponseDto> handleException(Exception ex) {
         System.out.println("Global error handler called");
         ex.printStackTrace();
         return new ResponseEntity<>(

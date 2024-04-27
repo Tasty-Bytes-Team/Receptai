@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/api/v1/tag")
 public class TagController {
 
-    @Autowired
-    private TagService tagService;
+    private final TagService tagService;
+
+    public TagController(TagService tagService) {
+        this.tagService = tagService;
+    }
 
     @PostMapping(path="/create")
     public ResponseEntity<?> createTag(@Valid @RequestBody CreateTagDto dto) {

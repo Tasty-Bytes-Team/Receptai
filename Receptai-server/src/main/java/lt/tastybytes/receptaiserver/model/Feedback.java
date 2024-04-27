@@ -2,7 +2,6 @@ package lt.tastybytes.receptaiserver.model;
 
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.feedback.FeedbackDto;
-import lt.tastybytes.receptaiserver.dto.user.PublicUserDto;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 
@@ -76,7 +75,8 @@ public class Feedback {
         return new FeedbackDto(
                 author.toPublicUserDto(),
                 content,
-                rating
+                rating,
+                dateCreated
         );
     }
 }

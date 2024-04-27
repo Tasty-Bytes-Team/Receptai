@@ -1,14 +1,12 @@
-type GetRecipes = () => void;
-
 const sortOptionSelector = (selectionValue: string) => {
   switch (selectionValue) {
-    case "nameDesc":
-      return ["dateCreated", false];
-    case "nameAsc":
-      return ["dateCreated", true];
     case "DateDesc":
-      return ["name", false];
+      return ["dateCreated", false];
     case "DateAsc":
+      return ["dateCreated", true];
+    case "nameDesc":
+      return ["name", false];
+    case "nameAsc":
       return ["name", true];
   }
 };

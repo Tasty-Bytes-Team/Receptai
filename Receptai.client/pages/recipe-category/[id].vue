@@ -22,6 +22,7 @@ interface Recipe {
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+  averageRating: number;
 }
 
 interface Author {
@@ -122,7 +123,7 @@ getRecipes();
           v-for="item in recipeList"
           :imageLink="item.previewImage"
           :name="item.name"
-          :raiting="5"
+          :rating="item.averageRating"
           :about="item.shortDescription"
           :link="`/recipes/${item.id}`"
           :category="

@@ -5,6 +5,7 @@ import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
 import printDownload from "@/typescript/printRecipe";
+import StarRating from "../Feedback/components/StarRating.vue";
 
 defineProps<{
   recipe: Recipe;
@@ -26,6 +27,15 @@ interface Recipe {
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+  averageRating: number;
+}
+
+interface Instruction {
+  text: string;
+}
+
+interface Instruction {
+  text: string;
 }
 
 interface Instruction {
@@ -97,6 +107,10 @@ const error = ref(false);
           <div class="lg:basis-3/5 md:basis-1/2 basis-full">
             <div class="p-4">
               <div>
+                <StarRating
+                  v-if="recipe.averageRating > 0"
+                  :setRating="recipe.averageRating / 2"
+                />
                 <h1 class="font-bold text-4xl">{{ recipe.name }}</h1>
                 <div class="text-sm font-light">
                   <span class="font-medium">{{ recipe.author.name }}, </span

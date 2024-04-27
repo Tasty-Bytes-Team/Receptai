@@ -77,7 +77,7 @@ try {
       v-for="item in recipeList"
       :imageLink="item.previewImage"
       :name="item.name"
-      :raiting="item.averageRating"
+      :rating="item.averageRating"
       :about="item.shortDescription"
       :link="`/recipes/${item.id}`"
       :category="item.categories.length > 0 ? item.categories[0].name : 'Empty'"

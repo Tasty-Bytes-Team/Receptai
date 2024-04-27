@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import StarRaiting from "../components/StarRating.vue";
+import StarRating from "../components/StarRating.vue";
 import { addNotification } from "@/store/store";
 
 interface Feedback {
@@ -90,7 +90,7 @@ const onSubmit = async () => {
     >
       <div class="flex flex-col w-full m-auto justify-center">
         <label class="font-bold">Rating</label>
-        <StarRaiting v-model="rating" />
+        <StarRating v-model="rating" />
       </div>
       <div class="flex flex-col w-full m-auto justify-center">
         <label class="font-bold">Comment</label>

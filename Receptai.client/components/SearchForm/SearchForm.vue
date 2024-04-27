@@ -25,7 +25,7 @@ const onSearch = async () => {
       >Search</label
     >
     <div
-      class="flex flex-row p-1 gap-1 text-gray-900 border-2 border-concrete-300 focus:border-black rounded-md bg-gray-50"
+      class="flex flex-row p-1 gap-1 text-gray-900 border-2 border-concrete-300 focus-within:border-black rounded-md bg-gray-50"
     >
       <input
         v-model="search"

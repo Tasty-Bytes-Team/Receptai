@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import StarRating from '../Feedback/components/StarRating.vue';
+
 defineProps({
   imageLink: String,
   name: String,
@@ -52,6 +54,7 @@ const error = ref(false);
             >
               {{ name }}
             </h2>
+            <StarRating v-if="raiting && raiting > 0" :setRating="raiting/2" />
             <p class="text-sm" data-testid="recipe-description">
               {{ about }}
             </p>

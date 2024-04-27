@@ -19,6 +19,7 @@ interface Recipe {
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+  averageRating: number;
 }
 
 interface Instruction {

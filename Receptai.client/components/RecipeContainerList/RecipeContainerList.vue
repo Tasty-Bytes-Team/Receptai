@@ -20,6 +20,7 @@ interface Recipe {
   categories: Category[];
   minutesToPrepare: number;
   portions: number;
+  averageRating: number;
 }
 
 interface Author {
@@ -76,7 +77,7 @@ try {
       v-for="item in recipeList"
       :imageLink="item.previewImage"
       :name="item.name"
-      :raiting="5"
+      :raiting="item.averageRating"
       :about="item.shortDescription"
       :link="`/recipes/${item.id}`"
       :category="item.categories.length > 0 ? item.categories[0].name : 'Empty'"

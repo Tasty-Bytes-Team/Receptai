@@ -5,10 +5,7 @@ import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
 import CookingInstructions from "@/components/RecipePage/components/CookingInstructions.vue";
 import Ingredients from "@/components/RecipePage/components/Ingredients.vue";
 import printDownload from "@/typescript/printRecipe";
-<<<<<<< HEAD
 import StarRating from "../Feedback/components/StarRating.vue";
-=======
->>>>>>> e613c2b1a20a918355754215dd12774eb2a6b32e
 
 defineProps<{
   recipe: Recipe;

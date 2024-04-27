@@ -102,6 +102,7 @@ const onSubmit = async () => {
         ></textarea>
       </div>
       <button
+        type="submit"
         class="bg-whiskey-200 hover:bg-whiskey-300 w-fit px-3 py-1.5 rounded-sm text-md font-medium transition-colors duration-100"
       >
         Post review

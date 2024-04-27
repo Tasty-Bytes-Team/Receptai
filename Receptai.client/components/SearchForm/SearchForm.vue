@@ -31,10 +31,10 @@ const onSearch = async () => {
         class="block w-full p-2 text-gray-900 border-2 border-concrete-300 focus:border-black outline-none rounded-md bg-gray-50"
         placeholder="Search recipes..."
       />
-      <div class="absolute right-2 top-0 h-full flex justify-center">
+      <div class="absolute right-1 top-0 h-full flex justify-center">
         <button
           type="submit"
-          class="text-black my-[5px] aspect-square bg-whiskey-200 hover:bg-whiskey-300 rounded-lg flex justify-center items-center transition-colors duration-100"
+          class="text-black my-1 w-8 aspect-square bg-whiskey-200 hover:bg-whiskey-300 rounded-lg flex justify-center items-center transition-colors duration-100"
         >
           <Icon name="material-symbols:search-rounded" size="20px" />
         </button>

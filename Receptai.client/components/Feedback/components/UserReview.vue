@@ -97,7 +97,8 @@ const onSubmit = async () => {
         <textarea
           v-model="content"
           placeholder="Write your experience about making the recipe..."
-          class="border-2 border-black rounded-sm p-2 w-full"
+          class="border-2 border-concrete-400 focus-visible:border-black rounded-sm p-2 w-full outline-none"
+          required
         ></textarea>
       </div>
       <button

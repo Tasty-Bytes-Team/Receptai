@@ -23,9 +23,13 @@ defineProps<{
     class="m-auto w-full p-4 flex flex-col gap-2 bg-white border-concrete-400 border-2"
   >
     <h3 class="font-semibold text-lg mb-2">All of the reviews left by users</h3>
-    <div v-if="feedbackArray && feedbackArray.length > 0" class="flex flex-col gap-2">
+    <div
+      v-if="feedbackArray && feedbackArray.length > 0"
+      class="flex flex-col gap-2"
+    >
       <div
-        v-for="feedback in feedbackArray"
+        v-for="(feedback, index) in feedbackArray"
+        :key="index"
         class="p-3 border-2 border-concrete-400 rounded-md bg-concrete-50 shadow-[2px_2px_#00000082]"
       >
         <p class="font-bold">{{ feedback.user.name }}</p>

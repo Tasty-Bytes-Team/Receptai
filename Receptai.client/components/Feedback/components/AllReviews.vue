@@ -4,6 +4,7 @@ import StarRaiting from "../components/StarRating.vue";
 interface Feedback {
   content: string;
   rating: number;
+  dateCreated: string;
   user: User;
 }
 
@@ -16,6 +17,27 @@ interface User {
 defineProps<{
   feedbackArray: Feedback[] | null;
 }>();
+
+const formatDate = (date: string) => {
+  const formatedDate = new Date(date);
+  const date_format_str =
+    formatedDate.getFullYear().toString() +
+    "-" +
+    ((formatedDate.getMonth() + 1).toString().length == 2
+      ? (formatedDate.getMonth() + 1).toString()
+      : "0" + (formatedDate.getMonth() + 1).toString()) +
+    "-" +
+    (formatedDate.getDate().toString().length == 2
+      ? formatedDate.getDate().toString()
+      : "0" + formatedDate.getDate().toString()) +
+    " " +
+    (formatedDate.getHours().toString().length == 2
+      ? formatedDate.getHours().toString()
+      : "0" + formatedDate.getHours().toString()) +
+    ":" +
+    ((formatedDate.getMinutes() / 5) * 5).toString();
+  return date_format_str;
+};
 </script>
 
 <template>
@@ -32,7 +54,12 @@ defineProps<{
         :key="index"
         class="p-3 border-2 border-concrete-400 rounded-md bg-concrete-50 shadow-[2px_2px_#00000082]"
       >
-        <p class="font-bold">{{ feedback.user.name }}</p>
+        <p class="font-bold">
+          {{ feedback.user.name }}
+          <span class="font-normal"
+            >– {{ formatDate(feedback.dateCreated) }}</span
+          >
+        </p>
         <StarRaiting :setRating="feedback.rating / 2" />
         <h3>{{ feedback.content }}</h3>
       </div>

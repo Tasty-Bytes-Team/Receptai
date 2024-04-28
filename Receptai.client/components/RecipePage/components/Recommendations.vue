@@ -73,6 +73,8 @@ const allRecipes = ref<Recipe[] | null>(null);
 const loading = ref(true);
 
 const getRecipes = async () => {
+  loading.value = true;
+  
   try {
     await axios
       .get(
@@ -93,9 +95,12 @@ getRecipes();
 
 <template>
   <div class="max-w-screen-lg m-auto my-3 px-2">
-    <h3 class="font-semibold text-xl mb-2">You may also like</h3>
+    <h3 class="font-semibold text-2xl mb-2">You may also like</h3>
     <div v-if="loading" class="flex flex-wrap flex-row">
-      <RecipeContainerShimmer class="lg:!basis-1/4 xsm:!basis-1/2 !basis-full" v-for="i in shimmerComponentsCount" />
+      <RecipeContainerShimmer
+        class="lg:!basis-1/4 xsm:!basis-1/2 !basis-full"
+        v-for="i in shimmerComponentsCount"
+      />
     </div>
     <div v-else class="flex flex-wrap flex-row">
       <RecipeContainer

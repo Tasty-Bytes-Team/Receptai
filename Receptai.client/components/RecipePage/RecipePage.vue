@@ -168,15 +168,14 @@ const error = ref(false);
       v-if="recipe.tutorialVideoEmbed"
       class="max-w-screen-lg m-auto my-2 px-2"
     >
-      <h3 class="font-semibold text-xl mb-3">
+      <h3 class="font-semibold text-2xl mb-3">
         Searching for video instructions?
         <span class="font-normal">Find them here!</span>
       </h3>
       <iframe
         class="w-4/6 lg:h-[400px] sm:h-[300px] h-[200px] m-auto"
-        :src="recipe.tutorialVideoEmbed as string"
+        :src="recipe.tutorialVideoEmbed"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
       ></iframe>
     </div>

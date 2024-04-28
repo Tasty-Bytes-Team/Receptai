@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
-import StarRating from "../components/StarRating.vue";
 import { addNotification } from "@/store/store";
-
-interface Feedback {
-  content: string;
-  rating: number;
-  user: User;
-}
+import StarRating from "../components/StarRating.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface User {
   id: number | null;
@@ -56,8 +51,12 @@ const onSubmit = async () => {
       }
     );
     addNotification("Your review has been added successfully.", "Success");
+
+    //Reset fields
     rating.value = null;
     content.value = null;
+
+    //Emit event to update review list
     emit("newReview");
   } catch (e) {
     console.error("Error fetching recipe", e);
@@ -108,18 +107,12 @@ const onSubmit = async () => {
         Post review
       </button>
     </form>
-    <div v-else class="flex flex-col items-center text-center gap-2">
-      <p>
-        Sorry, you can only write a review if you are logged in. You can do that
-        by pressing the button below.
-      </p>
-      <button
-        @click="navigateTo('/user/login')"
-        class="p-1 px-3 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
-      >
-        Log in
-      </button>
-    </div>
+    <EmptyListInformation
+      v-else
+      description="Sorry, you can only write a review if you are logged in. You can do that by pressing the button below."
+      button-text="Log in"
+      @button-click="navigateTo('/user/login')"
+    />
   </div>
 </template>
 

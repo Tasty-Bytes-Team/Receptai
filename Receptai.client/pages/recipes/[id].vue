@@ -2,6 +2,7 @@
 import axios from "axios";
 import RecipePage from "@/components/RecipePage/RecipePage.vue";
 import Feedback from "@/components/Feedback/Feedback.vue";
+import Recommendations from "@/components/RecipePage/components/Recommendations.vue";
 
 interface Recipe {
   id: number;
@@ -117,7 +118,8 @@ await getRecipe();
   </div>
   <div v-else>
     <RecipePage :recipe="recipe" />
-    <Feedback :recipeId="route.params.id as string"></Feedback>
+    <Feedback :recipeId="route.params.id as string" />
+    <Recommendations />
   </div>
 </template>
 

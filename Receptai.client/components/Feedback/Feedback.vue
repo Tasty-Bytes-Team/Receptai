@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 interface Feedback {
   content: string;
   rating: number;
+  dateCreated: string;
   user: User;
 }
 

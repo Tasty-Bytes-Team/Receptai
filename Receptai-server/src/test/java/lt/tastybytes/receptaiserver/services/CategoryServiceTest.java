@@ -6,6 +6,7 @@ import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Import(TestDatabaseConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class CategoryServiceTest {
 
     @Autowired

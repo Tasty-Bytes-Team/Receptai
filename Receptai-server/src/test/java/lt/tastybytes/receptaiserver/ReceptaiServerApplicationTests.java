@@ -11,5 +11,4 @@ class ReceptaiServerApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

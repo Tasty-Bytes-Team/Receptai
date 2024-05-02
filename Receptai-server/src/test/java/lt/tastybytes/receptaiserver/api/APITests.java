@@ -65,28 +65,36 @@ public class APITests {
         ));
     }
 
+    RestTemplate getTemplate() {
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+    }
+
+    String getUrl(String endpoint) {
+        return "http://localhost:" + port + endpoint;
+    }
+
 
     // Navigacija į neegzistuojančius API kelius:
     @Test
-    void GetRequest_WhenEndpointDoesntExist_ShouldReturn401() {
-        var response = restTemplate.getForEntity("http://localhost:" + port + "/api/v1/this-does-not-exist", String.class);
+    void GetToAnywhere_WhenEndpointDoesntExist_ShouldReturn401() {
+        var response = restTemplate.getForEntity(getUrl("/api/v1/this-does-not-exist"), String.class);
         assertEquals(401, response.getStatusCode().value());
     }
 
     // Iškvietimas į autorizacijos reikalaujančius API kelius be autorizacijos:
     @Test
-    void GetRequestToUserMe_WhenUserIsNotAuthorized_ShouldReturn401() {
-        var response = restTemplate.getForEntity("http://localhost:" + port + "/api/v1/user/me", String.class);
+    void GetToUserMe_WhenUserIsNotAuthorized_ShouldReturn401() {
+        var response = restTemplate.getForEntity(getUrl("/api/v1/user/me"), String.class);
         assertEquals(401, response.getStatusCode().value());
     }
 
     @Test
-    void GetRequestToUserMe_WhenUserIsAuthorizedWithUserRole_ShouldReturnUserData() throws Exception {
+    void GetToUserMe_WhenUserIsAuthorizedWithUserRole_ShouldReturnUserData() throws Exception {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer " + getNormalUserToken());
-        ResponseEntity<FullUserDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/me", HttpMethod.GET, new HttpEntity<>(headers),
+        ResponseEntity<FullUserDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/me"), HttpMethod.GET, new HttpEntity<>(headers),
                 FullUserDto.class);
 
         assertEquals(200, entity.getStatusCode().value());
@@ -94,12 +102,12 @@ public class APITests {
     }
 
     @Test
-    void GetRequestToUserMe_WhenUserIsAuthorizedWithUserAndAdminRole_ShouldReturnUserData() throws Exception {
+    void GetToUserMe_WhenUserIsAuthorizedWithUserAndAdminRole_ShouldReturnUserData() throws Exception {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer " + getAdminUserToken());
-        ResponseEntity<FullUserDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/me", HttpMethod.GET, new HttpEntity<>(headers),
+        ResponseEntity<FullUserDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/me"), HttpMethod.GET, new HttpEntity<>(headers),
                 FullUserDto.class);
 
         assertEquals(200, entity.getStatusCode().value());
@@ -113,8 +121,8 @@ public class APITests {
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
-        ResponseEntity<FullUserDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/register", HttpMethod.POST, new HttpEntity<>(request, headers),
+        ResponseEntity<FullUserDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/register"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 FullUserDto.class);
 
         assertEquals(200, entity.getStatusCode().value());
@@ -127,7 +135,7 @@ public class APITests {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/register", HttpMethod.POST, new HttpEntity<>(request, headers),
+                getUrl("/api/v1/user/register"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
 
         assertEquals(400, entity.getStatusCode().value());
@@ -143,8 +151,8 @@ public class APITests {
         var request = new LoginRequestDto("user@email.com", "Very Secret Password 123!");
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
-        ResponseEntity<LoginResponseDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/login", HttpMethod.POST, new HttpEntity<>(request, headers),
+        ResponseEntity<LoginResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/login"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 LoginResponseDto.class);
         assertEquals(200, entity.getStatusCode().value());
     }
@@ -155,7 +163,7 @@ public class APITests {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/login", HttpMethod.POST, new HttpEntity<>(request, headers),
+                getUrl("/api/v1/user/login"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(403, entity.getStatusCode().value());
     }
@@ -166,7 +174,7 @@ public class APITests {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
-                "http://localhost:" + port + "/api/v1/user/login", HttpMethod.POST, new HttpEntity<>(request, headers),
+                getUrl("/api/v1/user/login"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(403, entity.getStatusCode().value());
     }
@@ -175,15 +183,13 @@ public class APITests {
     // Vartotojo duomenų redagavimas:
     @Test
     void PatchToUserEdit1_WhenDataOk_ShouldSucceed() throws Exception {
-        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-
 
         var request = new PatchUserDto("Antanas", null, null, null, null);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer " + getNormalUserToken());
-        ResponseEntity<FullUserDto> entity = template.exchange(
-                "http://localhost:" + port + "/api/v1/user/edit/1", HttpMethod.PATCH, new HttpEntity<>(request, headers),
+        ResponseEntity<FullUserDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/edit/1"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
                 FullUserDto.class);
         assertEquals(200, entity.getStatusCode().value());
         assertEquals("Antanas", entity.getBody().name());

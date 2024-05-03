@@ -34,9 +34,11 @@ public class SecurityConfiguration {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/category/create").hasRole("ADMIN")
                         .requestMatchers("/api/v1/category/list").permitAll()
                         .requestMatchers("/api/v1/category/{categoryId}").permitAll()
                         .requestMatchers("/api/v1/category/{categoryId}/recipes").permitAll()
+
 
                         .requestMatchers("/api/v1/feedback/list/**").permitAll()
 
@@ -44,6 +46,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/recipe/get/**").permitAll()
                         .requestMatchers("/api/v1/recipe/find/**").permitAll()
 
+                        .requestMatchers("/api/v1/tag/create").hasRole("ADMIN")
                         .requestMatchers("/api/v1/tag/list").permitAll()
 
                         .requestMatchers("/api/v1/user/register").permitAll()

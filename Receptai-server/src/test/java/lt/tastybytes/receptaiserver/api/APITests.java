@@ -5,7 +5,10 @@ import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
 import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto;
 import lt.tastybytes.receptaiserver.dto.feedback.FeedbackDto;
+import lt.tastybytes.receptaiserver.dto.recipe.IngredientDto;
+import lt.tastybytes.receptaiserver.dto.recipe.IngredientListDto;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
+import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.dto.tag.CreateTagDto;
 import lt.tastybytes.receptaiserver.dto.user.*;
 import lt.tastybytes.receptaiserver.service.*;
@@ -293,9 +296,123 @@ public class APITests {
     }
 
     // Recepto kūrimas:
+    @Test
+    void PostToRecipeCreate_WhenFieldsCorrect_ShouldSucceed() throws Exception {
+        var request = new ModifyRecipeDto(
+                "Some name yada yada", "Description of things and stuff",
+                "not empty", null,
+                List.of(new IngredientListDto("Purpose", List.of(new IngredientDto("Field", 1, "kg")))),
+                List.of("Some text"),
+                List.of(1), 1,
+                10, 10
+        );
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<RecipeDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/create"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                RecipeDto.class);
+        assertEquals(200, entity.getStatusCode().value());
+    }
+
+    @Test
+    void PostToRecipeCreate_WhenNotAuthorized_ShouldFail() {
+        var request = new ModifyRecipeDto(
+                "Some name yada yada", "Description of things and stuff",
+                "not empty", null,
+                List.of(new IngredientListDto("Purpose", List.of(new IngredientDto("Field", 1, "kg")))),
+                List.of("Some text"),
+                List.of(1), 1,
+                10, 10
+        );
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        ResponseEntity<RecipeDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/create"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                RecipeDto.class);
+        assertEquals(401, entity.getStatusCode().value());
+    }
+
+    @Test
+    void PostToRecipeCreate_WhenInstructionsAndTagsAreAbsent_ShouldFail() throws Exception {
+        var request = new ModifyRecipeDto(
+                "Some name yada yada", "Description of things and stuff",
+                "not empty", null,
+                List.of(new IngredientListDto("Purpose", List.of(new IngredientDto("Field", 1, "kg")))),
+                List.of(),
+                List.of(), 1,
+                10, 10
+        );
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<RecipeDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/create"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                RecipeDto.class);
+        assertEquals(400, entity.getStatusCode().value());
+    }
 
     // Recepto redagavimas:
+    @Test
+    void PutToRecipeEdit1_WhenUserIsAuthor_ShouldSucceed() throws Exception {
+        var request = new ModifyRecipeDto(
+                "New name amazing", "Description of things and stuff",
+                "not empty", null,
+                List.of(new IngredientListDto("Purpose", List.of(new IngredientDto("Field", 1, "kg")))),
+                List.of("Some text"),
+                List.of(1), 1,
+                10, 10
+        );
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getAdminUserToken());
+        ResponseEntity<RecipeDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/edit/1"), HttpMethod.PUT, new HttpEntity<>(request, headers),
+                RecipeDto.class);
+        assertEquals(200, entity.getStatusCode().value());
+        assertEquals("New name amazing", entity.getBody().name());
+    }
+
+    @Test
+    void PutToRecipeEdit1_WhenUserIsNotAuthor_ShouldFail() throws Exception {
+        var request = new ModifyRecipeDto(
+                "New name amazing", "Description of things and stuff",
+                "not empty", null,
+                List.of(new IngredientListDto("Purpose", List.of(new IngredientDto("Field", 1, "kg")))),
+                List.of("Some text"),
+                List.of(1), 1,
+                10, 10
+        );
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<RecipeDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/edit/1"), HttpMethod.PUT, new HttpEntity<>(request, headers),
+                RecipeDto.class);
+        assertEquals(403, entity.getStatusCode().value());
+    }
 
     // Recepto šalinimas:
+    @Test
+    void DeleteToRecipeDelete1_WhenUserIsAuthor_ShouldSucceed() throws Exception {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getAdminUserToken());
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/delete/1"), HttpMethod.DELETE, new HttpEntity<>(headers),
+                MessageResponseDto.class);
+        assertEquals(200, entity.getStatusCode().value());
+    }
+
+    @Test
+    void DeleteToRecipeDelete1_WhenUserIsNotAuthor_ShouldFail() throws Exception {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/recipe/delete/1"), HttpMethod.DELETE, new HttpEntity<>(headers),
+                MessageResponseDto.class);
+        assertEquals(403, entity.getStatusCode().value());
+    }
 
 }

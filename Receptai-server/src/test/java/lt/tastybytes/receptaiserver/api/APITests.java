@@ -2,8 +2,13 @@ package lt.tastybytes.receptaiserver.api;
 
 import lt.tastybytes.receptaiserver.TestDatabaseConfig;
 import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
+import lt.tastybytes.receptaiserver.dto.category.CreateCategoryDto;
+import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto;
+import lt.tastybytes.receptaiserver.dto.feedback.FeedbackDto;
+import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
+import lt.tastybytes.receptaiserver.dto.tag.CreateTagDto;
 import lt.tastybytes.receptaiserver.dto.user.*;
-import lt.tastybytes.receptaiserver.service.UserService;
+import lt.tastybytes.receptaiserver.service.*;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +21,15 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestDatabaseConfig.class)
@@ -40,6 +44,18 @@ public class APITests {
     private UserService userService;
 
     @Autowired
+    private RecipeService recipeService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
     private JwtServiceImpl jwtService;
 
     @Autowired
@@ -48,8 +64,29 @@ public class APITests {
 
     @BeforeEach
     void createTestUsers() {
+        // Create 3 users
         userService.createUser("Normal User", "user@email.com", "Very Secret Password 123!");
         userService.createUser("Admin User", "admin@email.com", "Very Secret Password 123!");
+        userService.createUser("Normal User 2", "user2@email.com", "Very Secret Password 123!");
+
+        // Create a category and a tag to create a recipe
+        categoryService.createCategory(new CreateCategoryDto("", "", null));
+        tagService.createTag(new CreateTagDto("", ""));
+
+        // Create a recipe 1 that is owned by user 2
+        recipeService.createRecipe(new ModifyRecipeDto(
+            "", "", "", null,
+                List.of(), List.of(), List.of(1),
+                1, 1, 1
+        ), userService.findUserById(2).orElseThrow());
+
+        // Leave a review on recipe 1 by user 3
+        feedbackService.leaveFeedback(1, userService.findUserById(3).orElseThrow(), new CreateFeedbackDto(
+                "", 8
+        ));
+
+
+
         // TODO: there is no way to make someone an admin through the service yet
     }
 
@@ -65,8 +102,15 @@ public class APITests {
         ));
     }
 
-    RestTemplate getTemplate() {
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+    String getNormalUser2Token() throws Exception {
+        return jwtService.generateToken(userService.authenticate(
+                "user2@email.com", "Very Secret Password 123!"
+        ));
+    }
+
+    TestRestTemplate getTemplate() {
+        // Automatically resolves HttpComponentsClientHttpRequestFactory()
+        return new TestRestTemplate();
     }
 
     String getUrl(String endpoint) {
@@ -134,7 +178,7 @@ public class APITests {
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
-        ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
                 getUrl("/api/v1/user/register"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
 
@@ -162,7 +206,7 @@ public class APITests {
         var request = new LoginRequestDto("user@email.com", "1Very Secret Password 123!");
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
-        ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
                 getUrl("/api/v1/user/login"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(403, entity.getStatusCode().value());
@@ -173,7 +217,7 @@ public class APITests {
         var request = new LoginRequestDto("1user@email.com", "Very Secret Password 123!");
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
-        ResponseEntity<MessageResponseDto> entity = new TestRestTemplate().exchange(
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
                 getUrl("/api/v1/user/login"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(403, entity.getStatusCode().value());
@@ -183,7 +227,6 @@ public class APITests {
     // Vartotojo duomenų redagavimas:
     @Test
     void PatchToUserEdit1_WhenDataOk_ShouldSucceed() throws Exception {
-
         var request = new PatchUserDto("Antanas", null, null, null, null);
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json");
@@ -195,8 +238,59 @@ public class APITests {
         assertEquals("Antanas", entity.getBody().name());
     }
 
+    @Test
+    void PatchToUserEdit1_WhenEmailIsDuplicate_ShouldFail() throws Exception {
+        var request = new PatchUserDto(null, "admin@email.com", null, "Very Secret Password 123!", null);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/user/edit/1"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
+                MessageResponseDto.class);
+        assertEquals(400, entity.getStatusCode().value());
+        assertThat(entity.getBody().message(), containsString("already exists"));
+    }
+
 
     // Atsiliepimo sukūrimas prisijungus:
+    @Test
+    void PostToFeedbackLeave1_WhenCreatingNewFeedbackOnOthersRecipe_ShouldSucceed() throws Exception {
+        var request = new CreateFeedbackDto("Šitas receptas labai geras, visiems šeimoje patiko.", 10);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUserToken());
+        ResponseEntity<FeedbackDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/feedback/leave/1"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                FeedbackDto.class);
+        assertEquals(200, entity.getStatusCode().value());
+    }
+
+    // TODO: not yet implemented on the backend
+    @Test
+    void PostToFeedbackLeave1_WhenCreatingNewFeedbackOnOwnRecipe_ShouldFail() throws Exception {
+        var request = new CreateFeedbackDto("Šitas receptas labai geras, visiems šeimoje patiko.", 10);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getAdminUserToken());
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/feedback/leave/1"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                MessageResponseDto.class);
+        assertEquals(400, entity.getStatusCode().value());
+        assertThat(entity.getBody().message(), containsString("Cannot leave review on own recipe"));
+    }
+
+    @Test
+    void PostToFeedbackLeave1_WhenCreatingDuplicateFeedback_ShouldFail() throws Exception {
+        var request = new CreateFeedbackDto("Šitas receptas labai geras, visiems šeimoje patiko.", 10);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + getNormalUser2Token());
+        ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
+                getUrl("/api/v1/feedback/leave/1"), HttpMethod.POST, new HttpEntity<>(request, headers),
+                MessageResponseDto.class);
+        assertEquals(400, entity.getStatusCode().value());
+        assertThat(entity.getBody().message(), containsString("User has already left"));
+    }
 
     // Recepto kūrimas:
 

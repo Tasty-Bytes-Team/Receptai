@@ -132,7 +132,8 @@ const onCancel = () => {
         >
           <ProfilePicture
             class="w-20 h-20 border-[3px] border-white text-3xl shadow-[2px_2px_3px_1px_#ffffff82]"
-            :user_name="user.name"
+            :userName="user.name"
+            :userUrl="user.avatarUrl"
           />
         </div>
       </div>

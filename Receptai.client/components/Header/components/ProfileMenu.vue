@@ -5,6 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  avatarUrl: string | null;
 }
 
 interface Navigation {
@@ -25,7 +26,7 @@ defineProps<{
     <div class="my-1">
       <div class="uppercase font-bold text-sm p-3">Account</div>
       <div class="px-4 flex flex-row items-center gap-3 py-2">
-        <ProfilePicture :user_name="user.name" class="w-10 h-10" />
+        <ProfilePicture :userName="user.name" :userUrl="user.avatarUrl" class="w-10 h-10" />
         <div>
           <div class="font-semibold text-sm">{{ user.name }}</div>
           <div class="text-xs">{{ user.email }}</div>

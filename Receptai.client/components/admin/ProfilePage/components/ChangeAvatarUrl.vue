@@ -28,7 +28,7 @@ const props = defineProps<{
 
 const validationSchema = toTypedSchema(
   zod.object({
-    avatarUrl: zod.string().url().nullable(),
+    avatarUrl: zod.string().url().nullable().or(zod.literal('')),
   })
 );
 

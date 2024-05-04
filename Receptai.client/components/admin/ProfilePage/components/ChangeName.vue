@@ -3,16 +3,9 @@ import axios from "axios";
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-
-import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
-import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
-import ErrorBaner from "@/components/Error/ErrorBaner.vue";
-import ChangeName from "@/components/admin/ProfilePage/components/ChangeName.vue";
 
-definePageMeta({
-  middleware: "auth",
-});
+import InputWithConfirmation from "../../components/InputWithConfirmation.vue";
 
 const config = useRuntimeConfig();
 
@@ -75,7 +68,7 @@ if (TastyBytes_user.value) {
   TastyBytes_user.value = null;
 }
 
-const onSubmit = handleSubmit(async (data) => {
+const onSubmit = handleSubmit(async () => {
   showConfirmation.value = false;
 
   if (name.value === user.name) {
@@ -120,51 +113,53 @@ const onCancel = () => {
 </script>
 
 <template>
-  <div v-if="user.name !== null">
+  <form class="flex flex-col relative" @submit.prevent="onSubmit">
+    <div class="flex gap-2 items-center flex-row">
+      <label class="font-medium text-gray-950">Name</label>
+      <span class="text-red-600 text-sm">{{ errors.name }}</span>
+    </div>
+
     <div>
-      <h1 class="text-3xl font-bold text-center m-5">Profile</h1>
-    </div>
-    <div v-if="user">
-      <div class="flex flex-col justify-center items-center">
-        <div
-          class="w-full py-10 flex justify-center items-center rounded-md bg-cover bg-[url(/images/food-image.jpg)] shadow-[inset_0_0_0_1000px_#0000004f] bg-center"
+      <input
+        @focus="showConfirmation = true"
+        class="w-full bg-concrete-50 hover:bg-concrete-100 focus:bg-concrete-100 px-2 py-2 focus:border-concrete-300 border-2 border-concrete-50 transition-colors duration-150 rounded-sm text-gray-950 outline-none"
+        :class="
+          showConfirmation ? '!bg-concrete-100 !border-concrete-300' : null
+        "
+        name="name"
+        placeholder="Full name"
+        autocomplete="name"
+        v-model="name"
+      />
+      <div
+        v-if="showConfirmation"
+        class="absolute right-0 -bottom-8 flex gap-2 z-50"
+      >
+        <button
+          type="submit"
+          class="h-7 w-7 bg-gray-200 border border-gray-300 rounded-sm transition-all duration-150 hover:bg-gray-300"
         >
-          <ProfilePicture
-            class="w-20 h-20 border-[3px] border-white text-3xl shadow-[2px_2px_3px_1px_#ffffff82]"
-            :user_name="user.name"
+          <Icon
+            name="material-symbols:done-rounded"
+            size="18px"
+            color="black"
           />
-        </div>
-      </div>
-      <div class="max-w-2xl m-auto flex flex-col gap-2 mt-4">
-        <div class="font-bold text-xl">User details</div>
-        <div
-          class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
+        </button>
+        <button
+          type="button"
+          value="cancel"
+          @click="onCancel"
+          class="h-7 w-7 bg-gray-200 border border-gray-300 rounded-sm transition-all duration-150 hover:bg-gray-300"
         >
-          <ErrorBaner v-if="error" :errorText />
-          <ChangeName />
-          <div class="flex flex-col">
-            <label class="font-medium text-gray-950">Email</label>
-            <div
-              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
-            >
-              {{ user.email }}
-            </div>
-          </div>
-          <div class="flex flex-col">
-            <label class="font-medium text-gray-950">Avatar URL</label>
-            <div
-              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
-              :class="user.avatarUrl ? null : '!text-gray-400'"
-            >
-              {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
-            </div>
-          </div>
-        </div>
+          <Icon
+            name="material-symbols:close-rounded"
+            size="18px"
+            color="black"
+          />
+        </button>
       </div>
-      <PasswordChange />
     </div>
-  </div>
-  <div v-else>Loading...</div>
+  </form>
 </template>
 
 <style scoped></style>

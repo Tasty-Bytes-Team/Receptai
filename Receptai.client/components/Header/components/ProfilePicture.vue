@@ -1,18 +1,20 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   userName: string;
   userUrl: string | null;
 }>();
-
-const profilePicture = computed(() => {
-  return props.userUrl ? `bg-[url(${props.userUrl})] bg-cover` : null;
-});
 </script>
 
 <template>
   <div
-    class="bg-indigo-300 rounded-full flex justify-center items-center font-semibold"
-    :class="profilePicture"
+    class="bg-indigo-300 rounded-full flex justify-center items-center font-semibold bg-cover"
+    :style="
+      userUrl
+        ? {
+            'background-image': `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${userUrl})`,
+          }
+        : null
+    "
     data-testid="profile-picture"
   >
     {{

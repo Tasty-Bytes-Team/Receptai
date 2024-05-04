@@ -63,8 +63,8 @@ const onSubmit = handleSubmit(async () => {
       );
 
       const newObject = props.TastyBytes_user;
-      newObject.user.name = avatarUrl.value as string;
-      avatarUrl.value = newObject.user.name;
+      newObject.user.avatarUrl = avatarUrl.value as string;
+      avatarUrl.value = newObject.user.avatarUrl;
       addNotification(
         "User avatar url change was successful! Keep in mind that your change might take some time to show everywhere.",
         "Success"

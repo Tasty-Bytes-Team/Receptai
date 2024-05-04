@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   userName: string;
-  userUrl: string | null;
+  userUrl?: string | null;
 }>();
 </script>
 

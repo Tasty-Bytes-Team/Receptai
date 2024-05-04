@@ -9,6 +9,7 @@ import { addNotification } from "~/store/store";
 import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import ChangeName from "@/components/admin/ProfilePage/components/ChangeName.vue";
+import ChangeAvatarUrl from "@/components/admin/ProfilePage/components/ChangeAvatarUrl.vue";
 
 definePageMeta({
   middleware: "auth",
@@ -141,7 +142,7 @@ const onCancel = () => {
           class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
         >
           <ErrorBaner v-if="error" :errorText />
-          <ChangeName />
+          <ChangeName :TastyBytes_user="TastyBytes_user" />
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Email</label>
             <div
@@ -150,15 +151,7 @@ const onCancel = () => {
               {{ user.email }}
             </div>
           </div>
-          <div class="flex flex-col">
-            <label class="font-medium text-gray-950">Avatar URL</label>
-            <div
-              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
-              :class="user.avatarUrl ? null : '!text-gray-400'"
-            >
-              {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
-            </div>
-          </div>
+          <ChangeAvatarUrl :TastyBytes_user="TastyBytes_user" />
         </div>
       </div>
       <PasswordChange />

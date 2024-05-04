@@ -28,13 +28,7 @@ const props = defineProps<{
 
 const validationSchema = toTypedSchema(
   zod.object({
-    name: zod
-      .string()
-      .min(3, "Name must be at least three characters long.")
-      .regex(
-        /^[a-zA-Z]{3,}(?: [a-zA-Z]+){0,2}$/,
-        "Name can't contain special symbols."
-      ),
+    avatarUrl: zod.string().url().nullable(),
   })
 );
 
@@ -42,14 +36,17 @@ const { handleSubmit, errors } = useForm({
   validationSchema,
 });
 
-const { value: name } = useField("name");
+const { value: avatarUrl } = useField("avatarUrl");
 
-name.value = props.TastyBytes_user?.user.name;
+avatarUrl.value = props.TastyBytes_user?.user.avatarUrl;
 
 const onSubmit = handleSubmit(async () => {
   showConfirmation.value = false;
 
-  if (!props.TastyBytes_user || name.value === props.TastyBytes_user.user.name) {
+  if (
+    !props.TastyBytes_user ||
+    avatarUrl.value === props.TastyBytes_user.user.name
+  ) {
     return;
   }
 
@@ -58,7 +55,7 @@ const onSubmit = handleSubmit(async () => {
       await axios.patch(
         `${config.public.baseURL}/api/v1/user/edit/${props.TastyBytes_user.user.id}`,
         {
-          newName: name.value,
+            newProfileAvatarUrl: avatarUrl.value,
         },
         {
           headers: { Authorization: `Bearer ${props.TastyBytes_user.token}` },
@@ -66,18 +63,18 @@ const onSubmit = handleSubmit(async () => {
       );
 
       const newObject = props.TastyBytes_user;
-      newObject.user.name = name.value as string;
-      name.value = newObject.user.name;
+      newObject.user.name = avatarUrl.value as string;
+      avatarUrl.value = newObject.user.name;
       addNotification(
-        "Name change was successful! Keep in mind that your change might take some time to show everywhere.",
+        "User avatar url change was successful! Keep in mind that your change might take some time to show everywhere.",
         "Success"
       );
     } catch (e) {
       console.warn(e);
 
-      name.value = props.TastyBytes_user.user.name;
+      avatarUrl.value = props.TastyBytes_user.user.avatarUrl;
       addNotification(
-        "There was an error when changing your name. Please try again.",
+        "There was an error when changing your avatar url. Please try again.",
         "Error"
       );
     }
@@ -87,19 +84,19 @@ const onSubmit = handleSubmit(async () => {
 const onCancel = () => {
   showConfirmation.value = false;
 
-  if (!props.TastyBytes_user){
-    return
+  if (!props.TastyBytes_user) {
+    return;
   }
 
-  name.value = props.TastyBytes_user.user.name;
+  avatarUrl.value = props.TastyBytes_user.user.avatarUrl;
 };
 </script>
 
 <template>
   <form class="flex flex-col relative" @submit.prevent="onSubmit">
     <div class="flex gap-2 items-center flex-row">
-      <label class="font-medium text-gray-950">Name</label>
-      <span class="text-red-600 text-sm">{{ errors.name }}</span>
+      <label class="font-medium text-gray-950">Avatar URL</label>
+      <span class="text-red-600 text-sm">{{ errors.avatarUrl }}</span>
     </div>
 
     <div>
@@ -109,10 +106,9 @@ const onCancel = () => {
         :class="
           showConfirmation ? '!bg-concrete-100 !border-concrete-300' : null
         "
-        name="name"
-        placeholder="Full name"
-        autocomplete="name"
-        v-model="name"
+        name="avatarUrl"
+        placeholder="Avatar url"
+        v-model="avatarUrl"
       />
       <div
         v-if="showConfirmation"

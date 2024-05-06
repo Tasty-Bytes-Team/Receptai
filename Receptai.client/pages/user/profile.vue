@@ -8,10 +8,13 @@ import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
 import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
+import ChangeName from "@/components/admin/ProfilePage/components/ChangeName.vue";
+import ChangeAvatarUrl from "@/components/admin/ProfilePage/components/ChangeAvatarUrl.vue";
 
 definePageMeta({
   middleware: "auth",
 });
+
 const config = useRuntimeConfig();
 
 interface User {
@@ -73,7 +76,7 @@ if (TastyBytes_user.value) {
   TastyBytes_user.value = null;
 }
 
-const onSubmit = handleSubmit(async () => {
+const onSubmit = handleSubmit(async (data) => {
   showConfirmation.value = false;
 
   if (name.value === user.name) {
@@ -129,7 +132,8 @@ const onCancel = () => {
         >
           <ProfilePicture
             class="w-20 h-20 border-[3px] border-white text-3xl shadow-[2px_2px_3px_1px_#ffffff82]"
-            :user_name="user.name"
+            :userName="user.name"
+            :userUrl="user.avatarUrl"
           />
         </div>
       </div>
@@ -139,55 +143,7 @@ const onCancel = () => {
           class="m-auto border border-concrete-400 rounded-sm p-4 w-full flex flex-col gap-4 shadow-[0_1px_2px_1px_#828282]"
         >
           <ErrorBaner v-if="error" :errorText />
-          <form class="flex flex-col relative" @submit.prevent="onSubmit">
-            <div class="flex gap-2 items-center flex-row">
-              <label class="font-medium text-gray-950">Name</label>
-              <span class="text-red-600 text-sm">{{ errors.name }}</span>
-            </div>
-
-            <div>
-              <input
-                @focus="showConfirmation = true"
-                class="w-full bg-concrete-50 hover:bg-concrete-100 focus:bg-concrete-100 px-2 py-2 focus:border-concrete-300 border-2 border-concrete-50 transition-colors duration-150 rounded-sm text-gray-950 outline-none"
-                :class="
-                  showConfirmation
-                    ? '!bg-concrete-100 !border-concrete-300'
-                    : null
-                "
-                name="name"
-                placeholder="Full name"
-                autocomplete="name"
-                v-model="name"
-              />
-              <div
-                v-if="showConfirmation"
-                class="absolute right-0 -bottom-8 flex gap-2"
-              >
-                <button
-                  type="submit"
-                  class="h-7 w-7 bg-gray-200 border border-gray-300 rounded-sm transition-all duration-150 hover:bg-gray-300"
-                >
-                  <Icon
-                    name="material-symbols:done-rounded"
-                    size="18px"
-                    color="black"
-                  />
-                </button>
-                <button
-                  type="button"
-                  value="cancel"
-                  @click="onCancel"
-                  class="h-7 w-7 bg-gray-200 border border-gray-300 rounded-sm transition-all duration-150 hover:bg-gray-300"
-                >
-                  <Icon
-                    name="material-symbols:close-rounded"
-                    size="18px"
-                    color="black"
-                  />
-                </button>
-              </div>
-            </div>
-          </form>
+          <ChangeName :TastyBytes_user="TastyBytes_user" />
           <div class="flex flex-col">
             <label class="font-medium text-gray-950">Email</label>
             <div
@@ -196,15 +152,7 @@ const onCancel = () => {
               {{ user.email }}
             </div>
           </div>
-          <div class="flex flex-col">
-            <label class="font-medium text-gray-950">Avatar URL</label>
-            <div
-              class="w-full bg-concrete-50 hover:bg-concrete-100 px-2 py-2 transition-colors duration-150 rounded-sm text-gray-950"
-              :class="user.avatarUrl ? null : '!text-gray-400'"
-            >
-              {{ user.avatarUrl ? user.avatarUrl : "Empty" }}
-            </div>
-          </div>
+          <ChangeAvatarUrl :TastyBytes_user="TastyBytes_user" />
         </div>
       </div>
       <PasswordChange />

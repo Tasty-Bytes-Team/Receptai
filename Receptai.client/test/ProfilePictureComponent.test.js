@@ -34,7 +34,7 @@ describe.each([
 ])("Profile picture", ({ name, expected }) => {
   test(`should display abbreviation of ${name}`, () => {
     const { getByTestId } = render(ProfilePicture, {
-      props: { user_name: name },
+      props: { userName: name },
     });
 
     expect(getByTestId("profile-picture").textContent).toBe(expected);

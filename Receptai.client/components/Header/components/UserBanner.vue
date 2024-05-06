@@ -8,6 +8,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  avatarUrl: string | null;
 }
 
 interface Navigation {
@@ -100,7 +101,8 @@ const vClickOutside = {
       <ProfilePicture
         class="hover:ring-[6px] hover:ring-gray-200 hover:scale-105 transition-all duration-150 cursor-pointer w-8 h-8"
         :class="hover ? 'ring-4 ring-gray-100' : null"
-        :user_name="user.name"
+        :userName="user.name"
+        :userUrl="user.avatarUrl"
       />
     </div>
     <ProfileMenu

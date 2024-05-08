@@ -30,6 +30,8 @@ public interface RecipeService {
     Page<Recipe> getRecipesByCategory(Category category, int pageNumber);
     Page<Recipe> getRecipesByUser(User user, Pager pager, @Valid @Nullable SortedRequestDto sortDto);
 
+    Page<Recipe> getRecommendedRecipesForRecipe(Recipe recipe);
+
 
     Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto);
 

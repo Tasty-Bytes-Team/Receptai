@@ -177,6 +177,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Page<Recipe> getRecommendedRecipesForRecipe(Recipe recipe) {
+        // TODO: figure out a better way to recommend recipes
+        return this.getRecipesByCategory(recipe.getCategories().get(0), 0);
+    }
+
+    @Override
     public Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
         var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
         if (sortDto != null) {

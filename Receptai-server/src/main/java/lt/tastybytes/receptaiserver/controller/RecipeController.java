@@ -57,6 +57,18 @@ public class RecipeController {
         return ResponseEntity.ok(recipe.get().toDto());
     }
 
+    @GetMapping("/{id}/recommended")
+    public ResponseEntity<PagedResponseDto<RecipeDto>> getRecommendedRecipes(@PathVariable(value = "id") long id) throws NotFoundException {
+        var recipe =  recipeService.getRecipeById(id);
+        if (recipe.isEmpty()) {
+            throw new NotFoundException("Recipe by specified ID not found");
+        }
+        var page =  recipeService.getRecommendedRecipesForRecipe(recipe.orElseThrow());
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Recipe::toDto)
+        );
+    }
+
     @GetMapping("/find/{query}")
     public ResponseEntity<PagedResponseDto<RecipeDto>> findRecipeByQuery(
             @PathVariable(value = "query") String query,

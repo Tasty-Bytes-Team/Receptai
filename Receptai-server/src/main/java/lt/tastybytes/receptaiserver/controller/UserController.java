@@ -89,6 +89,25 @@ public class UserController {
         );
     }
 
+    @GetMapping("/recipes/feedback")
+    public ResponseEntity<?> getUserRecipeFeedback(
+            @AuthenticationPrincipal User user,
+            @Valid PagedRequestDto pageDto
+    ) {
+        var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(
+                user.getId(),
+                new Pager(pageDto.page(), 20),
+                new SortedRequestDto("dateCreated", false)
+        );
+        return ResponseEntity.ok(
+                PagedResponseDto.of(
+                        feedbackPage,
+                        Feedback::toExtendedDto
+
+                )
+        );
+    }
+
     @GetMapping("/me")
     public ResponseEntity<FullUserDto> getCurrentUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.toFullUserDto());

@@ -6,8 +6,10 @@ import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Import(TestDatabaseConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class UserServiceTest {
 
     @Autowired
     private UserService userService;
 
+    @BeforeEach
     void createTestUsers() {
         userService.createUser("Test User 1", "TestUser1@email.com", "Very Secret Password 123!");
         userService.createUser("Test User 2", "TestUser2@email.com", "A Very Secret Password 123!");
@@ -34,22 +38,22 @@ public class UserServiceTest {
     }
 
     @Test
-    void findAllUsers_WhenNoUsersExist_shouldReturn0Elements() {
+    void findAllUsers_When3UsersExist_shouldReturn3Elements() {
         var result = userService.getUsers(0);
-        assertEquals(0, result.getTotalElements());
+        assertEquals(3, result.getTotalElements());
     }
 
     @Test
-    void findAllUsers_When1UserCreated_shouldReturn1Element() {
+    void findAllUsers_When1UserCreated_shouldReturn4Elements() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
         var result = userService.getUsers(0);
-        assertEquals(1, result.getTotalElements());
+        assertEquals(4, result.getTotalElements());
     }
 
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHave1Role() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(1).orElseThrow();
+        var user = userService.findUserById(4).orElseThrow();
         assertEquals(1, user.getRoles().size());
     }
 
@@ -68,16 +72,15 @@ public class UserServiceTest {
     }
 
     @Test
-    void findUserById_WhenUserNewlyCreated_ShouldBeOfId1AndReturnCorrectData() {
+    void findUserById_WhenUserNewlyCreated_ShouldBeOfId4AndReturnCorrectData() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = getTestUser1();
+        var user = userService.findUserById(4).get();
         assertEquals(user.getEmail(), "TestUser@email.com");
         assertEquals(user.getName(), "Test User");
     }
 
     @Test
     void userEdit_WithValidOldPassword_ShouldBeApplied() throws NotFoundException, UserAlreadyExistsException {
-        createTestUsers();
         var user = getTestUser1();
         var editedUser = userService.editUser(user, new PatchUserDto(
                 "Naujas Vardas",
@@ -92,7 +95,6 @@ public class UserServiceTest {
 
     @Test
     void userPasswordEdit_WithNoOldPassword_ShouldFail() {
-        createTestUsers();
         var user = getTestUser1();
         assertThrows(BadCredentialsException.class, () -> {
             userService.editUser(user, new PatchUserDto(
@@ -107,7 +109,6 @@ public class UserServiceTest {
 
     @Test
     void userNameEdit_WithNoOldPassword_ShouldSucceed() throws NotFoundException, UserAlreadyExistsException {
-        createTestUsers();
         var user = getTestUser1();
         userService.editUser(user, new PatchUserDto(
                 "New Name",
@@ -120,7 +121,6 @@ public class UserServiceTest {
 
     @Test
     void userEmailEdit_WithNoOldPassword_ShouldFail() {
-        createTestUsers();
         var user = getTestUser1();
         assertThrows(BadCredentialsException.class, () -> {
             userService.editUser(user, new PatchUserDto(
@@ -135,7 +135,6 @@ public class UserServiceTest {
 
     @Test
     void userPasswordEdit_WithBadOldPassword_ShouldFail() {
-        createTestUsers();
         var user = getTestUser1();
         assertThrows(BadCredentialsException.class, () -> {
             userService.editUser(user, new PatchUserDto(
@@ -150,7 +149,6 @@ public class UserServiceTest {
 
     @Test
     void userPasswordEdit_WithValidOldPassword_ShouldSucceed() throws NotFoundException, UserAlreadyExistsException {
-        createTestUsers();
         var user = getTestUser1();
         userService.editUser(user, new PatchUserDto(
                 null,
@@ -163,7 +161,6 @@ public class UserServiceTest {
 
     @Test
     void userAuthentication_WithInvalidDetails_ShouldFail() {
-        createTestUsers();
         assertThrows(BadCredentialsException.class, () -> {
             userService.authenticate("invalidemail@email.co", "invalidpassword");
         });
@@ -171,7 +168,6 @@ public class UserServiceTest {
 
     @Test
     void userAuthentication_WithValidEmailAndInvalidPassword_ShouldFail() {
-        createTestUsers();
         assertThrows(BadCredentialsException.class, () -> {
             userService.authenticate("TestUser1@email.com", "invalidpassword");
         });
@@ -179,7 +175,6 @@ public class UserServiceTest {
 
     @Test
     void userAuthentication_WithValidEmailAndInvalidPassword_ShouldSucceed() throws Exception {
-        createTestUsers();
         var user = userService.authenticate("TestUser1@email.com", "Very Secret Password 123!");
         assertNotNull(user);
     }

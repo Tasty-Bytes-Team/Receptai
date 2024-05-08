@@ -5,7 +5,6 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import CategoryNameBanner from "@/components/CategoryPage/components/CategoryNameBanner.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
-import CategoryNameBannerShimmer from "@/components/ShimmerLoaders/CategoryNameBannerShimmer.vue";
 
 interface Recipe {
   id: number;
@@ -65,27 +64,32 @@ const siblings = 2;
 
 const getCategory = async () => {
   try {
-    const res = await axios.get(
-      `${config.public.baseURL}/api/v1/category/${route.params.id}`
-    );
-    categoryInfo.value = res.data;
+    await axios
+      .get(`${config.public.baseURL}/api/v1/category/${route.params.id}`)
+      .then((res) => (categoryInfo.value = res.data));
   } catch (e) {
     console.warn("Error fetching recipes", e);
   }
 };
 
 const getRecipes = async () => {
+  loading.value = true;
   try {
-    const res = await axios.get(
-      `${config.public.baseURL}/api/v1/category/${route.params.id}/recipes`
-    );
-    recipeList.value = res.data.elements;
-    totalPages.value = res.data.totalPageCount;
-    loading.value = false;
+    await axios
+      .get(
+        `${config.public.baseURL}/api/v1/category/${route.params.id}/recipes`
+      )
+      .then((res) => {
+        recipeList.value = res.data.elements;
+        totalPages.value = res.data.totalPageCount;
+        loading.value = false;
+      });
   } catch (e) {
     console.warn("Error fetching recipes", e);
+  } finally {
+    window.scrollTo(0, 0);
+    loading.value = false;
   }
-  window.scrollTo(0, 0);
 };
 
 if (process.env.NODE_ENV === "development") {
@@ -95,14 +99,14 @@ if (process.env.NODE_ENV === "development") {
   }, 300);
 }
 
-getCategory();
+await getCategory();
 getRecipes();
 </script>
 
 <template>
   <div>
+    <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
     <div v-if="loading || loadingTimeout">
-      <CategoryNameBannerShimmer />
       <div class="flex flex-wrap">
         <RecipeContainerShimmer v-for="i in shimmerComponentsCount" />
       </div>
@@ -117,7 +121,6 @@ getRecipes();
       />
     </div>
     <div v-else>
-      <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
       <div class="flex flex-wrap">
         <RecipeContainer
           v-for="item in recipeList"

@@ -2,6 +2,8 @@
 import axios from "axios";
 import RecipePage from "@/components/RecipePage/RecipePage.vue";
 import Feedback from "@/components/Feedback/Feedback.vue";
+import Recommendations from "@/components/RecipePage/components/Recommendations.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 interface Recipe {
   id: number;
@@ -27,11 +29,11 @@ interface Instruction {
 }
 
 interface Instruction {
-    text: string;
+  text: string;
 }
 
 interface Instruction {
-    text: string;
+  text: string;
 }
 
 interface Author {
@@ -73,6 +75,8 @@ const recipe = ref<Recipe | null>(null);
 const loading = ref(true);
 
 const getRecipe = async () => {
+  loading.value = true;
+
   try {
     await axios
       .get(`${config.public.baseURL}/api/v1/recipe/get/${route.params.id}`)
@@ -100,24 +104,17 @@ await getRecipe();
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div
+  <EmptyListInformation
     v-else-if="!recipe"
-    class="flex flex-col justify-center items-center gap-3 my-10"
-  >
-    <p>
-      Sorry, this recipe couldn't be found. Try viewing all the recipes by
-      pressing the button bellow.
-    </p>
-    <button
-      @click="navigateTo('/recipes')"
-      class="bg-whiskey-200 hover:bg-whiskey-300 w-fit px-3 py-1.5 rounded-sm text-md font-medium transition-colors duration-100"
-    >
-      All recipes
-    </button>
-  </div>
+    description="Sorry, this recipe couldn't be found. Try viewing all the recipes by
+      pressing the button bellow."
+    button-text="All recipes"
+    @button-click="navigateTo('/recipes')"
+  />
   <div v-else>
     <RecipePage :recipe="recipe" />
-    <Feedback :recipeId="route.params.id as string"></Feedback>
+    <Feedback :recipeId="(route.params.id as string)" />
+    <Recommendations />
   </div>
 </template>
 

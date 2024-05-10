@@ -114,7 +114,7 @@ await getRecipe();
   <div v-else>
     <RecipePage :recipe="recipe" />
     <Feedback :recipeId="(route.params.id as string)" />
-    <Recommendations />
+    <Recommendations :recipeId="(route.params.id as string)" />
   </div>
 </template>
 

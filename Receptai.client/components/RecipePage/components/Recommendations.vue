@@ -66,6 +66,10 @@ const config = useRuntimeConfig();
 
 const shimmerComponentsCount = 4;
 
+const props = defineProps<{
+  recipeId: string
+}>();
+
 const sortBy = ref("dateCreated");
 const sortAsc = ref(false);
 
@@ -78,10 +82,10 @@ const getRecipes = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/recipe/list?&sortBy=${sortBy.value}&sortAsc=${sortAsc.value}`
+        `${config.public.baseURL}/api/v1/recipe/${props.recipeId}/recommended`
       )
       .then((res) => {
-        allRecipes.value = res.data.elements.slice(0, 4);
+        allRecipes.value = res.data.elements.sort(() => 0.5 - Math.random()).slice(0, 4);
       });
   } catch (e) {
     console.error("Error fetching recipe", e);

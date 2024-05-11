@@ -1,19 +1,13 @@
 <script setup lang="ts">
+import type { HeaderNavigation } from "@/typescript/types";
 import MobileHeader from "./MobileHeader.vue";
 import DefaultHeader from "./DefaultHeader.vue";
-
-interface Navigation {
-  to: string;
-  title: string;
-  highlight?: boolean;
-  onlyForMobile?: boolean;
-}
 
 defineProps<{
   headerType?: "ADMIN" | "DEFAULT";
 }>();
 
-const headerNav: Array<Navigation> = [
+const headerNav: Array<HeaderNavigation> = [
   {
     to: "/about",
     title: "About",
@@ -28,7 +22,7 @@ const headerNav: Array<Navigation> = [
   },
 ];
 
-const adminHeaderNav: Array<Navigation> = [
+const adminHeaderNav: Array<HeaderNavigation> = [
   {
     to: "/user/dashboard",
     title: "Dashboard",

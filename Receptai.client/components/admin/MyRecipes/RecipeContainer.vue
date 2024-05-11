@@ -1,73 +1,17 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { UserCookie, Recipe, RecipeContainerColumn } from "@/typescript/types";
 import { addNotification } from "@/store/store";
 
 import ConfirmBox from "./components/ConfirmBox.vue";
 import Image from "./Image.vue";
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo?: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  tags: string[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  name: string;
-  link: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface column {
-  key: string;
-  label: string;
-  sortable: boolean;
-  sortBy?: string;
-  curr?: boolean;
-}
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const props = defineProps<{
   recipes: Recipe[] | null;
-  columns: column[];
+  columns: RecipeContainerColumn[];
 }>();
 
 const emit = defineEmits(["reload", "changeSort"]);

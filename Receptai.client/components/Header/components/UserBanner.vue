@@ -1,26 +1,9 @@
 <script setup lang="ts">
+import type { User, UserCookie, HeaderNavigation } from "@/typescript/types";
 import ProfilePicture from "./ProfilePicture.vue";
 import ProfileMenu from "./ProfileMenu.vue";
 
 import { addNotification } from "@/store/store";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatarUrl: string | null;
-}
-
-interface Navigation {
-  to: string;
-  title: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
 
 const user = ref<User | null>(null);
 const hover = ref(false);
@@ -44,7 +27,7 @@ const logout = () => {
   );
 };
 
-const navigation: Array<Navigation> = [
+const navigation: Array<HeaderNavigation> = [
   {
     to: "/user/dashboard",
     title: "Dashboard",

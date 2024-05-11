@@ -1,64 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import type { UserCookie, Recipe } from '@/typescript/types';
 import axios from 'axios';
 import Widget from "./Widgets/WidgetComponent.vue";
-import RecipeBannerComponent from '~/components/Banner/RecipeBannerComponent.vue';
+import RecipeBannerComponent from '@/components/Banner/RecipeBannerComponent.vue';
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo?: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  tags: string[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-}
-
-interface Author {
-  id: number;
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
 
 const currentTime = ref(new Date().toLocaleTimeString());
 

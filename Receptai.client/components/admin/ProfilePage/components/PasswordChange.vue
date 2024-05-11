@@ -1,31 +1,11 @@
 <script setup lang="ts">
 import axios from "axios";
-
+import type { User, UserCookie } from "@/typescript/types";
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { addNotification } from "@/store/store";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
-
-interface User {
-  id: number | null;
-  name: string | null;
-  email: string | null;
-  avatarUrl: string | null;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
-const user: User = reactive({
-  id: null,
-  name: null,
-  email: null,
-  avatarUrl: null,
-});
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

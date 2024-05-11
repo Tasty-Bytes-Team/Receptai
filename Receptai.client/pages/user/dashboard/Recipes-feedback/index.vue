@@ -1,63 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { UserCookie, Review } from "@/typescript/types";
 import dateWithTime from "@/typescript/dateFormating";
 import StarRating from "@/components/Feedback/components/StarRating.vue";
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo?: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  tags: string[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  name: string;
-  link: string;
-}
-
-interface Review {
-  content: string;
-  dateCreated: string;
-  rating: number;
-  recipe: Recipe;
-  user: User;
-}
 
 definePageMeta({
   layout: "admin",

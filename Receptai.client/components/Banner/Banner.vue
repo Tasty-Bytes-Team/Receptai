@@ -1,45 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { Recipe } from "@/typescript/types";
 import RecipeBannerComponent from "@/components/Banner/RecipeBannerComponent.vue";
-
-interface Recipe {
-    id: number;
-    name: string;
-    shortDescription: string;
-    author: Author;
-    dateCreated: string;
-    dateModified: string | null;
-    previewImage: string;
-    tutorialVideo?: string;
-    ingredients: Ingredients[];
-    instructions: string[];
-    tags: string[];
-    categories: Category[];
-    minutesToPrepare: number;
-    portions: number;
-}
-
-interface Author {
-    name: string;
-}
-
-interface Ingredients {
-    purpose: string;
-    ingredients: Ingredient[];
-}
-
-interface Ingredient {
-    name: string;
-    quantity: number;
-    unit: string;
-}
-
-interface Category {
-    id: number;
-    name: string;
-    description: string | null;
-    previewImageUrl: string | null;
-}
 
 const recipeList = ref<Recipe[]>([]);
 const bannerOffset = ref(0);

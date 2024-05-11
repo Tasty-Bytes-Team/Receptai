@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { User, UserCookie } from "@/typescript/types";
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -17,23 +18,10 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 
-interface User {
-  id: number | null;
-  name: string | null;
-  email: string | null;
-  avatarUrl: string | null;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
 const user: User = reactive({
-  id: null,
-  name: null,
-  email: null,
+  id: 0,
+  name: "",
+  email: "",
   avatarUrl: null,
 });
 const showConfirmation = ref(false);

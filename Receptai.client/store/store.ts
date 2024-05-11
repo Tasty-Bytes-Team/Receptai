@@ -1,17 +1,5 @@
 import { reactive } from "vue";
-
-interface Message {
-  text: string;
-  show: boolean;
-  label?: "Error" | "Success";
-  links?: Link[];
-}
-
-interface Link {
-  text: string;
-  link: string;
-  type?: "Black" | "Gray";
-}
+import type { Message, Link } from "@/typescript/types";
 
 export const store = reactive<Message>({
   text: "",

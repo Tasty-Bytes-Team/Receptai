@@ -1,21 +1,9 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { UserCookie } from "@/typescript/types";
 import { addNotification } from "@/store/store";
 import StarRating from "../components/StarRating.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
-
-interface User {
-  id: number | null;
-  name: string | null;
-  email: string | null;
-  avatarUrl: string | null;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

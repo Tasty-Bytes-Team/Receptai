@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-
+import type { Recipe, PostRecipe, UserCookie, Category, Tag, Instruction } from "@/typescript/types";
 import { Form, type GenericObject } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -15,78 +15,11 @@ import MultipleOptionSelect from "@/components/admin/components/MultipleOptionSe
 import IngredientsGroups from "@/components/admin/components/IngredientsGroups.vue";
 import Instructions from "@/components/admin/components/Instructions.vue";
 
-interface GetRecipe {
-  id: number;
-  name: string;
-  author: { id: number; name: string };
-  shortDescription: string;
-  previewImage: string;
-  tutorialVideo: string;
-  ingredients: Ingredients[];
-  instructions: Instructions[];
-  minutesToPrepare: number | null;
-  portions: number | null;
-  categories: Category[];
-  tags: Tag[];
-}
-
-interface Recipe {
-  name: string;
-  shortDescription: string;
-  previewImage: string;
-  tutorialVideo: string | null;
-  ingredients: Ingredients[];
-  instructions: string[];
-  minutesToPrepare: number | null;
-  portions: number | null;
-  categoryId: number | string;
-  tagIds: number[] | string[];
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number | null;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  primary: boolean;
-}
-
-interface Tag {
-  id: number;
-  name: string;
-  iconName: string;
-}
-
-interface Instructions {
-  text: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const props = defineProps<{
-  recipeData: GetRecipe | null;
+  recipeData: Recipe | null;
 }>();
 
 const categoryList = ref<Category[] | null>(null);
@@ -141,7 +74,7 @@ const validationSchema = toTypedSchema(
   })
 );
 
-let initialValues: Recipe = {
+let initialValues: PostRecipe = {
   name: "",
   shortDescription: "",
   previewImage: "",
@@ -170,7 +103,7 @@ try {
       ? props.recipeData.tutorialVideo
       : "";
     initialValues.instructions = props.recipeData.instructions.map(
-      (instructions: Instructions) => instructions.text
+      (instructions: Instruction) => instructions.text
     );
     initialValues.ingredients = props.recipeData.ingredients;
     initialValues.minutesToPrepare = props.recipeData.minutesToPrepare;

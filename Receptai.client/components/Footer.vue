@@ -1,15 +1,6 @@
 <script setup lang="ts">
+import type { Link, Navigation } from '@/typescript/types';
 const currYear: Date = new Date();
-
-interface Link {
-  name: string;
-  link: string;
-}
-
-interface Navigation {
-  name: string;
-  links: Link[];
-}
 
 const NavigationTabs: Navigation[] = [
   {

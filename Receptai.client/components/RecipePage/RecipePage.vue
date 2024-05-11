@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Recipe } from "@/typescript/types";
 import NutritionTable from "@/components/RecipePage/components/NutritionTable.vue";
 import Badge from "@/components/RecipePage/components/Badge.vue";
 import InfoBadge from "@/components/RecipePage/components/InfoBadge.vue";
@@ -10,65 +11,6 @@ import StarRating from "../Feedback/components/StarRating.vue";
 defineProps<{
   recipe: Recipe;
 }>();
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo: string | null;
-  tutorialVideoEmbed: string | null;
-  ingredients: Ingredients[];
-  instructions: Instruction[];
-  tags: Tag[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-  averageRating: number;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
-
-interface Tag {
-  id: number;
-  iconName: string;
-  name: string;
-}
 
 const error = ref(false);
 </script>

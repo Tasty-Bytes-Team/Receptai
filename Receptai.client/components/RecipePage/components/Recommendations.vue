@@ -1,66 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { Recipe } from "@/typescript/types";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo: string | null;
-  tutorialVideoEmbed: string | null;
-  ingredients: Ingredients[];
-  instructions: Instruction[];
-  tags: Tag[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-  averageRating: number;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
-
-interface Tag {
-  id: number;
-  iconName: string;
-  name: string;
-}
 
 const config = useRuntimeConfig();
 
@@ -69,9 +11,6 @@ const shimmerComponentsCount = 4;
 const props = defineProps<{
   recipeId: string
 }>();
-
-const sortBy = ref("dateCreated");
-const sortAsc = ref(false);
 
 const allRecipes = ref<Recipe[] | null>(null);
 const loading = ref(true);

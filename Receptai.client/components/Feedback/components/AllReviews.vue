@@ -1,19 +1,7 @@
 <script setup lang="ts">
+import type { Feedback } from "@/typescript/types";
 import dateWithTime from "@/typescript/dateFormating";
 import StarRaiting from "../components/StarRating.vue";
-
-interface Feedback {
-  content: string;
-  rating: number;
-  dateCreated: string;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  avatarUrl: string | null;
-}
 
 defineProps<{
   feedbackArray: Feedback[] | null;

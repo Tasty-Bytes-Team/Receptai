@@ -1,7 +1,5 @@
 <script setup lang="ts">
-interface Instruction {
-  text: string;
-}
+import type { Instruction } from '@/typescript/types';
 
 defineProps<{
   cookingInstructions: Instruction[];

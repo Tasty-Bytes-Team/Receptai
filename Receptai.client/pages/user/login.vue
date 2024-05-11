@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { UserCookie } from "~/typescript/types";
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -12,18 +13,6 @@ const config = useRuntimeConfig();
 definePageMeta({
   middleware: "to-dashboard",
 });
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
 
 const error: Ref<boolean> = ref(false);
 const errorText: Ref<string> = ref("");

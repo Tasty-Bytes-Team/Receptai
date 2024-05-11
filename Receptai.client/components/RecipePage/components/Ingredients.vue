@@ -1,14 +1,5 @@
 <script setup lang="ts">
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
+import type { Ingredients } from '@/typescript/types';
 
 defineProps<{
   ingredients: Ingredients[];

@@ -1,12 +1,8 @@
 <script setup lang="ts">
-interface column {
-  key: string;
-  label: string;
-  sortable: boolean;
-}
+import type { RecipeContainerColumn } from '~/typescript/types';
 
 defineProps<{
-  columns: column[];
+  columns: RecipeContainerColumn[];
 }>();
 
 const hover = ref(false);

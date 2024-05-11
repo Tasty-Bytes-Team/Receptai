@@ -1,64 +1,9 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { UserCookie, Recipe, RecipeContainerColumn } from "@/typescript/types";
 import RecipeContainer from "@/components/admin/MyRecipes/RecipeContainer.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo?: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  tags: string[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  name: string;
-  link: string;
-}
-
-interface Column {
-  key: string;
-  label: string;
-  sortable: boolean;
-  sortBy?: string;
-  curr?: boolean;
-}
 
 definePageMeta({
   layout: "admin",
@@ -84,7 +29,7 @@ const loading = ref(true);
 const totalPages = ref(0);
 const siblings = 2;
 
-const sortableColumns: Column[] = [
+const sortableColumns: RecipeContainerColumn[] = [
   {
     key: "id",
     label: "ID",
@@ -138,7 +83,7 @@ const getData = async () => {
   window.scrollTo(0, 0);
 };
 
-const updateDataSort = (item: Column) => {
+const updateDataSort = (item: RecipeContainerColumn) => {
   if (
     previouslySortedColumn.value &&
     previouslySortedColumn.value !== item.key

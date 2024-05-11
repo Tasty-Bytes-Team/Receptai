@@ -36,6 +36,10 @@ const adminHeaderNav: Array<Navigation> = [
   {
     to: "/user/dashboard/my-recipes",
     title: "My Recipes",
+  },
+  {
+    to: "/user/dashboard/recipes-feedback",
+    title: "My Recipes feedback",
   }
 ];
 </script>

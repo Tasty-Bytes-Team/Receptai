@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import axios from "axios";
 import type { UserCookie, Review } from "@/typescript/types";
-import dateWithTime from "@/typescript/dateFormating";
-import StarRating from "@/components/Feedback/components/StarRating.vue";
+import MyFeedback from "@/components/Feedback/MyFeedback.vue";
+import Pagination from "@/components/Pagination/Pagination.vue";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 definePageMeta({
   layout: "admin",
@@ -22,7 +23,7 @@ const loading = ref(true);
 const totalPages = ref(0);
 const siblings = 2;
 
-const getData = async () => {
+const getFeedback = async () => {
   try {
     await axios
       .get(
@@ -34,17 +35,17 @@ const getData = async () => {
       .then((res) => {
         reviews.value = res.data.elements;
         totalPages.value = res.data.totalPageCount;
-        loading.value = false;
-        console.log(reviews.value);
       });
   } catch (e) {
     console.warn("Error fetching my recipes", e);
+  } finally {
+    loading.value = false;
   }
 
   window.scrollTo(0, 0);
 };
 
-getData();
+getFeedback();
 </script>
 
 <template>
@@ -59,32 +60,21 @@ getData();
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div class="flex flex-col gap-2">
-    <div
-      v-for="review in reviews"
-      class="p-3 border-2 border-concrete-400 rounded-md bg-concrete-50 shadow-[2px_2px_#00000082]"
-    >
-      <div class="flex flex-col">
-        <div class="font-bold text-xl">
-          <RouterLink target="_blank" :to="`/recipes/${review.recipe.id}`">
-            {{ review.recipe.name }}
-          </RouterLink>
-        </div>
-        <div>
-          By
-          <span class="font-medium">
-            {{ review.user.name }}
-          </span>
-          on
-          <span class="font-medium">
-            {{ dateWithTime(review.dateCreated) }}
-          </span>
-        </div>
-        <StarRating :set-rating="review.rating / 2" />
-        <div>
-          {{ review.content }}
-        </div>
-      </div>
+  <EmptyListInformation
+    v-else-if="reviews && reviews.length <= 0"
+    description="Looks like your recipes haven't gotten any reviews yet! Be the first to share your culinary creations and inspire others. In the meantime, why not check out some recipes and leave a review for someone else?"
+    button-text="Recipes"
+    @button-click="navigateTo('/recipes')"
+  />
+  <div v-else class="flex flex-col gap-2">
+    <MyFeedback v-for="review in reviews" :review="review" />
+    <div class="w-full text-center" v-if="totalPages > 0">
+      <Pagination
+        @change="getFeedback"
+        v-model="pageNumber"
+        :totalPages
+        :siblings
+      />
     </div>
   </div>
 </template>

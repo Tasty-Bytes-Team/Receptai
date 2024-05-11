@@ -3,7 +3,6 @@ import axios from "axios";
 import type { Recipe } from "@/typescript/types";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
-import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
 import sortOptionSelector from "@/typescript/sortOptionSelector.ts";

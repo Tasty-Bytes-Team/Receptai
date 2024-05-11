@@ -17,7 +17,9 @@ import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.UserService;
 import lt.tastybytes.receptaiserver.service.impl.JwtServiceImpl;
 import lt.tastybytes.receptaiserver.utils.Pager;
+import lt.tastybytes.receptaiserver.utils.Sorter;
 import lt.tastybytes.receptaiserver.validation.SortedRequestValidation;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -81,9 +83,10 @@ public class UserController {
             @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
             SortedRequestDto sortDto
     ) {
+        var sorter = sortDto.toSorterOrDefault("name");
         return ResponseEntity.ok(
                 PagedResponseDto.of(
-                        recipeService.getRecipesByUser(user, new Pager(pageDto), sortDto),
+                        recipeService.getRecipesByUser(user, new Pager(pageDto), sorter),
                         Recipe::toDto
                 )
         );
@@ -97,7 +100,7 @@ public class UserController {
         var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(
                 user.getId(),
                 new Pager(pageDto.page(), 20),
-                new SortedRequestDto("dateCreated", false)
+                new Sorter(new Sort.Order(Sort.Direction.DESC, "dateCreated"))
         );
         return ResponseEntity.ok(
                 PagedResponseDto.of(
@@ -118,12 +121,12 @@ public class UserController {
         var recipePage = recipeService.getRecipesByUser(
                 user,
                 new Pager(0, 5),
-                new SortedRequestDto("dateCreated", false)
+                new Sorter(new Sort.Order(Sort.Direction.DESC, "dateCreated"))
         );
         var feedbackPage = feedbackService.getFeedbackByRecipeAuthor(
                 user.getId(),
                 new Pager(0, 5),
-                new SortedRequestDto("dateCreated", false)
+                new Sorter(new Sort.Order(Sort.Direction.DESC, "dateCreated"))
         );
         return ResponseEntity.ok(
                 new DashboardDto(

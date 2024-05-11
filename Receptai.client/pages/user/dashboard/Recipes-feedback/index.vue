@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
+import dateWithTime from "@/typescript/dateFormating";
 import StarRating from "@/components/Feedback/components/StarRating.vue";
 
 interface UserCookie {
@@ -131,7 +132,7 @@ getData();
           </span>
           on
           <span class="font-medium">
-            {{ review.dateCreated.split("T")[0] }}
+            {{ dateWithTime(review.dateCreated) }}
           </span>
         </div>
         <StarRating :set-rating="review.rating / 2" />

@@ -73,7 +73,6 @@ getRecipes();
       </div>
     </div>
     <div v-else-if="recipeList && recipeList.length === 0">
-      <CategoryNameBanner v-if="categoryInfo" :category-info="categoryInfo" />
       <EmptyListInformation
         description="While there aren't any recipes here yet, we invite you to explore our
         full range of categories by clicking button below."

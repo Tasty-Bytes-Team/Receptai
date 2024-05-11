@@ -37,9 +37,12 @@ public class SortedRequestValidation {
 
         @Override
         public boolean isValid(SortedRequestDto dto, ConstraintValidatorContext context) {
+            if (dto.getSortBy() == null) {
+                return true;
+            }
 
             for (var val : allowedValues) {
-                if (dto.sortBy().equals(val)) {
+                if (dto.getSortBy().equals(val)) {
                     return true;
                 }
             }

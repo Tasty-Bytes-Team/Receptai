@@ -1,7 +1,6 @@
 package lt.tastybytes.receptaiserver.service.impl;
 
 import jakarta.validation.Valid;
-import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
 import lt.tastybytes.receptaiserver.dto.recipe.ModifyRecipeDto;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.model.category.Category;
@@ -15,9 +14,8 @@ import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
 import lt.tastybytes.receptaiserver.service.TagService;
 import lt.tastybytes.receptaiserver.utils.Pager;
+import lt.tastybytes.receptaiserver.utils.Sorter;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -148,28 +146,24 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getRecipes(int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
-        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
-        if (sortDto != null) {
-            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
-        }
+    public Page<Recipe> getRecipes(Pager pager, Sorter sorter) {
+        var request = pager.toPageRequest(RECIPES_PER_PAGE);
+        request = sorter.toPageRequest(request);
         return recipeRepository.findAll(request);
     }
 
     @Override
-    public Page<Recipe> getRecipesByCategory(Category category, int pageNumber) {
+    public Page<Recipe> getRecipesByCategory(Category category, Pager pager) {
         return recipeRepository.findAllByCategoriesContaining(
                 category,
-                PageRequest.of(pageNumber, RECIPES_PER_PAGE)
+                pager.toPageRequest(RECIPES_PER_PAGE)
         );
     }
 
     @Override
-    public Page<Recipe> getRecipesByUser(User user, Pager pager, @Valid @Nullable SortedRequestDto sortDto) {
+    public Page<Recipe> getRecipesByUser(User user, Pager pager, Sorter sorter) {
         var request = pager.toPageRequest(RECIPES_PER_PAGE);
-        if (sortDto != null) {
-            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
-        }
+        request = sorter.toPageRequest(request);
         return recipeRepository.findAllByAuthor(
                 user,
                 request
@@ -179,15 +173,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Page<Recipe> getRecommendedRecipesForRecipe(Recipe recipe) {
         // TODO: figure out a better way to recommend recipes
-        return this.getRecipesByCategory(recipe.getCategories().get(0), 0);
+        return this.getRecipesByCategory(recipe.getCategories().get(0), new Pager(0));
     }
 
     @Override
-    public Page<Recipe> findRecipeByQuery(String query, int pageNumber, @Valid @Nullable SortedRequestDto sortDto) {
-        var request = PageRequest.of(pageNumber, RECIPES_PER_PAGE);
-        if (sortDto != null) {
-            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy());
-        }
+    public Page<Recipe> findRecipeByQuery(String query, Pager pager, Sorter sorter) {
+        var request = pager.toPageRequest(RECIPES_PER_PAGE);
+        request = sorter.toPageRequest(request);
         return recipeRepository.findAllByNameIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(
                 "%" + query + "%", "%" + query + "%",
                 request

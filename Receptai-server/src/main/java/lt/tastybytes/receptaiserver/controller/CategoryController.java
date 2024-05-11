@@ -9,7 +9,7 @@ import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.service.CategoryService;
 import lt.tastybytes.receptaiserver.service.RecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,7 +65,7 @@ public class CategoryController {
             throw new NotFoundException("Category by specified ID not found.");
         }
 
-        var page = recipeService.getRecipesByCategory(category.get(), pageDto.page());
+        var page = recipeService.getRecipesByCategory(category.get(), new Pager(pageDto));
         return ResponseEntity.ok(
             PagedResponseDto.of(page, Recipe::toDto)
         );

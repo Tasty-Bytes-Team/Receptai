@@ -1,6 +1,5 @@
 package lt.tastybytes.receptaiserver.service.impl
 
-import lt.tastybytes.receptaiserver.dto.SortedRequestDto
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto
 import lt.tastybytes.receptaiserver.exception.EntryAlreadyExistsException
 import lt.tastybytes.receptaiserver.exception.NotFoundException
@@ -12,8 +11,8 @@ import lt.tastybytes.receptaiserver.service.FeedbackService
 import lt.tastybytes.receptaiserver.service.RecipeService
 import lt.tastybytes.receptaiserver.service.UserService
 import lt.tastybytes.receptaiserver.utils.Pager
+import lt.tastybytes.receptaiserver.utils.Sorter
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.jvm.optionals.getOrDefault
@@ -45,12 +44,10 @@ class FeedbackServiceImpl(
         )
     }
 
-    override fun getFeedbackByRecipeAuthor(userId: Long, pager: Pager, sortDto: SortedRequestDto?): Page<Feedback> {
+    override fun getFeedbackByRecipeAuthor(userId: Long, pager: Pager, sorter: Sorter): Page<Feedback> {
         val user = userService.findUserById(userId)
         var request = pager.toPageRequest(FEEDBACK_PER_PAGE)
-        if (sortDto != null) {
-            request = request.withSort(sortDto.getSortDirection(), sortDto.getSortBy())
-        }
+        request = sorter.toPageRequest(request)
         return feedbackRepository.findAllByAuthor(
             user.orElseThrow(),
             request

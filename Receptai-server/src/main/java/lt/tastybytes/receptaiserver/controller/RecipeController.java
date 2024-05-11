@@ -10,8 +10,8 @@ import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.RecipeService;
+import lt.tastybytes.receptaiserver.utils.Pager;
 import lt.tastybytes.receptaiserver.validation.SortedRequestValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,8 @@ public class RecipeController {
             @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
             SortedRequestDto sortDto
     ) {
-        var recipes = recipeService.getRecipes(pageDto.page(), sortDto);
+        var sorter = sortDto.toSorterOrDefault("name");
+        var recipes = recipeService.getRecipes(new Pager(pageDto), sorter);
         return ResponseEntity.ok(
                 PagedResponseDto.of(recipes, Recipe::toDto)
         );
@@ -77,7 +78,8 @@ public class RecipeController {
             @SortedRequestValidation.AllowedSortBy(values={"name", "dateCreated"})
             SortedRequestDto sortDto
     ) {
-        var recipes = recipeService.findRecipeByQuery(query, pageDto.page(), sortDto);
+        var sorter = sortDto.toSorterOrDefault("name");
+        var recipes = recipeService.findRecipeByQuery(query, new Pager(pageDto), sorter);
         return ResponseEntity.ok(
                 PagedResponseDto.of(recipes, Recipe::toDto)
         );

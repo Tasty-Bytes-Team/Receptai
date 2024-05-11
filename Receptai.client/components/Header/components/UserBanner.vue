@@ -37,6 +37,10 @@ const navigation: Array<HeaderNavigation> = [
     title: "My recipes",
   },
   {
+    to: "/user/dashboard/community-feedback",
+    title: "Community Feedback",
+  },
+  {
     to: "/user/dashboard/my-recipes/create",
     title: "Create new recipe",
   },

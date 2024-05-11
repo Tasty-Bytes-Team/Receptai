@@ -32,9 +32,9 @@ const adminHeaderNav: Array<HeaderNavigation> = [
     title: "My Recipes",
   },
   {
-    to: "/user/dashboard/recipes-feedback",
-    title: "My Recipes feedback",
-  }
+    to: "/user/dashboard/community-feedback",
+    title: "Community Feedback",
+  },
 ];
 </script>
 

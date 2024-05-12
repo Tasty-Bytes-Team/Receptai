@@ -1,21 +1,10 @@
 <script setup lang="ts">
+import type { User, HeaderNavigation } from "@/typescript/types";
 import ProfilePicture from "./ProfilePicture.vue";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatarUrl: string | null;
-}
-
-interface Navigation {
-  to: string;
-  title: string;
-}
 
 defineProps<{
   user: User;
-  navigation: Navigation[];
+  navigation: HeaderNavigation[];
 }>();
 </script>
 

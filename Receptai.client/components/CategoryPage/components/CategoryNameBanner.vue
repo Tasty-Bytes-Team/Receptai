@@ -1,10 +1,5 @@
 <script setup lang="ts">
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
+import type { Category } from '@/typescript/types';
 
 defineProps<{
   categoryInfo: Category;

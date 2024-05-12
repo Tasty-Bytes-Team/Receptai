@@ -1,51 +1,11 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { Recipe } from "@/typescript/types";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
-import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
 import sortOptionSelector from "@/typescript/sortOptionSelector.ts";
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo?: string;
-  ingredients: Ingredients[];
-  instructions: string[];
-  tags: string[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-  averageRating: number;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
 
 const config = useRuntimeConfig();
 

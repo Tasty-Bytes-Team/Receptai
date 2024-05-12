@@ -1,11 +1,6 @@
 <script setup lang="ts">
+import type { Category } from "@/typescript/types";
 import { ErrorMessage, Field } from "vee-validate";
-
-interface Category {
-  id: number;
-  name: string;
-  primary: boolean;
-}
 
 defineProps<{
   name: string;

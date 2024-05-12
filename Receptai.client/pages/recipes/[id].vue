@@ -1,68 +1,10 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { Recipe } from "@/typescript/types";
 import RecipePage from "@/components/RecipePage/RecipePage.vue";
 import Feedback from "@/components/Feedback/Feedback.vue";
 import Recommendations from "@/components/RecipePage/components/Recommendations.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
-
-interface Recipe {
-  id: number;
-  name: string;
-  shortDescription: string;
-  author: Author;
-  dateCreated: string;
-  dateModified: string | null;
-  previewImage: string;
-  tutorialVideo: string | null;
-  tutorialVideoEmbed: string | null;
-  ingredients: Ingredients[];
-  instructions: Instruction[];
-  tags: Tag[];
-  categories: Category[];
-  minutesToPrepare: number;
-  portions: number;
-  averageRating: number;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Instruction {
-  text: string;
-}
-
-interface Author {
-  name: string;
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-  previewImageUrl: string | null;
-}
-
-interface Tag {
-  id: number;
-  iconName: string;
-  name: string;
-}
 
 definePageMeta({
   layout: "empty",
@@ -114,7 +56,7 @@ await getRecipe();
   <div v-else>
     <RecipePage :recipe="recipe" />
     <Feedback :recipeId="(route.params.id as string)" />
-    <Recommendations />
+    <Recommendations :recipeId="(route.params.id as string)" />
   </div>
 </template>
 

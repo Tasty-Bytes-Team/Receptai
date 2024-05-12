@@ -1,61 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
-
+import type { Recipe, UserCookie } from "@/typescript/types";
 import RecipeEditingPage from "@/components/admin/RecipeEdit/RecipeEditingPage.vue";
-
-interface GetRecipe {
-  id: number;
-  name: string;
-  author: { id: number; name: string };
-  shortDescription: string;
-  previewImage: string;
-  tutorialVideo: string;
-  ingredients: Ingredients[];
-  instructions: Instructions[];
-  minutesToPrepare: number | null;
-  portions: number | null;
-  categories: Category[];
-  tags: Tag[];
-}
-
-interface Ingredients {
-  purpose: string;
-  ingredients: Ingredient[];
-}
-
-interface Ingredient {
-  name: string;
-  quantity: number | null;
-  unit: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-  primary: boolean;
-}
-
-interface Tag {
-  id: number;
-  name: string;
-  iconName: string;
-}
-
-interface Instructions {
-  text: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
 
 definePageMeta({
   layout: "admin",
@@ -65,7 +11,7 @@ definePageMeta({
 const config = useRuntimeConfig();
 const route = useRoute();
 
-const recipeData = ref<GetRecipe | null>(null);
+const recipeData = ref<Recipe | null>(null);
 
 try {
   const recipe = await axios.get(

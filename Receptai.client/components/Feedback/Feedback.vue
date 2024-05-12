@@ -1,21 +1,9 @@
 <script setup lang="ts">
 import axios from "axios";
+import type { Feedback } from "@/typescript/types";
 import UserReview from "./components/UserReview.vue";
 import AllReviews from "./components/AllReviews.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
-
-interface Feedback {
-  content: string;
-  rating: number;
-  dateCreated: string;
-  user: User;
-}
-
-interface User {
-  id: number;
-  name: string;
-  avatarUrl: string | null;
-}
 
 const config = useRuntimeConfig();
 

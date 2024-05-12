@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-
+import type { UserCookie, Category, Tag } from "@/typescript/types";
 import {
   ErrorMessage,
   FieldArray,
@@ -27,29 +27,6 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
-interface Category {
-  id: number;
-  name: string;
-  primary: boolean;
-}
-
-interface Tag {
-  id: number;
-  name: string;
-  iconName: string;
-}
-
-interface User {
-  name: string;
-  email: string;
-}
-
-interface UserCookie {
-  token: string;
-  expiresIn: number;
-  user: User;
-}
 
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 

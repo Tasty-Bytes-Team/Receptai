@@ -1,11 +1,8 @@
 <script setup lang="ts">
+import type { Tag } from "@/typescript/types";
 import { ErrorMessage, Field } from "vee-validate";
 
-interface Tag {
-  id: number;
-  name: string;
-  iconName: string;
-}
+
 
 defineProps<{
   name: string;

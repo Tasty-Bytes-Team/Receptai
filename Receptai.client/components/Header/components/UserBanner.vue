@@ -96,6 +96,7 @@ const vClickOutside = {
       v-if="hover"
       :user
       :navigation
+      :is-admin="true"
       @logout="logout"
       @page-exit="hover = false"
     />

@@ -6,8 +6,8 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 definePageMeta({
-  layout: "user",
-  middleware: "auth",
+  layout: "admin",
+  middleware: "admin",
 });
 
 const config = useRuntimeConfig();
@@ -65,7 +65,7 @@ const getData = async () => {
   try {
     await axios
       .get(
-        `${config.public.baseURL}/api/v1/user/recipes?page=${pageNumber.value}&sortBy=${activeSortKey.value}&sortAsc=${isSortAscending.value}`,
+        `${config.public.baseURL}/api/v1/recipe/list?page=${pageNumber.value}&sortBy=${activeSortKey.value}&sortAsc=${isSortAscending.value}`,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value?.token}` },
         }
@@ -129,7 +129,7 @@ getData();
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold text-center m-3">My Recipes</h1>
+    <h1 class="text-3xl font-bold text-center m-3">All Recipes</h1>
     <div v-if="loading">
       <div role="status" class="flex justify-center items-center my-2">
         <img

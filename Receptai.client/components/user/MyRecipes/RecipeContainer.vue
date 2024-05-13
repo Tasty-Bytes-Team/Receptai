@@ -27,6 +27,7 @@ const recipeSelection = props.recipes?.map((recipe) => ({
 }));
 
 const deleteRecipe = async () => {
+  console.log("Delete")
   try {
     if (TastyBytes_user.value && toBeDeleted.value != null) {
       await axios.delete(

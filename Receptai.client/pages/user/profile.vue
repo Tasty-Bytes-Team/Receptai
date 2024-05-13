@@ -7,10 +7,10 @@ import * as zod from "zod";
 
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
 import { addNotification } from "~/store/store";
-import PasswordChange from "@/components/admin/ProfilePage/components/PasswordChange.vue";
+import PasswordChange from "@/components/user/ProfilePage/components/PasswordChange.vue";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
-import ChangeName from "@/components/admin/ProfilePage/components/ChangeName.vue";
-import ChangeAvatarUrl from "@/components/admin/ProfilePage/components/ChangeAvatarUrl.vue";
+import ChangeName from "@/components/user/ProfilePage/components/ChangeName.vue";
+import ChangeAvatarUrl from "@/components/user/ProfilePage/components/ChangeAvatarUrl.vue";
 
 definePageMeta({
   middleware: "auth",
@@ -23,6 +23,7 @@ const user: User = reactive({
   name: "",
   email: "",
   avatarUrl: null,
+  roles: []
 });
 const showConfirmation = ref(false);
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

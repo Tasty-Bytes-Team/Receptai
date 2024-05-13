@@ -5,7 +5,7 @@ import axios from 'axios';
 import Widget from "./Widgets/WidgetComponent.vue";
 import RecipeBannerComponent from '@/components/Banner/RecipeBannerComponent.vue';
 definePageMeta({
-  layout: "admin",
+  layout: "user",
   middleware: "auth",
 });
 

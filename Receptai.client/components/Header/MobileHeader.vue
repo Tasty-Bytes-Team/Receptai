@@ -6,7 +6,8 @@ import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 defineProps<{
   headerNav: HeaderNavigation[];
-  headerType?: "ADMIN" | "DEFAULT";
+  showSearch?: boolean;
+  showCreate?: boolean;
 }>();
 const route = useRoute();
 
@@ -82,7 +83,7 @@ const toggleMobileSearchWithTimeout = () => {
           />
         </button>
         <button
-          v-if="headerType !== 'ADMIN'"
+          v-if="showSearch"
           @click="toggleMobileSearchWithTimeout"
         >
           <Icon
@@ -103,7 +104,7 @@ const toggleMobileSearchWithTimeout = () => {
     <div class="flex-1">
       <div class="flex gap-3 items-center justify-end">
         <NuxtLink
-          v-if="headerType === 'ADMIN'"
+          v-if="showCreate"
           to="/user/dashboard/my-recipes/create"
         >
           <button

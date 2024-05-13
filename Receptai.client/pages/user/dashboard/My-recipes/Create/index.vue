@@ -24,7 +24,7 @@ import Instructions from "@/components/admin/components/Instructions.vue";
 const config = useRuntimeConfig();
 
 definePageMeta({
-  layout: "admin",
+  layout: "user",
   middleware: "auth",
 });
 

@@ -5,14 +5,22 @@ import type { HeaderNavigation } from "@/typescript/types";
 
 const headerNav: Array<HeaderNavigation> = [
   {
-    to: "#",
-    title: "Test",
+    to: "/user/dashboard",
+    title: "Dashboard",
+  },
+  {
+    to: "/user/dashboard/my-recipes",
+    title: "My Recipes",
+  },
+  {
+    to: "/user/dashboard/community-feedback",
+    title: "Community Feedback",
   },
 ];
 </script>
 
 <template>
-  <Header :show-create="false" :show-search="false" :header-nav="headerNav" />
+  <Header :show-create="true" :show-search="false" :header-nav="headerNav" />
   <div class="max-w-screen-lg m-auto my-5 px-2">
     <slot />
   </div>

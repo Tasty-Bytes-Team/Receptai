@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(async () => {
   try {
     const response = await axios.get(`${config.public.baseURL}/api/v1/user/me`);
     if (!response.data.roles.includes("ROLE_ADMIN")) {
-      return navigateTo("/user/login");
+      return navigateTo("/user/dashboard");
     }
   } catch (error) {
     console.log("Auth", error);

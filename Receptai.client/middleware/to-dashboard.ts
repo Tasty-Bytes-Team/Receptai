@@ -7,23 +7,15 @@ export default defineNuxtRouteMiddleware(async () => {
   const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
   if (TastyBytes_user.value) {
-    const userObj: UserCookie = TastyBytes_user.value;
-
     try {
-      axios
-        .get(`${config.public.baseURL}/api/v1/user/me`, {
-          headers: { Authorization: `Bearer ${userObj.token}` },
-        })
-        .catch(async () => {
-          TastyBytes_user.value = null;
-          return navigateTo("/user/login");
-        });
+      await axios.get(`${config.public.baseURL}/api/v1/user/me`, {
+        headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+      });
       return navigateTo("/user/dashboard");
-    } catch (e) {
-      console.log("To-dashboard", e);
-      return;
+    } catch (error) {
+      console.log("Auth", error);
+      useCookie("TastyBytes_user").value = null;
+      return navigateTo("/user/login");
     }
-  } else {
-    return;
   }
 });

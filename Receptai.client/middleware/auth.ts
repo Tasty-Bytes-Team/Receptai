@@ -7,22 +7,19 @@ export default defineNuxtRouteMiddleware(async () => {
   const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
   if (TastyBytes_user.value) {
-    const userObj: UserCookie = TastyBytes_user.value;
-
     try {
-      axios
-        .get(`${config.public.baseURL}/api/v1/user/me`, {
-          headers: { Authorization: `Bearer ${userObj.token}` },
-        })
-        .then(() => {
-          return;
-        })
-        .catch(async () => {
-          return navigateTo("/user/login");
-        });
-    } catch (e) {
-      console.log("Auth", e);
-      TastyBytes_user.value = null;
+      const response = await axios.get(
+        `${config.public.baseURL}/api/v1/user/me`,
+        {
+          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+        }
+      );
+      if (!response.data.roles.includes("ROLE_ADMIN")) {
+        return navigateTo("/user/login");
+      }
+    } catch (error) {
+      console.log("Auth", error);
+      useCookie("TastyBytes_user").value = null;
       return navigateTo("/user/login");
     }
   } else {

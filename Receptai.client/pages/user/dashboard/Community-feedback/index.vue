@@ -6,7 +6,7 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 definePageMeta({
-  layout: "admin",
+  layout: "user",
   middleware: "auth",
 });
 

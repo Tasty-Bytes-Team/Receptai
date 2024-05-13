@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserCookie } from "~/typescript/types";
+import type { UserCookie } from "@/typescript/types";
 
 export default defineNuxtRouteMiddleware(async () => {
   const config = useRuntimeConfig();

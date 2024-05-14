@@ -28,7 +28,6 @@ const recipeSelection = props.recipes?.map((recipe) => ({
   image: recipe.previewImage,
   authorName: recipe.author.name,
   category: recipe.categories,
-  tags: recipe.tags,
   authorId: recipe.author.id,
   name: recipe.name,
   dateCreated: dateWithTime(recipe.dateCreated),
@@ -117,9 +116,6 @@ const deleteRecipe = async () => {
           </td>
           <td class="px-3 py-4">
             {{ recipe.category.map((r) => r.name).join("\r\n") }}
-          </td>
-          <td class="px-3 py-4">
-            {{ recipe.tags.map((r) => r.name).join("\r\n") }}
           </td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
           <td class="text-center max-w-40">

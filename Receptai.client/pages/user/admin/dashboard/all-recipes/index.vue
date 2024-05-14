@@ -57,16 +57,21 @@ const sortableColumns: RecipeContainerColumn[] = [
     sortable: false,
   },
   {
+    key: "category",
+    label: "Categories",
+    sortable: false,
+  },
+  {
+    key: "tags",
+    label: "Tags",
+    sortable: false,
+  },
+  {
     key: "dateCreated",
     label: "Creaton date",
     sortable: true,
     sortBy: "DEFAULT",
     curr: false,
-  },
-  {
-    key: "dateModified",
-    label: "Update date",
-    sortable: false,
   },
   {
     key: "action",

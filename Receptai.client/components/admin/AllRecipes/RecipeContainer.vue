@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import axios from "axios";
-import type { UserCookie, Recipe, RecipeContainerColumn } from "@/typescript/types";
+import type {
+  UserCookie,
+  Recipe,
+  RecipeContainerColumn,
+} from "@/typescript/types";
 import { addNotification } from "@/store/store";
 import dateWithTime from "~/typescript/dateFormating";
-
 import ConfirmBox from "./components/ConfirmBox.vue";
 import Image from "./Image.vue";
 
@@ -24,14 +27,15 @@ const recipeSelection = props.recipes?.map((recipe) => ({
   id: recipe.id,
   image: recipe.previewImage,
   authorName: recipe.author.name,
+  category: recipe.categories,
+  tags: recipe.tags,
   authorId: recipe.author.id,
   name: recipe.name,
   dateCreated: dateWithTime(recipe.dateCreated),
-  dateUpdated: (recipe.dateModified ? dateWithTime(recipe.dateModified) : null),
 }));
 
 const deleteRecipe = async () => {
-  console.log("Delete")
+  console.log("Delete");
   try {
     if (TastyBytes_user.value && toBeDeleted.value != null) {
       await axios.delete(
@@ -109,9 +113,16 @@ const deleteRecipe = async () => {
             <Image class="m-auto" :preview-image="recipe.image" />
           </td>
           <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
-          <td class="font-bold px-3 py-4">{{ recipe.authorName }} (ID: {{ recipe.authorId }})</td>
+          <td class="font-bold px-3 py-4">
+            {{ recipe.authorName }} (ID: {{ recipe.authorId }})
+          </td>
+          <td class="px-3 py-4">
+            {{ recipe.category.map((r) => r.name).join("\r\n") }}
+          </td>
+          <td class="px-3 py-4">
+            {{ recipe.tags.map((r) => r.name).join("\r\n") }}
+          </td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
-          <td class="px-3 py-4">{{ recipe.dateUpdated ?? "Empty" }}</td>
           <td class="text-center max-w-40">
             <div class="w-full flex justify-evenly">
               <NuxtLink
@@ -121,17 +132,6 @@ const deleteRecipe = async () => {
               >
                 <Icon
                   name="material-symbols:globe"
-                  class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
-                  size="24px"
-                  color="black"
-                />
-              </NuxtLink>
-              <NuxtLink
-                :to="`/user/dashboard/my-recipes/edit/${recipe.id}`"
-                title="Edit recipe"
-              >
-                <Icon
-                  name="material-symbols:contract-edit"
                   class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
                   size="24px"
                   color="black"

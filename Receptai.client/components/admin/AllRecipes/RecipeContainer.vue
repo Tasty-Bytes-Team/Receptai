@@ -7,8 +7,8 @@ import type {
 } from "@/typescript/types";
 import { addNotification } from "@/store/store";
 import dateWithTime from "~/typescript/dateFormating";
-import ConfirmBox from "./components/ConfirmBox.vue";
-import Image from "./Image.vue";
+import ConfirmBox from "../../user/MyRecipes/components/ConfirmBox.vue";
+import Image from "../../user/MyRecipes/Image.vue";
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

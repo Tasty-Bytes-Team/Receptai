@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeaderNavigation } from "~/typescript/types";
+import type { HeaderNavigation } from "@/typescript/types";
 import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
 import SearchForm from "@/components/SearchForm/SearchForm.vue";

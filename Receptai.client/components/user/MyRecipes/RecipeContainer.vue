@@ -26,13 +26,12 @@ const toBeDeleted = ref<number | null>(null);
 const recipeSelection = props.recipes?.map((recipe) => ({
   id: recipe.id,
   image: recipe.previewImage,
-  averageRaiting: recipe.averageRating,
+  averageRating: recipe.averageRating,
   name: recipe.name,
   dateCreated: recipe.dateCreated.split("T")[0],
 }));
 
 const deleteRecipe = async () => {
-  console.log("Delete");
   try {
     if (TastyBytes_user.value && toBeDeleted.value != null) {
       await axios.delete(
@@ -109,7 +108,7 @@ const deleteRecipe = async () => {
             <Image class="m-auto" :preview-image="recipe.image" />
           </td>
           <td class="font-bold px-3 py-4">
-            <StarRating :set-rating="recipe.averageRaiting / 2" />
+            <StarRating :set-rating="recipe.averageRating / 2" />
           </td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
           <td class="text-center max-w-40">

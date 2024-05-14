@@ -6,7 +6,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
 import ProfilePicture from "@/components/Header/components/ProfilePicture.vue";
-import { addNotification } from "~/store/store";
+import { addNotification } from "@/store/store";
 import PasswordChange from "@/components/user/ProfilePage/components/PasswordChange.vue";
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import ChangeName from "@/components/user/ProfilePage/components/ChangeName.vue";

@@ -6,7 +6,7 @@ import type {
   RecipeContainerColumn,
 } from "@/typescript/types";
 import { addNotification } from "@/store/store";
-import dateWithTime from "~/typescript/dateFormating";
+import dateWithTime from "@/typescript/dateFormating";
 import ConfirmBox from "../../user/MyRecipes/components/ConfirmBox.vue";
 import Image from "../../user/MyRecipes/Image.vue";
 

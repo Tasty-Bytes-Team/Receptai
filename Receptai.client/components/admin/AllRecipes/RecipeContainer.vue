@@ -46,7 +46,7 @@ const deleteRecipe = async () => {
 
       emit("reload");
       confirmBox.value = false;
-      addNotification(`Your recipe has been deleted!`, "Success");
+      addNotification(`Recipe has been deleted!`, "Success");
     } else {
       addNotification(`You are not authorized. Please log in again.`, "Error");
       navigateTo("/user/login");

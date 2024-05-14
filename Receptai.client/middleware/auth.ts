@@ -14,9 +14,7 @@ export default defineNuxtRouteMiddleware(async () => {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
         }
       );
-      if (!response.data.roles.includes("ROLE_ADMIN")) {
-        return navigateTo("/user/login");
-      }
+
     } catch (error) {
       console.log("Auth", error);
       useCookie("TastyBytes_user").value = null;

@@ -35,7 +35,6 @@ const recipeSelection = props.recipes?.map((recipe) => ({
 }));
 
 const deleteRecipe = async () => {
-  console.log("Delete");
   try {
     if (TastyBytes_user.value && toBeDeleted.value != null) {
       await axios.delete(
@@ -132,6 +131,17 @@ const deleteRecipe = async () => {
               >
                 <Icon
                   name="material-symbols:globe"
+                  class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
+                  size="24px"
+                  color="black"
+                />
+              </NuxtLink>
+              <NuxtLink
+                :to="`/user/admin/dashboard/all-recipes/edit/${recipe.id}`"
+                title="Edit recipe"
+              >
+                <Icon
+                  name="material-symbols:contract-edit"
                   class="transition-all duration-150 hover:bg-gray-200 hover:ring-4 hover:ring-gray-200 hover:rounded-sm outline-none hover:z-10"
                   size="24px"
                   color="black"

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import axios from "axios";
-import type { UserCookie, Recipe, RecipeContainerColumn } from "@/typescript/types";
-import RecipeContainer from "@/components/user/MyRecipes/RecipeContainer.vue";
+import type {
+  UserCookie,
+  Recipe,
+  RecipeContainerColumn,
+} from "@/typescript/types";
+import RecipeContainer from "@/components/admin/AllRecipes/RecipeContainer.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
@@ -48,11 +52,21 @@ const sortableColumns: RecipeContainerColumn[] = [
     curr: false,
   },
   {
+    key: "author",
+    label: "Author",
+    sortable: false,
+  },
+  {
     key: "dateCreated",
     label: "Creaton date",
     sortable: true,
     sortBy: "DEFAULT",
     curr: false,
+  },
+  {
+    key: "dateModified",
+    label: "Update date",
+    sortable: false,
   },
   {
     key: "action",

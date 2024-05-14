@@ -96,6 +96,7 @@ const vClickOutside = {
       v-if="hover"
       :user
       :navigation
+      :is-admin="TastyBytes_user?.user.roles.includes('ROLE_ADMIN')"
       @logout="logout"
       @page-exit="hover = false"
     />

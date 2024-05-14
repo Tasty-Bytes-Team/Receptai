@@ -4,7 +4,7 @@ import type { Recipe, UserCookie } from "@/typescript/types";
 import RecipeEditingPage from "@/components/admin/RecipeEdit/RecipeEditingPage.vue";
 
 definePageMeta({
-  layout: "admin",
+  layout: "user",
   middleware: "auth",
 });
 

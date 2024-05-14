@@ -8,6 +8,7 @@ export interface User {
   name: string;
   email: string;
   avatarUrl: string | null;
+  roles: string[]
 }
 
 export interface Recipe {
@@ -126,10 +127,10 @@ export interface Message {
   text: string;
   show: boolean;
   label?: "Error" | "Success";
-  links?: Link[];
+  links?: MesgLink[];
 }
 
-export interface Link {
+export interface MesgLink {
   text: string;
   link: string;
   type?: "Black" | "Gray";

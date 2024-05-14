@@ -4,49 +4,23 @@ import MobileHeader from "./MobileHeader.vue";
 import DefaultHeader from "./DefaultHeader.vue";
 
 defineProps<{
-  headerType?: "ADMIN" | "DEFAULT";
+  showSearch?: boolean;
+  showCreate?: boolean;
+  headerNav: HeaderNavigation[];
 }>();
-
-const headerNav: Array<HeaderNavigation> = [
-  {
-    to: "/about",
-    title: "About",
-  },
-  {
-    to: "/recipes",
-    title: "Recipes",
-  },
-  {
-    to: "/recipe-category",
-    title: "Categories",
-  },
-];
-
-const adminHeaderNav: Array<HeaderNavigation> = [
-  {
-    to: "/user/dashboard",
-    title: "Dashboard",
-  },
-  {
-    to: "/user/dashboard/my-recipes",
-    title: "My Recipes",
-  },
-  {
-    to: "/user/dashboard/community-feedback",
-    title: "Community Feedback",
-  },
-];
 </script>
 
 <template>
   <header class="bg-white shadow-md">
     <MobileHeader
-      :header-type
-      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+      :show-create="showCreate"
+      :show-search="showSearch"
+      :header-nav="headerNav"
     />
     <DefaultHeader
-      :header-type
-      :header-nav="headerType === 'ADMIN' ? adminHeaderNav : headerNav"
+      :show-create="showCreate"
+      :show-search="showSearch"
+      :header-nav="headerNav"
     />
   </header>
 </template>

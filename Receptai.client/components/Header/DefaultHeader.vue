@@ -6,7 +6,8 @@ import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 defineProps<{
   headerNav: HeaderNavigation[];
-  headerType?: "ADMIN" | "DEFAULT";
+  showSearch?: boolean;
+  showCreate?: boolean;
 }>();
 const route = useRoute();
 
@@ -41,9 +42,9 @@ watch(
       </div>
     </div>
     <div class="flex gap-4 items-center w-full justify-end">
-      <SearchForm v-if="headerType !== 'ADMIN'" />
+      <SearchForm v-if="showSearch" />
       <NuxtLink
-        v-if="headerType === 'ADMIN'"
+        v-if="showCreate"
         to="/user/dashboard/my-recipes/create"
       >
         <button

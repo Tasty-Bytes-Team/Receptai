@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import type { Message, Link } from "@/typescript/types";
+import type { Message, MesgLink } from "@/typescript/types";
 
 export const store = reactive<Message>({
   text: "",
@@ -9,7 +9,7 @@ export const store = reactive<Message>({
 export const addNotification = (
   text: string,
   label?: "Error" | "Success",
-  links?: Link[]
+  links?: MesgLink[]
 ) => {
   //Delete old notification if it is visible
   resetNotification();

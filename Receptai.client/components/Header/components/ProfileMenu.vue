@@ -5,6 +5,7 @@ import ProfilePicture from "./ProfilePicture.vue";
 defineProps<{
   user: User;
   navigation: HeaderNavigation[];
+  isAdmin?: boolean;
 }>();
 </script>
 
@@ -20,6 +21,18 @@ defineProps<{
           <div class="font-semibold text-sm">{{ user.name }}</div>
           <div class="text-xs">{{ user.email }}</div>
         </div>
+      </div>
+      <div
+        v-if="isAdmin"
+        class="px-3 py-2 text-sm text-white bg-gray-700 hover:bg-gray-950 cursor-pointer"
+        @click="
+          {
+            navigateTo('/user/admin/dashboard');
+            $emit('page-exit');
+          }
+        "
+      >
+        Admin dashboard
       </div>
       <div
         class="px-3 py-2 text-sm hover:bg-concrete-100 cursor-pointer"

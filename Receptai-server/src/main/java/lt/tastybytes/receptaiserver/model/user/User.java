@@ -117,7 +117,8 @@ public class User implements UserDetails, ManageableModel {
         return new PublicUserDto(id, name, profileUrl);
     }
     public FullUserDto toFullUserDto() {
-        return new FullUserDto(id, name, email, profileUrl);
+        var roles = getRoles().stream().map(Role::getName).toList();
+        return new FullUserDto(id, name, email, profileUrl, roles);
     }
 
     public Long getId() {

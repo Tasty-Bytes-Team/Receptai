@@ -72,8 +72,7 @@ const deleteRecipe = async () => {
               }
             "
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2"
-            :class="item.label === 'ID' ? 'min-w-14' : 'min-w-36'"
+            class="px-3 py-3 border-concrete-300 border-2 min-w-36"
             v-for="item in columns"
           >
             <div class="flex flex-row items-center justify-between gap-1.5">

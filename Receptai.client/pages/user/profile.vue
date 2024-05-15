@@ -23,6 +23,7 @@ const user: User = reactive({
   name: "",
   email: "",
   avatarUrl: null,
+  roles: []
 });
 const showConfirmation = ref(false);
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

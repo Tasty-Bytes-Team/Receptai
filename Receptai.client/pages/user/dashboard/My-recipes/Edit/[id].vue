@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import type { Recipe, UserCookie } from "@/typescript/types";
-import RecipeEditingPage from "@/components/admin/RecipeEdit/RecipeEditingPage.vue";
+import RecipeEditingPage from "@/components/user/RecipeEdit/RecipeEditingPage.vue";
 
 definePageMeta({
   layout: "user",

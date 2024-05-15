@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RecipeContainerColumn } from '~/typescript/types';
+import type { RecipeContainerColumn } from '@/typescript/types';
 
 defineProps<{
   columns: RecipeContainerColumn[];

@@ -14,12 +14,12 @@ import * as zod from "zod";
 import { addNotification } from "@/store/store";
 
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
-import InputField from "@/components/admin/components/InputField.vue";
-import InputTextarea from "@/components/admin/components/InputTextarea.vue";
-import OptionSelect from "@/components/admin/components/OptionSelect.vue";
-import MultipleOptionSelect from "@/components/admin/components/MultipleOptionSelect.vue";
-import IngredientsGroups from "@/components/admin/components/IngredientsGroups.vue";
-import Instructions from "@/components/admin/components/Instructions.vue";
+import InputField from "@/components/user/components/InputField.vue";
+import InputTextarea from "@/components/user/components/InputTextarea.vue";
+import OptionSelect from "@/components/user/components/OptionSelect.vue";
+import MultipleOptionSelect from "@/components/user/components/MultipleOptionSelect.vue";
+import IngredientsGroups from "@/components/user/components/IngredientsGroups.vue";
+import Instructions from "@/components/user/components/Instructions.vue";
 
 const config = useRuntimeConfig();
 

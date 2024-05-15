@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { render, fireEvent } from "@testing-library/vue";
-import InputField from "@/components/admin/components/InputField.vue";
+import InputField from "@/components/user/components/InputField.vue";
 
 describe("Input field", () => {
   test("should display all prop values with text input", () => {

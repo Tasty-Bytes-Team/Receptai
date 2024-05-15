@@ -4,7 +4,7 @@ import type { Recipe } from "@/typescript/types";
 import RecipeContainer from "@/components/RecipeContainerComponent/RecipeContainerComponent.vue";
 import Pagination from "@/components/Pagination/Pagination.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
-import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
+import RecipeSortAndFilter from "@/components/user/components/RecipeSortAndFilter.vue";
 import sortOptionSelector from "@/typescript/sortOptionSelector.ts";
 
 const config = useRuntimeConfig();

@@ -6,7 +6,7 @@ import Pagination from "@/components/Pagination/Pagination.vue";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import RecipeContainerShimmer from "@/components/ShimmerLoaders/RecipeContainerShimmer.vue";
 import SearchForm from "@/components/SearchForm/SearchForm.vue";
-import RecipeSortAndFilter from "@/components/admin/components/RecipeSortAndFilter.vue";
+import RecipeSortAndFilter from "@/components/user/components/RecipeSortAndFilter.vue";
 import RecipeSortAndFilterShimmer from "@/components/ShimmerLoaders/RecipeSortAndFilterShimmer.vue";
 import sortOptionSelector from "@/typescript/sortOptionSelector.ts";
 

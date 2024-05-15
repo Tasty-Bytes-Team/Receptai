@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import axios from "axios";
-import type { UserCookie, User } from "~/typescript/types";
+import type { UserCookie, User } from "@/typescript/types";
 import { Form, useForm, useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { addNotification } from "~/store/store";
+import { addNotification } from "@/store/store";
 
 const config = useRuntimeConfig();
 

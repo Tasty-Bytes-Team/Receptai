@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import axios from "axios";
-import type { UserCookie, Recipe, RecipeContainerColumn } from "@/typescript/types";
+import type {
+  UserCookie,
+  Recipe,
+  RecipeContainerColumn,
+} from "@/typescript/types";
 import { addNotification } from "@/store/store";
-
 import ConfirmBox from "./components/ConfirmBox.vue";
 import Image from "./Image.vue";
+import StarRating from "@/components/Feedback/components/StarRating.vue";
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
@@ -22,6 +26,7 @@ const toBeDeleted = ref<number | null>(null);
 const recipeSelection = props.recipes?.map((recipe) => ({
   id: recipe.id,
   image: recipe.previewImage,
+  averageRating: recipe.averageRating,
   name: recipe.name,
   dateCreated: recipe.dateCreated.split("T")[0],
 }));
@@ -66,8 +71,7 @@ const deleteRecipe = async () => {
               }
             "
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2"
-            :class="item.label === 'ID' ? 'min-w-14' : 'min-w-36'"
+            class="px-3 py-3 border-concrete-300 border-2 min-w-36"
             v-for="item in columns"
           >
             <div class="flex flex-row items-center justify-between gap-1.5">
@@ -99,11 +103,13 @@ const deleteRecipe = async () => {
           class="border-b-2 border-concrete-200"
           v-for="recipe in recipeSelection"
         >
-          <td class="text-center">{{ recipe.id }}</td>
+          <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
           <td class="text-center">
             <Image class="m-auto" :preview-image="recipe.image" />
           </td>
-          <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
+          <td class="font-bold px-3 py-4">
+            <StarRating :set-rating="recipe.averageRating / 2" />
+          </td>
           <td class="px-3 py-4">{{ recipe.dateCreated }}</td>
           <td class="text-center max-w-40">
             <div class="w-full flex justify-evenly">

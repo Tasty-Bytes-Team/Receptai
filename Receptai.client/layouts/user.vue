@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Header from "@/components/Header/Header.vue";
-import Footer from "@/components/admin/Footer.vue";
+import Footer from "@/components/user/Footer.vue";
 import type { HeaderNavigation } from "@/typescript/types";
 
 const headerNav: Array<HeaderNavigation> = [

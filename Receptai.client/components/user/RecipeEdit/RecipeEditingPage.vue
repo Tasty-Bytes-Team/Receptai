@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import type {
-  Recipe,
-  PostRecipe,
-  UserCookie,
-  Category,
-  Tag,
-  Instruction,
-} from "@/typescript/types";
+import type { Recipe, PostRecipe, UserCookie, Category, Tag, Instruction } from "@/typescript/types";
 import { Form, type GenericObject } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -146,19 +139,23 @@ const onSubmit = async (values: GenericObject) => {
         }
       );
 
-      await navigateTo("/user/admin/dashboard/all-recipes");
+      await navigateTo("/user/dashboard/my-recipes");
 
-      addNotification(`Recipe ${values.name} has been updated!`, "Success", [
-        {
-          text: "View recipe",
-          link: `/recipes/${res.data.id}`,
-          type: "Black",
-        },
-      ]);
+      addNotification(
+        `Your recipe ${values.name} has been updated!`,
+        "Success",
+        [
+          {
+            text: "View recipe",
+            link: `/recipes/${res.data.id}`,
+            type: "Black",
+          },
+        ]
+      );
     } catch (e) {
       console.log("Edit recipe", e);
 
-      errorText.value = "Oops! There was an error saving changes.";
+      errorText.value = "Oops! There was an error saving your changes.";
       error.value = true;
 
       window?.scrollTo(0, 0);

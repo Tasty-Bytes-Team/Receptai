@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full h-80 shadow-md">
-    <div class="z-50 rounded-md absolute top-0 left-0 w-full h-full bg-[#00000094] flex justify-center items-center">
+    <div class="z-[5] rounded-md absolute top-0 left-0 w-full h-full bg-[#00000094] flex justify-center items-center">
         <div class="flex justify-center items-center flex-col gap-2 mx-10 my-5">
             <h1 class="text-white font-semibold text-5xl">Tasty Bytes</h1>
             <p class="text-white text-center leading-5">

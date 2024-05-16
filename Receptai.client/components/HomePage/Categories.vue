@@ -2,8 +2,6 @@
 import axios from "axios";
 import type { Category } from "@/typescript/types";
 import CategoryComponent from "@/components/CategoryPage/CategoryComponent/CategoryComponent.vue";
-import Pagination from "@/components/Pagination/Pagination.vue";
-import EmptyListInformation from "@/components/EmptyListInformation.vue";
 import CategoryContainerShimmer from "@/components/ShimmerLoaders/CategoryContainerShimmer.vue";
 
 const config = useRuntimeConfig();

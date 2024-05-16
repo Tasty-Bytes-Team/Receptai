@@ -195,7 +195,7 @@ const onSubmit = async (values: GenericObject) => {
       />
       <InputField
         name="portions"
-        label="Servings (in minutes) (required)"
+        label="Servings (required)"
         placeholder="How many people does this recipe serve?"
         type="number"
       />

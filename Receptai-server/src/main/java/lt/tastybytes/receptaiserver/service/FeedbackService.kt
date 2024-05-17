@@ -6,9 +6,14 @@ import lt.tastybytes.receptaiserver.model.user.User
 import lt.tastybytes.receptaiserver.utils.Pager
 import lt.tastybytes.receptaiserver.utils.Sorter
 import org.springframework.data.domain.Page
-import java.util.Optional
+import java.util.*
 
 interface FeedbackService {
+
+    /**
+     * Returns total feedback count as saved in the database.
+     */
+    fun getTotalFeedbackCount(): Number
 
     /**
      * Return a page containing feedback for the specified recipe ID.
@@ -42,4 +47,14 @@ interface FeedbackService {
      * The feedback contents are to be provided through a DTO object.
      */
     fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback
+
+    /**
+     * Returns feedback object by the specified ID.
+     */
+    fun getFeedbackById(feedbackId: Long): Optional<Feedback>
+
+    /**
+     * Deletes feedback object by the specified ID.
+     */
+    fun deleteFeedbackById(feedbackId: Long): Boolean
 }

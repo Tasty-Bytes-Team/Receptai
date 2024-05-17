@@ -1,6 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
+import lt.tastybytes.receptaiserver.dto.MessageResponseDto;
 import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
 import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto;
@@ -56,4 +57,25 @@ public class FeedbackController {
         var createdFeedback = feedbackService.leaveFeedback(recipeId, currentUser, dto);
         return ResponseEntity.ok(createdFeedback.toDto());
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<MessageResponseDto> deleteFeedback(
+            @PathVariable(value = "id") long id,
+            @AuthenticationPrincipal User user
+    ) throws Exception {
+        var feedback = feedbackService.getFeedbackById(id);
+        if (feedback.isEmpty()) {
+            throw new NotFoundException("Feedback by specified ID not found");
+        }
+
+        feedback.get().assertCanBeManagedBy(user);
+
+        var ok = feedbackService.deleteFeedbackById(id);
+        if (ok) {
+            return ResponseEntity.ok(new MessageResponseDto("Feedback deleted successfully"));
+        }
+        return ResponseEntity.badRequest().body(new MessageResponseDto("Feedback deletion failed"));
+    }
+
+
 }

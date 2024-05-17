@@ -2,7 +2,6 @@ package lt.tastybytes.receptaiserver.service.impl;
 
 import jakarta.validation.Valid;
 import lt.tastybytes.receptaiserver.dto.user.PatchUserDto;
-import lt.tastybytes.receptaiserver.exception.NotFoundException;
 import lt.tastybytes.receptaiserver.exception.UserAlreadyExistsException;
 import lt.tastybytes.receptaiserver.model.user.Role;
 import lt.tastybytes.receptaiserver.model.user.User;
@@ -18,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +28,8 @@ public class UserServiceImpl implements UserService {
 
     final String DefaultRole = "ROLE_USER";
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -124,6 +121,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getUsers(int pageNumber) {
         return userRepository.findAll(PageRequest.of(pageNumber, USERS_PER_PAGE));
+    }
+
+    @Override
+    public Number getTotalUserCount() {
+        return userRepository.count();
     }
 
     private Role createDefaultRoleIfNotExist() {

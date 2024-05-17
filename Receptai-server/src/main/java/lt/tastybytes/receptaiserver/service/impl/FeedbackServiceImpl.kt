@@ -5,6 +5,7 @@ import lt.tastybytes.receptaiserver.exception.EntryAlreadyExistsException
 import lt.tastybytes.receptaiserver.exception.NotFoundException
 import lt.tastybytes.receptaiserver.exception.RuntimeValidationException
 import lt.tastybytes.receptaiserver.model.Feedback
+import lt.tastybytes.receptaiserver.model.recipe.Recipe
 import lt.tastybytes.receptaiserver.model.user.User
 import lt.tastybytes.receptaiserver.repository.FeedbackRepository
 import lt.tastybytes.receptaiserver.service.FeedbackService
@@ -25,6 +26,10 @@ class FeedbackServiceImpl(
     private var recipeService: RecipeService,
     private var userService: UserService
 ) : FeedbackService {
+
+    override fun getTotalFeedbackCount(): Number {
+        return feedbackRepository.count()
+    }
 
     override fun getFeedbackByRecipe(recipeId: Long, pager: Pager): Page<Feedback> {
         val recipe = recipeService.getRecipeById(recipeId)
@@ -89,5 +94,18 @@ class FeedbackServiceImpl(
         feedbackObj.dateCreated = Date()
         feedbackRepository.save(feedbackObj)
         return feedbackObj
+    }
+
+    override fun getFeedbackById(feedbackId: Long): Optional<Feedback> {
+        return feedbackRepository.findById(feedbackId)
+    }
+
+    override fun deleteFeedbackById(feedbackId: Long): Boolean {
+        val feedback = getFeedbackById(feedbackId)
+        if (feedback.isPresent) {
+            feedbackRepository.deleteById(feedbackId)
+            return true
+        }
+        return false
     }
 }

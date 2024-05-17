@@ -14,7 +14,7 @@ public interface UserService {
 
     Page<User> getUsers(int pageNumber);
 
-
+    Number getTotalUserCount();
 
     Optional<User> findUserById(long id);
 

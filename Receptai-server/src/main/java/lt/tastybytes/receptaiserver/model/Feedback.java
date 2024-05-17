@@ -3,14 +3,17 @@ package lt.tastybytes.receptaiserver.model;
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.feedback.ExtendedFeedbackDto;
 import lt.tastybytes.receptaiserver.dto.feedback.FeedbackDto;
+import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.model.recipe.Recipe;
 import lt.tastybytes.receptaiserver.model.user.User;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "feedback")
-public class Feedback {
+public class Feedback implements ManageableModel  {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
@@ -89,5 +92,18 @@ public class Feedback {
                 dateCreated,
                 recipe.toDto()
         );
+    }
+
+    @Override
+    public void assertCanBeManagedBy(@NotNull User user) throws MissingRightsException {
+        if (getAuthor().getId().equals(user.getId())) {
+            return;
+        }
+
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            return;
+        }
+
+        throw new MissingRightsException("You are missing the required rights to manage this feedback!");
     }
 }

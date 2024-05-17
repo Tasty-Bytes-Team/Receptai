@@ -47,4 +47,14 @@ interface FeedbackService {
      * The feedback contents are to be provided through a DTO object.
      */
     fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback
+
+    /**
+     * Returns feedback object by the specified ID.
+     */
+    fun getFeedbackById(feedbackId: Long): Optional<Feedback>
+
+    /**
+     * Deletes feedback object by the specified ID.
+     */
+    fun deleteFeedbackById(feedbackId: Long): Boolean
 }

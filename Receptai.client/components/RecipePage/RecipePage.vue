@@ -71,7 +71,7 @@ const error = ref(false);
               <p>
                 {{ recipe.shortDescription }}
               </p>
-              <div class="my-3">
+              <div class="my-3" v-if="false">
                 <NutritionTable />
               </div>
             </div>

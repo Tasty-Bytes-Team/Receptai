@@ -43,12 +43,21 @@
         <SingleTag v-for="tag in tags" :tag="tag" />
       </tbody>
     </table>
+    <div class="w-full text-center" v-if="totalPages > 0">
+      <Pagination
+        @change="getTags"
+        v-model="pageNumber"
+        :totalPages
+        :siblings
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SingleTag from "./SingleTag.vue";
 import axios from "axios";
+import Pagination from "~/components/Pagination/Pagination.vue";
 import type { Tag, UserCookie } from "@/typescript/types";
 
 const config = useRuntimeConfig();
@@ -57,10 +66,15 @@ const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 const tags = ref<Tag[] | null>(null);
 const loading = ref(true);
 
+const pageNumber = ref(0);
+const totalPages = ref(0);
+const siblings = 2;
+
 const getTags = async () => {
   try {
     const result = await axios.get(`${config.public.baseURL}/api/v1/tag/list`);
     tags.value = result.data.elements;
+    totalPages.value = result.data.totalPageCount;
   } catch (e) {
     console.log(e);
   } finally {

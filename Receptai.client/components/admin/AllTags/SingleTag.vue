@@ -9,7 +9,6 @@
     <td class="text-center p-3">
       <Icon :name="tag.iconName" color="black" />
     </td>
-    <td class="text-center p-3">DELETE</td>
   </tr>
 </template>
 
@@ -19,8 +18,6 @@ import type { Tag } from "@/typescript/types";
 const props = defineProps<{
   tag: Tag;
 }>();
-
-console.log(props);
 </script>
 
 <style scoped></style>

@@ -31,12 +31,6 @@
           >
             Tag icon
           </th>
-          <th
-            scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center"
-          >
-            Action
-          </th>
         </tr>
       </thead>
       <tbody>

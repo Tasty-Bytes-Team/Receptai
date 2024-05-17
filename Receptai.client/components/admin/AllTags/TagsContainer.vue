@@ -52,10 +52,9 @@
 import SingleTag from "./SingleTag.vue";
 import axios from "axios";
 import Pagination from "~/components/Pagination/Pagination.vue";
-import type { Tag, UserCookie } from "@/typescript/types";
+import type { Tag } from "@/typescript/types";
 
 const config = useRuntimeConfig();
-const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const tags = ref<Tag[] | null>(null);
 const loading = ref(true);

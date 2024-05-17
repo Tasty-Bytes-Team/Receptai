@@ -15,7 +15,7 @@
         <tr>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-14"
           >
             ID
           </th>
@@ -27,7 +27,7 @@
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36 "
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
           >
             Name
           </th>
@@ -61,7 +61,6 @@ import Pagination from "~/components/Pagination/Pagination.vue";
 import type { Category, UserCookie } from "@/typescript/types";
 
 const config = useRuntimeConfig();
-const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 
 const categories = ref<Category[] | null>(null);
 const loading = ref(true);

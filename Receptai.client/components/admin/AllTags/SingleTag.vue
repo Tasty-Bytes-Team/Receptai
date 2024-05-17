@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import type { Tag } from "@/typescript/types";
 
-const props = defineProps<{
+defineProps<{
   tag: Tag;
 }>();
 </script>

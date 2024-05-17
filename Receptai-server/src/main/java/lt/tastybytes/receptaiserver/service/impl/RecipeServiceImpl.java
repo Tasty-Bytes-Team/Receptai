@@ -146,6 +146,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Number getTotalRecipeCount() {
+        return recipeRepository.count();
+    }
+
+    @Override
     public Page<Recipe> getRecipes(Pager pager, Sorter sorter) {
         var request = pager.toPageRequest(RECIPES_PER_PAGE);
         request = sorter.toPageRequest(request);

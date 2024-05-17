@@ -6,9 +6,14 @@ import lt.tastybytes.receptaiserver.model.user.User
 import lt.tastybytes.receptaiserver.utils.Pager
 import lt.tastybytes.receptaiserver.utils.Sorter
 import org.springframework.data.domain.Page
-import java.util.Optional
+import java.util.*
 
 interface FeedbackService {
+
+    /**
+     * Returns total feedback count as saved in the database.
+     */
+    fun getTotalFeedbackCount(): Number
 
     /**
      * Return a page containing feedback for the specified recipe ID.

@@ -1,10 +1,7 @@
 package lt.tastybytes.receptaiserver.controller;
 
 import jakarta.validation.Valid;
-import lt.tastybytes.receptaiserver.dto.DashboardDto;
-import lt.tastybytes.receptaiserver.dto.PagedRequestDto;
-import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
-import lt.tastybytes.receptaiserver.dto.SortedRequestDto;
+import lt.tastybytes.receptaiserver.dto.*;
 import lt.tastybytes.receptaiserver.dto.user.*;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
@@ -134,6 +131,17 @@ public class UserController {
                         recipePage.getContent().stream().map(Recipe::toDto).toList(),
                         feedbackPage.getContent().stream().map(Feedback::toDto).toList(),
                         feedbackService.getAverageRecipeAuthorRating(user.getId())
+                )
+        );
+    }
+
+    @GetMapping("/admin/dashboard")
+    public ResponseEntity<AdminDashboardDto> getAdminDashboard() {
+        return ResponseEntity.ok(
+                new AdminDashboardDto(
+                        recipeService.getTotalRecipeCount(),
+                        feedbackService.getTotalFeedbackCount(),
+                        userService.getTotalUserCount()
                 )
         );
     }

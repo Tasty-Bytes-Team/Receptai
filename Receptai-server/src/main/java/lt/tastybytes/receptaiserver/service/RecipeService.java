@@ -20,6 +20,7 @@ public interface RecipeService {
      */
     Optional<Recipe> getRecipeById(long id);
 
+    Number getTotalRecipeCount();
 
     Page<Recipe> getRecipes(Pager pager, Sorter sorter);
     Page<Recipe> getRecipesByCategory(Category category, Pager pager);

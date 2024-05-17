@@ -126,6 +126,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(PageRequest.of(pageNumber, USERS_PER_PAGE));
     }
 
+    @Override
+    public Number getTotalUserCount() {
+        return userRepository.count();
+    }
+
     private Role createDefaultRoleIfNotExist() {
         Role role = new Role();
         role.setName(DefaultRole);

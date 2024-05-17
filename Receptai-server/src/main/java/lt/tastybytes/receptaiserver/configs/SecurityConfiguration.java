@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/user/register").permitAll()
                         .requestMatchers("/api/v1/user/login").permitAll()
                         .requestMatchers("/api/v1/user/list").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/user/admin/dashboard").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

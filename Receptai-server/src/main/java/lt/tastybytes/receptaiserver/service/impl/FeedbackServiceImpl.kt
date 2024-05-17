@@ -26,6 +26,10 @@ class FeedbackServiceImpl(
     private var userService: UserService
 ) : FeedbackService {
 
+    override fun getTotalFeedbackCount(): Number {
+        return feedbackRepository.count()
+    }
+
     override fun getFeedbackByRecipe(recipeId: Long, pager: Pager): Page<Feedback> {
         val recipe = recipeService.getRecipeById(recipeId)
         val request = pager.toPageRequest(FEEDBACK_PER_PAGE)

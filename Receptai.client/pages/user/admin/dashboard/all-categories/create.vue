@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import type {
-  UserCookie,
-} from "@/typescript/types";
+import type { UserCookie } from "@/typescript/types";
 import { Form, type GenericObject } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -11,10 +9,13 @@ import { addNotification } from "@/store/store";
 
 import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import InputField from "@/components/user/components/InputField.vue";
+import InputTextarea from "@/components/user/components/InputTextarea.vue";
+
 
 interface CreateTag {
   name: string;
-  iconName: string;
+  description: string;
+  previewImageUrl: string;
 }
 
 const config = useRuntimeConfig();
@@ -26,13 +27,15 @@ const errorText: Ref<string> = ref("");
 const validationSchema = toTypedSchema(
   zod.object({
     name: zod.string().min(1, "Name is required"),
-    iconName: zod.string().min(1, "Icon is required"),
+    description: zod.string().min(1, "Description is required"),
+    previewImageUrl: zod.string().url("Preview image must be a valid URL"),
   })
 );
 
 let initialValues: CreateTag = {
   name: "",
   iconName: "",
+  previewImageUrl: ""
 };
 
 const onSubmit = async (values: GenericObject) => {
@@ -42,26 +45,26 @@ const onSubmit = async (values: GenericObject) => {
   if (TastyBytes_user.value) {
     try {
       const res = await axios.post(
-        `${config.public.baseURL}/api/v1/tag/create`,
+        `${config.public.baseURL}/api/v1/category/create`,
         values,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
         }
       );
 
-      await navigateTo("/user/admin/dashboard/all-tags");
+      await navigateTo("/user/admin/dashboard/all-categories");
 
-      addNotification(`Your tag ${values.name} has been added!`, "Success");
+      addNotification(`Your category ${values.name} has been added!`, "Success");
     } catch (e) {
-      console.log("Create tag", e);
+      console.log("Create category", e);
 
-      errorText.value = "Oops! There was an error while creating your tag.";
+      errorText.value = "Oops! There was an error while creating your category.";
       error.value = true;
 
       window?.scrollTo(0, 0);
 
       addNotification(
-        "Uh oh! We couldn't create this tag. Please try again.",
+        "Uh oh! We couldn't create this category. Please try again.",
         "Error"
       );
     }
@@ -71,7 +74,7 @@ const onSubmit = async (values: GenericObject) => {
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold text-center m-5">Create Tag</h1>
+    <h1 class="text-3xl font-bold text-center m-5">Create Category</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
     <Form
       :initial-values="initialValues"
@@ -82,23 +85,17 @@ const onSubmit = async (values: GenericObject) => {
       <InputField
         name="name"
         label="Name (required)"
-        placeholder="What's the tag's name?"
+        placeholder="What's the categorie's name?"
       />
-      <div class="bg-gray-200 rounded-md w-full p-3">
-        <p class="font-medium text-sm">
-          Icon should be selected from the list provided in this website:
-          <a
-            href="https://icones.js.org/"
-            target="_blank"
-            style="color: #0043c8"
-            >icones.js.org</a
-          >.
-        </p>
-      </div>
+      <InputTextarea
+        name="description"
+        label="Short description (required)"
+        placeholder="How would you describe this category?"
+      />
       <InputField
-        name="iconName"
-        label="Icon name (required)"
-        placeholder="What icon best describes your tag?"
+        name="previewImageUrl"
+        label="Preview image url (required)"
+        placeholder="What image best describes your category?"
       />
       <button
         class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"

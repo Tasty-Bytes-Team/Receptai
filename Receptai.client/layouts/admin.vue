@@ -12,6 +12,10 @@ const headerNav: Array<HeaderNavigation> = [
     to: "/user/admin/dashboard/all-recipes",
     title: "All recipes",
   },
+  {
+    to: "/user/admin/dashboard/all-reviews",
+    title: "All reviews",
+  },
 ];
 </script>
 

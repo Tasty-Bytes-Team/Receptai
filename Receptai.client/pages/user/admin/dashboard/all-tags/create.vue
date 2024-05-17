@@ -1,0 +1,123 @@
+<script setup lang="ts">
+import axios from "axios";
+import type {
+  Recipe,
+  PostRecipe,
+  UserCookie,
+  Category,
+  Tag,
+  Instruction,
+} from "@/typescript/types";
+import { Form, type GenericObject } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+
+import { addNotification } from "@/store/store";
+
+import ErrorBaner from "@/components/Error/ErrorBaner.vue";
+import InputField from "@/components/user/components/InputField.vue";
+import InputTextarea from "@/components/user/components/InputTextarea.vue";
+import OptionSelect from "@/components/user/components/OptionSelect.vue";
+import MultipleOptionSelect from "@/components/user/components/MultipleOptionSelect.vue";
+import IngredientsGroups from "@/components/user/components/IngredientsGroups.vue";
+import Instructions from "@/components/user/components/Instructions.vue";
+
+interface CreateTag {
+  name: string;
+  iconName: string;
+}
+
+const config = useRuntimeConfig();
+const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+const error: Ref<boolean> = ref(false);
+const errorText: Ref<string> = ref("");
+
+const validationSchema = toTypedSchema(
+  zod.object({
+    name: zod.string().min(1, "Name is required"),
+    iconName: zod.string().min(1, "Icon is required"),
+  })
+);
+
+let initialValues: CreateTag = {
+  name: "",
+  iconName: "",
+};
+
+const onSubmit = async (values: GenericObject) => {
+  error.value = false;
+  errorText.value = "";
+
+  if (TastyBytes_user.value) {
+    try {
+      const res = await axios.post(
+        `${config.public.baseURL}/api/v1/tag/create`,
+        values,
+        {
+          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+        }
+      );
+
+      await navigateTo("/user/admin/dashboard/all-tags");
+
+      addNotification(`Your tag ${values.name} has been added!`, "Success");
+    } catch (e) {
+      console.log("Create tag", e);
+
+      errorText.value = "Oops! There was an error while creating your tag.";
+      error.value = true;
+
+      window?.scrollTo(0, 0);
+
+      addNotification(
+        "Uh oh! We couldn't create this tag. Please try again.",
+        "Error"
+      );
+    }
+  }
+};
+</script>
+
+<template>
+  <div>
+    <h1 class="text-3xl font-bold text-center m-5">Create Tag</h1>
+    <ErrorBaner v-if="error" :errorText="errorText" />
+    <Form
+      :initial-values="initialValues"
+      :validation-schema="validationSchema"
+      @submit="onSubmit"
+      class="flex flex-col gap-3"
+    >
+      <InputField
+        name="name"
+        label="Name (required)"
+        placeholder="What's the tag's name?"
+      />
+      <div class="bg-gray-200 rounded-md w-full p-3">
+        <p class="font-medium text-sm">
+          Icon should be selected from the list provided in this website:
+          <a
+            href="https://icones.js.org/"
+            target="_blank"
+            style="color: #0043c8"
+            >icones.js.org</a
+          >.
+        </p>
+      </div>
+      <InputField
+        name="iconName"
+        label="Icon name (required)"
+        placeholder="What icon best describes your tag?"
+      />
+      <button
+        class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"
+        type="submit"
+      >
+        Submit
+      </button>
+    </Form>
+  </div>
+</template>
+
+<style scoped></style>

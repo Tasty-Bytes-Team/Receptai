@@ -15,7 +15,7 @@ import CategorySuggestion from "@/components/HomePage/CategorySuggestion.vue";
       <Banner />
     </div>
     <div class="flex flex-col gap-2">
-      <CategorySuggestion recipeID="6" url="https://th.bing.com/th/id/R.34e8e2c30e241abd30d41a9a8da280a1?rik=7BGT7mk1Lf1BIg&pid=ImgRaw&r=0" heading="Craving a taste of the world?" description="Look no further than our Global Eats category! Explore a
+      <CategorySuggestion recipeID="6" url="/images/pica.jpg" heading="Craving a taste of the world?" description="Look no further than our Global Eats category! Explore a
           vibrant collection of recipes inspired by international cuisines. From
           the fiery curries of Thailand to the rich pastas of Italy, we offer a
           passport to deliciousness on your plate. Whether you're a seasoned

@@ -9,7 +9,7 @@
         </div>
     </div>
     <div
-      class="absolute top-0 left-0 rounded-md w-full h-full bg-gray-500 border-black border-2 bg-cover bg-center bg-[url('https://res.cloudinary.com/peloton-cycle/image/fetch/f_auto,c_limit,w_3840,q_90/https://images.ctfassets.net/6ilvqec50fal/4dUbnYDaqf2jRuED5WsMSc/4390b51bdc6b0673b37d09abbec3bad6/longevity-foods.jpg')]"
+      :class="`absolute top-0 left-0 rounded-md w-full h-full bg-gray-500 border-black border-2 bg-cover bg-center bg-[url('/images/longevity-foods.webp')]`"
     ></div>
   </div>
 </template>

@@ -5,7 +5,7 @@ import axios from "axios";
 
 definePageMeta({
   layout: "admin",
-  middleware: ["admin"],
+  middleware: "admin",
 });
 
 const config = useRuntimeConfig();

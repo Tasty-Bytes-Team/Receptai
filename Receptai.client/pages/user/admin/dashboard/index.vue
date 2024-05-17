@@ -43,7 +43,7 @@ getDashboardInfo();
         Welcome back, {{ TastyBytes_user?.user.name }}!
       </p>
     </div>
-    <div class="flex flex-col gap-4 p-2">
+    <div class="flex flex-col gap-3 p-2">
       <h2 class="text-2xl font-semibold text-gray-800">Featured numbers</h2>
       <div class="flex flex-row flex-wrap justify-around gap-4">
         <FeaturedNumber

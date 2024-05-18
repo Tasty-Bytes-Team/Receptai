@@ -1,16 +1,17 @@
-<template>
-    <div>
-        All reviews
-    </div>
-</template>
-
 <script setup lang="ts">
+import ReviewsContainer from '@/components/admin/AllReviews/ReviewsContainer.vue';
+
 definePageMeta({
   layout: "admin",
   middleware: "admin",
 });
 </script>
 
-<style scoped>
+<template>
+  <h1 class="text-3xl font-bold text-center m-3">All Reviews</h1>
+  <div>
+    <ReviewsContainer />
+  </div>
+</template>
 
-</style>
+<style scoped></style>

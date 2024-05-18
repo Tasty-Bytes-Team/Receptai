@@ -3,7 +3,7 @@
     <td class="text-center p-3">
       {{ review.id }}
     </td>
-    <td class="text-center p-3">
+    <td class="text-center p-3 font-semibold">
       {{ review.user.name }} (ID: {{ review.user.id }})
     </td>
     <td class="text-center p-3">

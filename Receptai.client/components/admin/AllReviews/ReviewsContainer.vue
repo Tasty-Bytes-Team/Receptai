@@ -31,31 +31,31 @@
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-28"
           >
             User
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-32"
           >
             Rating
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-48"
           >
             Review content
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-28"
           >
             Creation date
           </th>
           <th
             scope="col"
-            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-20"
           >
             Action
           </th>

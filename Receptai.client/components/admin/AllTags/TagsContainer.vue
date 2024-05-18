@@ -27,13 +27,13 @@
             scope="col"
             class="px-3 py-3 border-concrete-300 border-2 text-center"
           >
-            Tag name
+            Name
           </th>
           <th
             scope="col"
             class="px-3 py-3 border-concrete-300 border-2 text-center"
           >
-            Tag icon
+            Icon
           </th>
         </tr>
       </thead>

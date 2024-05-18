@@ -9,6 +9,10 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
+  <EmptyListInformation
+    v-else-if="categories && categories.length === 0"
+    description="Your tag list is currently empty. Why not add some tags today?"
+  />
   <div v-else class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right">
       <thead class="text-sm bg-concrete-100">
@@ -58,7 +62,8 @@
 import SingleCategory from "./SingleCategory.vue";
 import axios from "axios";
 import Pagination from "~/components/Pagination/Pagination.vue";
-import type { Category, UserCookie } from "@/typescript/types";
+import type { Category } from "@/typescript/types";
+import EmptyListInformation from "@/components/EmptyListInformation.vue";
 
 const config = useRuntimeConfig();
 
@@ -76,10 +81,9 @@ const getCategories = async () => {
     );
     categories.value = result.data.elements;
     totalPages.value = result.data.totalPageCount;
-  } catch (e) {
-    console.log(e);
-  } finally {
     loading.value = false;
+  } catch (e) {
+    console.error(e);
   }
 };
 

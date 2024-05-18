@@ -7,11 +7,7 @@
   />
   <div v-if="loading">
     <div role="status" class="flex justify-center items-center my-2">
-      <img
-        src="/assets/loader.svg"
-        alt="Recipe loader"
-        class="w-9 h-9 animate-spin"
-      />
+      <img src="/assets/loader.svg" alt="Loader" class="w-9 h-9 animate-spin" />
       <span class="sr-only">Loading...</span>
     </div>
   </div>

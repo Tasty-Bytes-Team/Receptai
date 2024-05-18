@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ReviewsContainer from '@/components/admin/AllReviews/ReviewsContainer.vue';
+import ReviewsContainer from "@/components/admin/AllReviews/ReviewsContainer.vue";
 
 definePageMeta({
   layout: "admin",

@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import SingleCategory from "./SingleCategory.vue";
 import axios from "axios";
-import Pagination from "~/components/Pagination/Pagination.vue";
+import Pagination from "@/components/Pagination/Pagination.vue";
 import type { Category } from "@/typescript/types";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 

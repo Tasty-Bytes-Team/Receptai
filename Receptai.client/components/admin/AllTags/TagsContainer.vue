@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import SingleTag from "./SingleTag.vue";
 import axios from "axios";
-import Pagination from "~/components/Pagination/Pagination.vue";
+import Pagination from "@/components/Pagination/Pagination.vue";
 import type { Tag } from "@/typescript/types";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
 

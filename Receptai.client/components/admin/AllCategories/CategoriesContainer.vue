@@ -11,7 +11,7 @@
   </div>
   <EmptyListInformation
     v-else-if="categories && categories.length === 0"
-    description="Your tag list is currently empty. Why not add some tags today?"
+    description="Your category list is currently empty. Why not add some categories today?"
   />
   <div v-else class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right">

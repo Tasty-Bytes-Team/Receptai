@@ -11,7 +11,7 @@
       />
       <div v-else>Empty</div>
     </td>
-    <td class="text-center p-3 font-semibold">
+    <td class="text-center p-3 text-base font-semibold">
       {{ category.name }}
     </td>
     <td class="text-center p-3">

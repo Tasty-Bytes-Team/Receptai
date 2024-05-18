@@ -3,11 +3,11 @@
     <td class="text-center p-3">
       {{ tag.id }}
     </td>
-    <td class="text-center p-3 font-semibold">
+    <td class="text-center p-3 font-semibold text-base">
       {{ tag.name }}
     </td>
     <td class="text-center p-3">
-      <Icon :name="tag.iconName" color="black" />
+      <Icon :name="tag.iconName" size="24px" color="black" />
     </td>
   </tr>
 </template>

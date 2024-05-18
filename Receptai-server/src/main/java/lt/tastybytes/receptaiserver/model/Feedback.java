@@ -77,6 +77,7 @@ public class Feedback implements ManageableModel  {
 
     public FeedbackDto toDto() {
         return new FeedbackDto(
+                id,
                 author.toPublicUserDto(),
                 content,
                 rating,

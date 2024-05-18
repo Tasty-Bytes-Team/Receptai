@@ -6,8 +6,8 @@ import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
 defineProps<{
   headerNav: HeaderNavigation[];
-  showSearch?: boolean;
-  showCreate?: boolean;
+  showSearchButton?: boolean;
+  showCreateButton?: boolean;
 }>();
 const route = useRoute();
 
@@ -58,7 +58,7 @@ const toggleMobileSearchWithTimeout = () => {
 
 <template>
   <div
-    class="sm:hidden max-w-screen-lg m-auto px-3 flex items-center justify-between"
+    class="md:hidden max-w-screen-lg m-auto px-3 flex items-center justify-between"
   >
     <div class="flex-1">
       <div class="flex gap-3 items-center justify-start">
@@ -82,10 +82,7 @@ const toggleMobileSearchWithTimeout = () => {
             color="black"
           />
         </button>
-        <button
-          v-if="showSearch"
-          @click="toggleMobileSearchWithTimeout"
-        >
+        <button v-if="showSearchButton" @click="toggleMobileSearchWithTimeout">
           <Icon
             name="material-symbols:search-rounded"
             class="transition-all duration-150 hover:bg-whiskey-200 hover:ring-4 hover:ring-whiskey-200 hover:rounded-sm outline-none hover:z-10 cursor-pointer"
@@ -103,10 +100,7 @@ const toggleMobileSearchWithTimeout = () => {
     <Logo class="!m-0" />
     <div class="flex-1">
       <div class="flex gap-3 items-center justify-end">
-        <NuxtLink
-          v-if="showCreate"
-          to="/user/dashboard/my-recipes/create"
-        >
+        <NuxtLink v-if="showCreateButton" to="/user/dashboard/my-recipes/create">
           <button
             class="p-1 px-3 rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
           >
@@ -119,11 +113,11 @@ const toggleMobileSearchWithTimeout = () => {
   </div>
   <div
     v-show="showSearch"
-    class="sm:hidden w-full p-2 border border-concrete-100 rounded-sm bg-concrete-50"
+    class="md:hidden w-full p-2 border border-concrete-100 rounded-sm bg-concrete-50"
   >
     <SearchForm class="border-none" />
   </div>
-  <div v-show="showMobileMenu" class="sm:hidden w-full">
+  <div v-show="showMobileMenu" class="md:hidden w-full">
     <ul
       class="font-medium flex flex-col p-3 border border-concrete-100 rounded-sm bg-concrete-50"
     >

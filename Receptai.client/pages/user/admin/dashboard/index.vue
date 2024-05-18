@@ -55,6 +55,8 @@ getDashboardInfo();
         <FeaturedNumber
           heading="Total Reviews"
           :featured-number="totalReviewCount"
+          button-text="All reviews"
+          button-link="/user/admin/dashboard/all-reviews"
         />
         <FeaturedNumber
           heading="Total Users"

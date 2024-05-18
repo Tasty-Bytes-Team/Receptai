@@ -135,3 +135,11 @@ export interface MesgLink {
   link: string;
   type?: "Black" | "Gray";
 }
+
+export interface ReviewInformation {
+  user: User,
+  content: string,
+  rating: number;
+  dateCreated: string;
+  id: number;
+}

@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import static lt.tastybytes.receptaiserver.model.RolesKt.ROLE_USER;
 
 @Service
+@Component
 public class UserServiceImpl implements UserService {
 
     private static final int USERS_PER_PAGE = 20;

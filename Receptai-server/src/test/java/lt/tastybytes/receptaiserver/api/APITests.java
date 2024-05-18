@@ -81,10 +81,10 @@ public class APITests {
             "", "", "", null,
                 List.of(), List.of(), List.of(1),
                 1, 1, 1
-        ), userService.findUserById(2).orElseThrow());
+        ), userService.findUserById(3).orElseThrow());
 
         // Leave a review on recipe 1 by user 3
-        feedbackService.leaveFeedback(1, userService.findUserById(3).orElseThrow(), new CreateFeedbackDto(
+        feedbackService.leaveFeedback(1, userService.findUserById(4).orElseThrow(), new CreateFeedbackDto(
                 "", 8
         ));
 
@@ -235,7 +235,7 @@ public class APITests {
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer " + getNormalUserToken());
         ResponseEntity<FullUserDto> entity = getTemplate().exchange(
-                getUrl("/api/v1/user/edit/1"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
+                getUrl("/api/v1/user/edit/2"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
                 FullUserDto.class);
         assertEquals(200, entity.getStatusCode().value());
         assertEquals("Antanas", entity.getBody().name());
@@ -248,7 +248,7 @@ public class APITests {
         headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer " + getNormalUserToken());
         ResponseEntity<MessageResponseDto> entity = getTemplate().exchange(
-                getUrl("/api/v1/user/edit/1"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
+                getUrl("/api/v1/user/edit/2"), HttpMethod.PATCH, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(400, entity.getStatusCode().value());
         assertThat(entity.getBody().message(), containsString("already exists"));
@@ -279,7 +279,7 @@ public class APITests {
                 getUrl("/api/v1/feedback/leave/1"), HttpMethod.POST, new HttpEntity<>(request, headers),
                 MessageResponseDto.class);
         assertEquals(400, entity.getStatusCode().value());
-        assertThat(entity.getBody().message(), containsString("Cannot leave review on own recipe"));
+        assertThat(entity.getBody().message(), containsString("You cannot leave feedback on your own recipe!"));
     }
 
     @Test

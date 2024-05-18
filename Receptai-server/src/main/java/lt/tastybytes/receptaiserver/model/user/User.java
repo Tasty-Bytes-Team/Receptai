@@ -113,6 +113,10 @@ public class User implements UserDetails, ManageableModel {
         this.roles = roles;
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     public PublicUserDto toPublicUserDto() {
         return new PublicUserDto(id, name, profileUrl);
     }

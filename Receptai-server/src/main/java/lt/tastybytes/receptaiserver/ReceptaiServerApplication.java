@@ -37,5 +37,4 @@ public class ReceptaiServerApplication {
 			System.out.println("Added ROLE_ADMIN for user of ID 1");
 		}
 	}
-
 }

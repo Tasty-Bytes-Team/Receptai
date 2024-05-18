@@ -137,10 +137,4 @@ public class UserServiceImpl implements UserService {
     public Number getTotalUserCount() {
         return userRepository.count();
     }
-
-    private Role createDefaultRoleIfNotExist() {
-        Role role = new Role();
-        role.setName(DefaultRole);
-        return roleRepository.save(role);
-    }
 }

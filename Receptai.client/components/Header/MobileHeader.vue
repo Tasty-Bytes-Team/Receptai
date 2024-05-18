@@ -4,13 +4,11 @@ import UserBanner from "./components/UserBanner.vue";
 import Logo from "./components/Logo.vue";
 import SearchForm from "@/components/SearchForm/SearchForm.vue";
 
-const props = defineProps<{
+defineProps<{
   headerNav: HeaderNavigation[];
   showSearchButton?: boolean;
   showCreateButton?: boolean;
 }>();
-
-console.log(props)
 const route = useRoute();
 
 const updateHref = (): String => {

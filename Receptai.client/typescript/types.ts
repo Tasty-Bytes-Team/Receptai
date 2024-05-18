@@ -141,4 +141,5 @@ export interface ReviewInformation {
   content: string,
   rating: number;
   dateCreated: string;
+  id: number;
 }

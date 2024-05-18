@@ -77,7 +77,7 @@ const onSubmit = async (values: GenericObject) => {
     <h1 class="text-3xl font-bold text-center m-5">Create Tag</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
     <Form
-    v-slot="{values}"
+      v-slot="{ values }"
       :initial-values="initialValues"
       :validation-schema="validationSchema"
       @submit="onSubmit"
@@ -103,12 +103,12 @@ const onSubmit = async (values: GenericObject) => {
         name="iconName"
         label="Icon name (required)"
         placeholder="Which icon best describes your tag?"
-        
       />
-      <div v-if="values.iconName && values.iconName.length > 4" class="bg-gray-100 rounded-md w-full p-3 flex flex-row items-center gap-3 flex-wrap">
-        <p class="font-medium text-sm">
-          Your selected icon:
-        </p>
+      <div
+        v-if="values.iconName && values.iconName.length > 4"
+        class="bg-gray-100 rounded-md w-full p-3 flex flex-row items-center gap-3 flex-wrap"
+      >
+        <p class="font-medium text-sm">Your selected icon:</p>
         <Icon :name="values.iconName" size="24px" color="black" />
       </div>
       <button

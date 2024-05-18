@@ -95,15 +95,15 @@ const onSubmit = async (values: GenericObject) => {
         label="Name (required)"
         placeholder="What's the categorie's name?"
       />
-      <InputTextarea
-        name="description"
-        label="Short description (required)"
-        placeholder="How would you describe this category?"
-      />
       <InputField
         name="previewImageUrl"
         label="Preview image url (required)"
         placeholder="What image best describes your category?"
+      />
+      <InputTextarea
+        name="description"
+        label="Short description (required)"
+        placeholder="How would you describe this category?"
       />
       <button
         class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"

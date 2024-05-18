@@ -63,7 +63,7 @@ const onSubmit = async (values: GenericObject) => {
         "Success"
       );
     } catch (e) {
-      console.log("Create category", e);
+      console.error("Create category", e);
 
       errorText.value =
         "Oops! There was an error while creating your category.";

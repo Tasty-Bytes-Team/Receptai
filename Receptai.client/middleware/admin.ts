@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware(async () => {
       return navigateTo("/user/dashboard");
     }
   } catch (error) {
-    console.log("Auth", error);
+    console.error("Auth", error);
     useCookie("TastyBytes_user").value = null;
     return navigateTo("/user/login");
   }

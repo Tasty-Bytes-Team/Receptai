@@ -20,7 +20,7 @@ try {
 
   recipeData.value = recipe.data;
 } catch (e) {
-  console.log(e);
+  console.error(e);
 }
 </script>
 

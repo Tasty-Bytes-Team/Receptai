@@ -58,7 +58,7 @@ const onSubmit = async (values: GenericObject) => {
 
       addNotification(`Your tag ${values.name} has been added!`, "Success");
     } catch (e) {
-      console.log("Create tag", e);
+      console.error("Create tag", e);
 
       errorText.value = "Oops! There was an error while creating your tag.";
       error.value = true;

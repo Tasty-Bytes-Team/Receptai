@@ -19,7 +19,7 @@ try {
   );
   recipeData.value = recipe.data;
 } catch (e) {
-  console.log(e);
+  console.error(e);
 }
 
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");

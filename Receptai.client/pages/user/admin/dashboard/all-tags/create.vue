@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import type {
-  UserCookie,
-} from "@/typescript/types";
+import type { UserCookie } from "@/typescript/types";
 import { Form, type GenericObject } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -79,6 +77,7 @@ const onSubmit = async (values: GenericObject) => {
     <h1 class="text-3xl font-bold text-center m-5">Create Tag</h1>
     <ErrorBaner v-if="error" :errorText="errorText" />
     <Form
+    v-slot="{values}"
       :initial-values="initialValues"
       :validation-schema="validationSchema"
       @submit="onSubmit"
@@ -89,7 +88,7 @@ const onSubmit = async (values: GenericObject) => {
         label="Name (required)"
         placeholder="What's the tag's name?"
       />
-      <div class="bg-gray-200 rounded-md w-full p-3">
+      <div class="bg-gray-100 rounded-md w-full p-3">
         <p class="font-medium text-sm">
           Icon should be selected from the list provided in this website:
           <a
@@ -103,8 +102,15 @@ const onSubmit = async (values: GenericObject) => {
       <InputField
         name="iconName"
         label="Icon name (required)"
-        placeholder="What icon best describes your tag?"
+        placeholder="Which icon best describes your tag?"
+        
       />
+      <div v-if="values.iconName && values.iconName.length > 4" class="bg-gray-100 rounded-md w-full p-3 flex flex-row items-center gap-3 flex-wrap">
+        <p class="font-medium text-sm">
+          Your selected icon:
+        </p>
+        <Icon :name="values.iconName" size="24px" color="black" />
+      </div>
       <button
         class="bg-concrete-700 text-white hover:bg-concrete-900 p-2 w-full rounded-sm shadow-[3px_3px_0_0_#bdbdbd] font-medium transition-colors duration-200"
         type="submit"

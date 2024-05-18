@@ -5,6 +5,7 @@ import java.util.Date
 
 @JvmRecord
 data class FeedbackDto(
+    val id: Long,
     val user: PublicUserDto,
     val content: String,
     val rating: Int,

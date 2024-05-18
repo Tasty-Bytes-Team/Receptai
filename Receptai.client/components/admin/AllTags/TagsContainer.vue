@@ -70,7 +70,9 @@ const siblings = 2;
 
 const getTags = async () => {
   try {
-    const result = await axios.get(`${config.public.baseURL}/api/v1/tag/list`);
+    const result = await axios.get(
+      `${config.public.baseURL}/api/v1/tag/list?page=${pageNumber.value}`
+    );
     tags.value = result.data.elements;
     totalPages.value = result.data.totalPageCount;
     loading.value = false;

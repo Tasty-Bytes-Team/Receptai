@@ -77,7 +77,7 @@ const siblings = 2;
 const getCategories = async () => {
   try {
     const result = await axios.get(
-      `${config.public.baseURL}/api/v1/category/list`
+      `${config.public.baseURL}/api/v1/category/list?page=${pageNumber.value}`
     );
     categories.value = result.data.elements;
     totalPages.value = result.data.totalPageCount;

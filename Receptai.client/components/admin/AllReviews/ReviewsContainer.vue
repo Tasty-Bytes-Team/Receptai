@@ -129,16 +129,21 @@ const deleteReview = async () => {
   try {
     if (TastyBytes_user.value) {
       await axios.delete(
-        `${config.public.baseURL}/api/v1/recipe/delete/${toBeDeleted.value}`,
+        `${config.public.baseURL}/api/v1/feedback/delete/${toBeDeleted.value}`,
         {
           headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
         }
       );
 
       confirmBox.value = false;
-      addNotification(`Your recipe has been deleted!`, "Success");
+      addNotification(`Review has been deleted!`, "Success");
+      
+      await getReviews();
     } else {
-      addNotification(`You are not authorized. Please log in again.`, "Error");
+      addNotification(
+        `You are not authorized to delete this review. Please log in again.`,
+        "Error"
+      );
       navigateTo("/user/login");
     }
   } catch (e) {

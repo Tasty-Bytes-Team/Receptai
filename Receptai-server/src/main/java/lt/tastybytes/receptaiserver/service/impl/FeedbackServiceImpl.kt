@@ -70,6 +70,10 @@ class FeedbackServiceImpl(
         return rating.getOrDefault(-1.0)
     }
 
+    override fun getFeedback(pager: Pager): Page<Feedback> {
+        return feedbackRepository.findAll(pager.toPageRequest(FEEDBACK_PER_PAGE))
+    }
+
     override fun leaveFeedback(recipeId: Long, author: User, dto: CreateFeedbackDto): Feedback {
         // Don't allow to create feedback if it already was created before
         if (findFeedbackByRecipeAndUser(recipeId, author.id).isPresent) {

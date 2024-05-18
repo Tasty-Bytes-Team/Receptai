@@ -44,6 +44,16 @@ public class FeedbackController {
         );
     }
 
+    @GetMapping(path="/list")
+    public ResponseEntity<PagedResponseDto<FeedbackDto>> listFeedback(
+            @Valid PagedRequestDto pageDto
+    ) {
+        var page = feedbackService.getFeedback(new Pager(pageDto));
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Feedback::toDto)
+        );
+    }
+
     @PostMapping(path="/leave/{recipeId}")
     public ResponseEntity<FeedbackDto> leaveFeedback(
             @PathVariable long recipeId,

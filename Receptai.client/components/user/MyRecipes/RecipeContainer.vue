@@ -57,6 +57,7 @@ const deleteRecipe = async () => {
 <template>
   <ConfirmBox
     v-if="confirmBox"
+    toBeDeletedText="recipe"
     @confirm="deleteRecipe"
     @cancel="confirmBox = !confirmBox"
   />

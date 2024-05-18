@@ -23,6 +23,10 @@ const { value: input } = useField("input");
 const onSubmit = handleSubmit(async () => {
   emit("confirm");
 });
+
+defineProps<{
+  toBeDeletedText: string;
+}>();
 </script>
 
 <template>
@@ -46,7 +50,7 @@ const onSubmit = handleSubmit(async () => {
         size="60px"
       />
       <p class="my-4 text-black">
-        Are you sure you want to delete this recipe? To confirm please enter
+        Are you sure you want to delete this {{toBeDeletedText}}? To confirm please enter
         <b>DELETE</b>.
       </p>
       <form

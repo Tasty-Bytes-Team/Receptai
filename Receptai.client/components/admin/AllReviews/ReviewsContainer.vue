@@ -1,4 +1,10 @@
 <template>
+  <ConfirmBox
+    v-if="confirmBox"
+    toBeDeletedText="review"
+    @confirm="deleteReview"
+    @cancel="confirmBox = !confirmBox"
+  />
   <div v-if="loading">
     <div role="status" class="flex justify-center items-center my-2">
       <img
@@ -17,6 +23,12 @@
     <table class="w-full text-sm text-left rtl:text-right">
       <thead class="text-sm bg-concrete-100">
         <tr>
+          <th
+            scope="col"
+            class="px-3 py-3 border-concrete-300 border-2 text-center min-w-14"
+          >
+            ID
+          </th>
           <th
             scope="col"
             class="px-3 py-3 border-concrete-300 border-2 text-center min-w-36"
@@ -50,7 +62,16 @@
         </tr>
       </thead>
       <tbody>
-        <SingleReview v-for="review in reviews" :review="review" />
+        <SingleReview
+          v-for="review in reviews"
+          @delete="
+            (value) => {
+              confirmBox = true;
+              toBeDeleted = value;
+            }
+          "
+          :review="review"
+        />
       </tbody>
     </table>
     <div class="w-full text-center" v-if="totalPages > 0">
@@ -68,10 +89,16 @@
 import SingleReview from "./SingleReview.vue";
 import axios from "axios";
 import Pagination from "@/components/Pagination/Pagination.vue";
-import type { ReviewInformation } from "@/typescript/types";
+import type { ReviewInformation, UserCookie } from "@/typescript/types";
 import EmptyListInformation from "@/components/EmptyListInformation.vue";
+import ConfirmBox from "@/components/user/MyRecipes/components/ConfirmBox.vue";
+import { addNotification } from "@/store/store";
 
 const config = useRuntimeConfig();
+const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
+
+const confirmBox = ref<boolean>(false);
+const toBeDeleted = ref<number | null>(null);
 
 const reviews = ref<ReviewInformation[] | null>(null);
 const loading = ref(true);
@@ -88,6 +115,32 @@ const getReviews = async () => {
     reviews.value = result.data.elements;
     totalPages.value = result.data.totalPageCount;
     loading.value = false;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const deleteReview = async () => {
+  if (toBeDeleted.value === null) {
+    confirmBox.value = false;
+    return;
+  }
+
+  try {
+    if (TastyBytes_user.value) {
+      await axios.delete(
+        `${config.public.baseURL}/api/v1/recipe/delete/${toBeDeleted.value}`,
+        {
+          headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
+        }
+      );
+
+      confirmBox.value = false;
+      addNotification(`Your recipe has been deleted!`, "Success");
+    } else {
+      addNotification(`You are not authorized. Please log in again.`, "Error");
+      navigateTo("/user/login");
+    }
   } catch (e) {
     console.error(e);
   }

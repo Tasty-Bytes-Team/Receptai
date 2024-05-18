@@ -41,6 +41,7 @@ public class SecurityConfiguration {
 
 
                         .requestMatchers("/api/v1/feedback/list/**").permitAll()
+                        .requestMatchers("/api/v1/feedback/list").hasRole("ADMIN")
 
                         .requestMatchers("/api/v1/recipe/list").permitAll()
                         .requestMatchers("/api/v1/recipe/get/**").permitAll()

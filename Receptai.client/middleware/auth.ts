@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       headers: { Authorization: `Bearer ${TastyBytes_user.value.token}` },
     });
   } catch (error) {
-    console.log("Auth", error);
+    console.error("Auth", error);
     useCookie("TastyBytes_user").value = null;
     return navigateTo("/user/login");
   }

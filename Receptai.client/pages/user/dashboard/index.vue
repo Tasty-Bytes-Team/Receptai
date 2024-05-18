@@ -2,7 +2,7 @@
 import type { UserCookie, Recipe } from "@/typescript/types";
 import axios from "axios";
 import Widget from "./Widgets/WidgetComponent.vue";
-import RecipeBannerComponent from "~/components/Banner/RecipeBannerComponent.vue";
+import RecipeBannerComponent from "@/components/Banner/RecipeBannerComponent.vue";
 
 definePageMeta({
   layout: "user",

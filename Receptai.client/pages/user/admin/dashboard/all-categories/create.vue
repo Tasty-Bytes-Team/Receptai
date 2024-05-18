@@ -11,12 +11,16 @@ import ErrorBaner from "@/components/Error/ErrorBaner.vue";
 import InputField from "@/components/user/components/InputField.vue";
 import InputTextarea from "@/components/user/components/InputTextarea.vue";
 
-
-interface CreateTag {
+interface CreateCategory {
   name: string;
   description: string;
   previewImageUrl: string;
 }
+
+definePageMeta({
+  layout: "admin",
+  middleware: "admin",
+});
 
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
@@ -32,10 +36,10 @@ const validationSchema = toTypedSchema(
   })
 );
 
-let initialValues: CreateTag = {
+let initialValues: CreateCategory = {
   name: "",
-  iconName: "",
-  previewImageUrl: ""
+  description: "",
+  previewImageUrl: "",
 };
 
 const onSubmit = async (values: GenericObject) => {
@@ -54,11 +58,15 @@ const onSubmit = async (values: GenericObject) => {
 
       await navigateTo("/user/admin/dashboard/all-categories");
 
-      addNotification(`Your category ${values.name} has been added!`, "Success");
+      addNotification(
+        `Your category ${values.name} has been added!`,
+        "Success"
+      );
     } catch (e) {
       console.log("Create category", e);
 
-      errorText.value = "Oops! There was an error while creating your category.";
+      errorText.value =
+        "Oops! There was an error while creating your category.";
       error.value = true;
 
       window?.scrollTo(0, 0);

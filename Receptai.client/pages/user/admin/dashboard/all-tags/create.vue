@@ -17,6 +17,11 @@ interface CreateTag {
   iconName: string;
 }
 
+definePageMeta({
+  layout: "admin",
+  middleware: "admin",
+});
+
 const config = useRuntimeConfig();
 const TastyBytes_user = useCookie<UserCookie | null>("TastyBytes_user");
 

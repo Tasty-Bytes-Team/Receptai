@@ -4,54 +4,53 @@ const currYear: Date = new Date();
 
 const NavigationTabs: Navigation[] = [
   {
-    name: "Navigation",
+    name: "Useful links",
     links: [
       {
-        name: "Link 1",
-        link: "/",
+        name: "About us",
+        link: "/about",
       },
       {
-        name: "Link 2",
-        link: "/",
+        name: "All recipes",
+        link: "/recipes",
+      },
+      {
+        name: "All categories",
+        link: "/categories",
       },
     ],
   },
   {
-    name: "Navigation",
+    name: "Popular categories",
     links: [
       {
-        name: "Link 1",
-        link: "/",
+        name: "Weeknight Wonders",
+        link: "#",
       },
       {
-        name: "Link 2",
-        link: "/",
+        name: "Global Eats",
+        link: "#",
+      },
+      {
+        name: "Plant-Powered Plates",
+        link: "#",
       },
     ],
   },
   {
-    name: "Navigation",
+    name: "Popular recipes",
     links: [
       {
-        name: "Link 1",
-        link: "/",
+        name: "Pizza Margherita",
+        link: "#",
       },
       {
-        name: "Link 2",
-        link: "/",
-      },
-    ],
-  },
-  {
-    name: "Navigation",
-    links: [
-      {
-        name: "Link 1",
-        link: "/",
+        name: "Oven-baked ribs",
+        link: "#",
       },
       {
-        name: "Link 2",
-        link: "/",
+        name: "Best Hamburger Ever",
+        link: "#",
       },
     ],
   },

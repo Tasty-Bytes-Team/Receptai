@@ -18,10 +18,12 @@ public interface UserService {
 
     Optional<User> findUserById(long id);
 
-    void createUser(String name, String email, String password);
+    User createUser(String name, String email, String password);
 
 
     User editUser(User user, @Valid PatchUserDto dto) throws NotFoundException, UserAlreadyExistsException;
+
+    User addRoleToUser(User user, String role);
 
 
     User findUserByEmail(String email);

@@ -103,6 +103,7 @@ const deleteRecipe = async () => {
         <tr
           class="border-b-2 border-concrete-200"
           v-for="recipe in recipeSelection"
+          :key="recipe.id"
         >
           <td class="font-bold px-3 py-4">{{ recipe.name }}</td>
           <td class="text-center">

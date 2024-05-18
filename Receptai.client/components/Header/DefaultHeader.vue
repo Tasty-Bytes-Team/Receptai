@@ -27,7 +27,7 @@ watch(
 
 <template>
   <div
-    class="sm:flex hidden max-w-screen-lg m-auto px-3 items-center justify-between gap-6"
+    class="md:flex hidden max-w-screen-lg m-auto px-3 items-center justify-between gap-6"
   >
     <div class="flex items-center justify-between w-full">
       <Logo />

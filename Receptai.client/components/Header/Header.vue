@@ -13,8 +13,8 @@ defineProps<{
 <template>
   <header class="bg-white shadow-md">
     <MobileHeader
-      :show-create="showCreate"
-      :show-search="showSearch"
+      :show-create-button="showCreate"
+      :show-search-button="showSearch"
       :header-nav="headerNav"
     />
     <DefaultHeader

@@ -17,7 +17,7 @@
   </div>
   <EmptyListInformation
     v-else-if="reviews && reviews.length === 0"
-    description="Your category list is currently empty. Why not add some categories today?"
+    description="Review list is currently empty."
   />
   <div v-else class="relative overflow-x-auto">
     <table class="w-full text-sm text-left rtl:text-right">
@@ -64,6 +64,7 @@
       <tbody>
         <SingleReview
           v-for="review in reviews"
+          :key="review.id"
           @delete="
             (value) => {
               confirmBox = true;
@@ -137,7 +138,7 @@ const deleteReview = async () => {
 
       confirmBox.value = false;
       addNotification(`Review has been deleted!`, "Success");
-      
+
       await getReviews();
     } else {
       addNotification(

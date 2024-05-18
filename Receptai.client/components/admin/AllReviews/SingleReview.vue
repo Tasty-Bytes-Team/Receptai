@@ -7,8 +7,8 @@
       {{ review.user.name }} (ID: {{ review.user.id }})
     </td>
     <td class="text-center p-3">
-      <StarRating :set-rating="review.rating / 2" />
-      ({{ review.rating / 2 }} out of 5)
+      <StarRating :set-rating="reviewStars" />
+      ({{ reviewStars }} out of 5)
     </td>
     <td class="text-center p-3">
       {{ review.content }}
@@ -38,9 +38,11 @@ import type { ReviewInformation } from "@/typescript/types";
 import dateWithTime from "@/typescript/dateFormating";
 import StarRating from "@/components/Feedback/components/StarRating.vue";
 
-defineProps<{
+const props = defineProps<{
   review: ReviewInformation;
 }>();
+
+const reviewStars = computed(() => props.review.rating / 2);
 </script>
 
 <style scoped></style>

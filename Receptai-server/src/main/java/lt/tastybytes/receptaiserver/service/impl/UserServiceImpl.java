@@ -15,18 +15,19 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import static lt.tastybytes.receptaiserver.model.RolesKt.ROLE_USER;
+
 @Service
+@Component
 public class UserServiceImpl implements UserService {
 
     private static final int USERS_PER_PAGE = 20;
-
-
-    final String DefaultRole = "ROLE_USER";
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(String name, String email, String password) {
+    public User createUser(String name, String email, String password) {
         var user = new User();
         user.setName(name);
         user.setEmail(email);
@@ -60,12 +61,18 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(password));
 
-        Role role = roleRepository.findByName(DefaultRole);
-        if (role == null) {
-            role = createDefaultRoleIfNotExist();
-        }
+        var role = getOrCreateRole(ROLE_USER);
         user.setRoles(List.of(role));
         userRepository.save(user);
+        return user;
+    }
+
+    private Role getOrCreateRole(String roleName) {
+        Role role = roleRepository.findByName(roleName);
+        if (role != null) return role;
+        var newRole = new Role();
+        newRole.setName(roleName);
+        return roleRepository.save(newRole);
     }
 
     @Override
@@ -98,8 +105,13 @@ public class UserServiceImpl implements UserService {
             user.setProfileUrl(dto.newProfileAvatarUrl());
         }
 
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User addRoleToUser(User user, String role) {
+        user.addRole(getOrCreateRole(role));
+        return userRepository.save(user);
     }
 
     public User authenticate(String email, String password) {
@@ -126,11 +138,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Number getTotalUserCount() {
         return userRepository.count();
-    }
-
-    private Role createDefaultRoleIfNotExist() {
-        Role role = new Role();
-        role.setName(DefaultRole);
-        return roleRepository.save(role);
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   description: string;
-  buttonText: string;
+  buttonText?: string;
 }>();
 </script>
 
@@ -11,6 +11,7 @@ defineProps<{
       {{ description }}
     </p>
     <button
+      v-if="buttonText"
       @click="$emit('button-click')"
       class="p-1.5 px-5 text-lg rounded-sm text-black font-medium bg-chilean-heath-200 hover:bg-chilean-heath-300 transition-colors duration-200"
     >

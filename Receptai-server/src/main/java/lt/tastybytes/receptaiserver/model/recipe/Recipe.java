@@ -3,6 +3,7 @@ package lt.tastybytes.receptaiserver.model.recipe;
 import jakarta.persistence.*;
 import lt.tastybytes.receptaiserver.dto.recipe.RecipeDto;
 import lt.tastybytes.receptaiserver.exception.MissingRightsException;
+import lt.tastybytes.receptaiserver.model.Feedback;
 import lt.tastybytes.receptaiserver.model.ManageableModel;
 import lt.tastybytes.receptaiserver.model.category.Category;
 import lt.tastybytes.receptaiserver.model.tag.Tag;
@@ -47,6 +48,9 @@ public class Recipe implements ManageableModel {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientType> ingredients = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedback = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Instruction> instructions = new ArrayList<>();

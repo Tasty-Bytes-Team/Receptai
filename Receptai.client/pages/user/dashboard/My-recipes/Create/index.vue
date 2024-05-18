@@ -106,7 +106,7 @@ try {
   categoryList.value = responseCategory.data.elements;
   tagList.value = responseTag.data.elements;
 } catch (e) {
-  console.log("Get category and tag list", e);
+  console.error("Get category and tag list", e);
 
   errorText.value = "Could not get categories and tags list. Please try again.";
   error.value = true;
@@ -141,7 +141,7 @@ const onSubmit = async (values: GenericObject) => {
         ]
       );
     } catch (e) {
-      console.log("Create recipe", e);
+      console.error("Create recipe", e);
       errorText.value = "Could not create a recipe. Please try again.";
       error.value = true;
 

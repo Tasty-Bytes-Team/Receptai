@@ -16,6 +16,14 @@ const headerNav: Array<HeaderNavigation> = [
     to: "/user/admin/dashboard/all-reviews",
     title: "All reviews",
   },
+  {
+    to: "/user/admin/dashboard/all-tags",
+    title: "All tags",
+  },
+  {
+    to: "/user/admin/dashboard/all-categories",
+    title: "All categories",
+  },
 ];
 </script>
 

@@ -34,33 +34,31 @@ public class UserServiceTest {
     }
 
     User getTestUser1() {
-        return userService.findUserById(1).get();
+        return userService.findUserById(2).get();
     }
 
     @Test
-    void findAllUsers_When3UsersExist_shouldReturn3Elements() {
-        var result = userService.getUsers(0);
-        assertEquals(3, result.getTotalElements());
-    }
-
-    @Test
-    void findAllUsers_When1UserCreated_shouldReturn4Elements() {
-        userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
+    void findAllUsers_When4UsersExist_shouldReturn4Elements() {
         var result = userService.getUsers(0);
         assertEquals(4, result.getTotalElements());
     }
 
     @Test
-    void findFirstUser_WhenUserNewlyCreated_ShouldHave1Role() {
+    void findAllUsers_When1UserCreated_shouldReturn5Elements() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(4).orElseThrow();
+        var result = userService.getUsers(0);
+        assertEquals(5, result.getTotalElements());
+    }
+
+    @Test
+    void findFirstUser_WhenUserNewlyCreated_ShouldHave1Role() {
+        var user = userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
         assertEquals(1, user.getRoles().size());
     }
 
     @Test
     void findFirstUser_WhenUserNewlyCreated_ShouldHaveDefaultRoleOfUser() {
-        userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(1).orElseThrow();
+        var user = userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
         assertEquals("ROLE_USER", user.getRoles().get(0).getName());
     }
 
@@ -72,9 +70,9 @@ public class UserServiceTest {
     }
 
     @Test
-    void findUserById_WhenUserNewlyCreated_ShouldBeOfId4AndReturnCorrectData() {
+    void findUserById_WhenUserNewlyCreated_ShouldBeOfId5AndReturnCorrectData() {
         userService.createUser("Test User", "TestUser@email.com", "Very Secret Password 123!");
-        var user = userService.findUserById(4).get();
+        var user = userService.findUserById(5).get();
         assertEquals(user.getEmail(), "TestUser@email.com");
         assertEquals(user.getName(), "Test User");
     }

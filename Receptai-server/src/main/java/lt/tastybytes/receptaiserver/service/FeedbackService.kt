@@ -42,6 +42,8 @@ interface FeedbackService {
      */
     fun getAverageRecipeAuthorRating(userId: Long): Double
 
+    fun getFeedback(pager: Pager): Page<Feedback>
+
     /**
      * Leave feedback on the specified recipe ID with the specified user.
      * The feedback contents are to be provided through a DTO object.

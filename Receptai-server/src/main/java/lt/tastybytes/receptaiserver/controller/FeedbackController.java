@@ -7,6 +7,7 @@ import lt.tastybytes.receptaiserver.dto.PagedResponseDto;
 import lt.tastybytes.receptaiserver.dto.feedback.CreateFeedbackDto;
 import lt.tastybytes.receptaiserver.dto.feedback.FeedbackDto;
 import lt.tastybytes.receptaiserver.exception.NotFoundException;
+import lt.tastybytes.receptaiserver.exception.RuntimeValidationException;
 import lt.tastybytes.receptaiserver.model.Feedback;
 import lt.tastybytes.receptaiserver.model.user.User;
 import lt.tastybytes.receptaiserver.service.FeedbackService;
@@ -44,16 +45,31 @@ public class FeedbackController {
         );
     }
 
+    @GetMapping(path="/list")
+    public ResponseEntity<PagedResponseDto<FeedbackDto>> listFeedback(
+            @Valid PagedRequestDto pageDto
+    ) {
+        var page = feedbackService.getFeedback(new Pager(pageDto));
+        return ResponseEntity.ok(
+                PagedResponseDto.of(page, Feedback::toDto)
+        );
+    }
+
     @PostMapping(path="/leave/{recipeId}")
     public ResponseEntity<FeedbackDto> leaveFeedback(
             @PathVariable long recipeId,
             @AuthenticationPrincipal User currentUser,
             @Valid @RequestBody CreateFeedbackDto dto
-    ) throws NotFoundException {
+    ) throws NotFoundException, RuntimeValidationException {
         var optionalRecipe = recipeService.getRecipeById(recipeId);
         if (optionalRecipe.isEmpty()) {
             throw new NotFoundException("Recipe with provided ID not found");
         }
+
+        if (optionalRecipe.get().getAuthor().getId().equals(currentUser.getId())) {
+            throw new RuntimeValidationException("You cannot leave feedback on your own recipe!");
+        }
+
         var createdFeedback = feedbackService.leaveFeedback(recipeId, currentUser, dto);
         return ResponseEntity.ok(createdFeedback.toDto());
     }

@@ -124,7 +124,7 @@ try {
   categoryList.value = responseCategory.data.elements;
   tagList.value = responseTag.data.elements;
 } catch (e) {
-  console.log(e);
+  console.error(e);
 
   errorText.value = "Couldn't load recipe data. Please try again.";
   error.value = true;
@@ -156,7 +156,7 @@ const onSubmit = async (values: GenericObject) => {
         },
       ]);
     } catch (e) {
-      console.log("Edit recipe", e);
+      console.error("Edit recipe", e);
 
       errorText.value = "Oops! There was an error saving changes.";
       error.value = true;

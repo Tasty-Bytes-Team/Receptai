@@ -40,7 +40,7 @@ const error = ref(false);
       <div class="px-3 py-2">
         <div class="text-sm font-normal">
           <NuxtLink
-            :to="`/recipe-category/${categoryId}`"
+            :to="`/categories/${categoryId}`"
             class="hover:underline duration-150 transition-all"
             data-testid="recipe-category"
             >{{ category }}</NuxtLink

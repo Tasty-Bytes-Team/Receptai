@@ -15,7 +15,7 @@ const error = ref(false);
     data-testid="recipe-container"
   >
     <div class="m-3">
-      <NuxtLink :to="`/recipe-category/${id}`">
+      <NuxtLink :to="`/categories/${id}`">
         <div class="relative">
           <NuxtImg
             v-if="previewImageUrl"

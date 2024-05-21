@@ -23,7 +23,7 @@ const error = ref(false);
         >
         <NuxtLink
           class="hover:underline font-medium"
-          :to="`/recipe-category/${recipe.categories[0].id}`"
+          :to="`/categories/${recipe.categories[0].id}`"
           >{{ recipe.categories[0].name }}</NuxtLink
         >
         > {{ recipe.name }}

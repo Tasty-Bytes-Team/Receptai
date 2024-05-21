@@ -77,7 +77,7 @@ getRecipes();
         description="While there aren't any recipes here yet, we invite you to explore our
         full range of categories by clicking button below."
         button-text="All categories"
-        @button-click="navigateTo('/recipe-category')"
+        @button-click="navigateTo('/categories')"
       />
     </div>
     <div v-else>

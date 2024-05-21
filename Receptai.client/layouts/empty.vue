@@ -5,8 +5,8 @@ import type { HeaderNavigation } from "@/typescript/types";
 
 const headerNav: Array<HeaderNavigation> = [
   {
-    to: "/about",
-    title: "About",
+    to: "/about-us",
+    title: "About us",
   },
   {
     to: "/recipes",

@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HeadingWithParagraph from '@/components/HomePage/HeadingWithParagraph.vue';
+</script>
 
 <template>
-  <div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="px-4">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">About Us</h1>
+      <h1 class="text-4xl font-bold mb-4">About Us</h1>
       <p>
         Welcome to our recipe website! Our mission is to inspire and empower home cooks by providing 
         a wide range of delicious and easy-to-follow recipes. Developed as a university project, this website was created by Erikas L., Dominykas S., and Dovydas M. 

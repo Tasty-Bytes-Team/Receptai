@@ -13,7 +13,7 @@ const headerNav: Array<HeaderNavigation> = [
     title: "Recipes",
   },
   {
-    to: "/recipe-category",
+    to: "/categories",
     title: "Categories",
   },
 ];

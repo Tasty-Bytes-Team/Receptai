@@ -1,12 +1,30 @@
 # Receptai
 
+[TODO: description]
+
 ## The Team
 
-## Techninė užduotis?
+Tasty Bytes team consists out of 3 members:
+- Dominykas Svetikas
+- Erikas Laužadis
+- Dovydas Mašinauskis
+
+## Technical task
+
+[TODO: technical task]
 
 ## Architecture
 
+From top-down view, the project uses a layered architecture using Docker containers to run MySQL database, Spring Boot backend, Vue + Nuxt frontend and Nginx to proxy requests to frontend and API under the same umbrella.
+
+A very simplified overview would look like so:
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/32238647/054f3236-f1c8-409b-9859-62b0c10a8d5e)
+
 ## Testing
+
+Tests have been written for both frontend and backend and are available under the framework-specific directories under `Receptai-server` and `Receptai.client` directories.
+
+Test status can be inspected by checking GitHub workflows associated with push commits.
 
 ## Deployment and development setup guide
 
@@ -20,6 +38,8 @@ docker compose up --build
 ```
 
 After containers start up, the website will be available on http://localhost/ over port 80 by default. The API can be accessed under http://localhost/api/.
+
+There will be an admin account created by default with these credentials: email: `admin@localhost` and password: `admin`.
 
 ### Development
 

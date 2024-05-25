@@ -10,6 +10,35 @@ Tasty Bytes team consists out of 3 members:
 - Erikas Laužadis
 - Dovydas Mašinauskis
 
+## WIKI - How to use
+This wiki is your one-stop guide to navigating and using all the features our recipe website has to offer.
+
+### Getting Started
+
+- **Creating an Account:** Head to the signup page and register with your email address to create a free profile. This unlocks the ability to save recipes, create your own, and leave reviews.
+- **Logging In:** After creating an account, you'll use a login form to access the website whenever you return.
+- **Editing your account:** You can edit your name, profile picture, and password by going to the ``/user/profile`` page. Keep in mind that changes may take a while to appear everywhere.
+
+### Browsing all recipes
+
+- **Explore Recipes:** Discover a wide variety of recipes using our search bar, sorting options (by name, date, etc.), or browse by category (starters, main courses, desserts, etc.).
+- **Recommendations and Featured Recipes:** Find inspiration on our homepage, which showcases recommended recipes. You can also find recipe suggestions at the bottom of any recipe page.
+- **Print Recipes:** Found a recipe you love? Click the print button at the top of the recipe page to easily print it.
+
+### Creating and Sharing Your Culinary Creations
+
+- **Adding Recipes:** Share your culinary genius! Click on the "Create" button in your user dashboard (``/user/dashboard``) or the "Create new recipe" option in your user profile menu. Fill in the details like ingredients, preparation instructions, cooking time, and servings. You can also add photos and even a video to showcase your dish!
+- **Editing and Managing Recipes:** Made a mistake or want to update your recipe? No problem! Easily edit your creations and manage them within your profile's "My Recipes" page (``/user/dashboard/my-recipes``).
+
+### User Reviews and Ratings
+
+- **Leaving Feedback:** Help out your fellow foodies by leaving reviews and ratings for recipes you've tried. Share your thoughts and experiences!
+- **Reading Reviews:** See what other users think before you try a recipe. Reviews offer valuable insights and tips.
+
+### For Admins Only
+
+- **Admin Panel:** If you've been granted admin privileges, you'll have access to a special panel to manage all user-generated content, including recipes, comments, and profiles. This allows you to maintain the quality of the website's content.
+
 ## Technical task
 
 This document outlines the technical functionalities planned for the recipe website:

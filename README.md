@@ -12,39 +12,61 @@ Tasty Bytes team consists out of 3 members:
 
 ## Technical task
 
-Technical tasks that have been attempted to be implemented can be described as:
+This document outlines the technical functionalities planned for the recipe website:
 
-### Recipe creation
-Users should be able to create their own profiles (name, surname, profile picture), leave comments and rate recipes.
-Users should be able to create, edit and manage their recipes in the editor panel, and see feedback and reviews left by users.
+### User Accounts
+- **Account Creation:** Users can register and create their own profiles.
+- **Login:** Existing users can log in with their credentials.
 
-### Admin panel
-A user with admin rights should be able to see and edit all recipes, comments, profiles, etc. on the page. These need to be administered and deleted.
+![Animation2](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/ebdf16c8-52c7-4232-9279-738796ec010d)
 
-### Viewing recipes
-Recipes should be able to be viewed by users: the author, ingredients, preparation instructions, photos of the result, video of the preparation, nutritional value, preparation time, number of servings should be clearly displayed.
+### User Profiles
+- **Profile Editing:** Users can edit their profile information, including name, profile picture, and password.
 
-Users should be able to leave a review, rate, score.
-The recipe should be easy and intuitive to print.
-The user should be able to share the recipe intuitively by copying the url.
+![Animation](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/e4f3ea94-4004-4f52-9569-c957f85dd3b0)
 
-### Recipe suggestions
-The user should be offered relevant recipes based on the recipes they have viewed.
+### Recipe Management
+- **Recipe Creation:** Users can create new recipes, including text descriptions, ingredients, preparation instructions, and media (photos and videos).
+- **Recipe Editing:** Users can edit and update their existing recipes.
+- **Recipe Feedback:** Users can view feedback and reviews left on their recipes by other users.
 
-The current recipe offers should be displayed on the home page of the website and at the bottom of the specific recipe page.
+![Animation3](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/0fea02ba-414b-4eda-aedd-3966b491854e)
 
-### Browse, search for recipes
-Recipes should be sortable by name, date, etc.
+### Admin Panel
+- **Content Management:** Admin users can view, edit, and delete all recipes, comments, create tags and categories.
 
-Users should be able to search for recipes by name, various attributes such as dish, ingredients, cooking time, etc., and select filters (vegan, gluten-free, etc.).
+![Animation4](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/37e66304-6130-41ad-a7c2-dadc71d185b7)
 
-Recipes should be able to be grouped into different categories or tags such as starters, soups, salads, main courses, desserts, etc.
+### Recipe Viewing
+- **Detailed Information:** Recipe pages display comprehensive information, including author, ingredients, preparation instructions, photos of the final dish, optional preparation videos, nutritional values, cooking time, and number of servings.
+
+![Animation11](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/1bd3a690-eb91-481d-bfda-99e30a835cb7)
+
+### Review System
+- **User Reviews:** Users can leave reviews, ratings for published recipes.
+
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/25b095d2-db68-4e5f-bcf9-0c2ce41900f9)
+
+### Recipe Recommendations
+- **Personalized Suggestions:** The system recommends recipes to users based on their viewing recipe.
+- **Display:** Recommended recipes are showcased on the homepage and at the bottom of individual recipe pages.
+
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/82d2efc5-1f3a-4361-8fe2-acd0de9b8f05)
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/faa3ede0-2c22-4052-9e6f-bd8ed3834873)
+
+### Recipe Search and Browsing
+- **Sorting and Filtering:** Recipes can be sorted by various criteria like name, date, etc.
+- **Search Functionality:** Users can search for recipes by name, dish type, ingredients, cooking time.
+- **Recipe Categories:** Recipes can be categorized into groups or tagged with labels for easier browsing (starters, soups, salads, main courses, desserts, etc.).
+
+![Animation12](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/21bc1366-9af7-4504-b38f-6a628876c5fe)
 
 ## Architecture
 
 From top-down view, the project uses a layered architecture using Docker containers to run MySQL database, Spring Boot backend, Vue + Nuxt frontend and Nginx to proxy requests to frontend and API under the same umbrella.
 
 A very simplified overview would look like so:
+
 ![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/32238647/054f3236-f1c8-409b-9859-62b0c10a8d5e)
 
 ## Testing
@@ -52,6 +74,9 @@ A very simplified overview would look like so:
 Tests have been written for both frontend and backend and are available under the framework-specific directories under `Receptai-server` and `Receptai.client` directories.
 
 Test status can be inspected by checking GitHub workflows associated with push commits.
+
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/3b9315d0-577d-409e-a0a0-8db03437d0e0)
+![image](https://github.com/Tasty-Bytes-Team/Receptai/assets/45915900/11ae854d-b127-40dc-be32-95525d36b7f6)
 
 ## Deployment and development setup guide
 

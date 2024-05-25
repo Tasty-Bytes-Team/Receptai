@@ -1,6 +1,7 @@
-# Receptai
+# Recipe website
 
-[TODO: description]
+The project is a recipe website, where users can create and view recipes, leave feedback,
+get useful cooking tips and inspiration and search for recipes.
 
 ## The Team
 
@@ -11,7 +12,33 @@ Tasty Bytes team consists out of 3 members:
 
 ## Technical task
 
-[TODO: technical task]
+Technical tasks that have been attempted to be implemented can be described as:
+
+### Recipe creation
+Users should be able to create their own profiles (name, surname, profile picture), leave comments and rate recipes.
+Users should be able to create, edit and manage their recipes in the editor panel, and see feedback and reviews left by users.
+
+### Admin panel
+A user with admin rights should be able to see and edit all recipes, comments, profiles, etc. on the page. These need to be administered and deleted.
+
+### Viewing recipes
+Recipes should be able to be viewed by users: the author, ingredients, preparation instructions, photos of the result, video of the preparation, nutritional value, preparation time, number of servings should be clearly displayed.
+
+Users should be able to leave a review, rate, score.
+The recipe should be easy and intuitive to print.
+The user should be able to share the recipe intuitively by copying the url.
+
+### Recipe suggestions
+The user should be offered relevant recipes based on the recipes they have viewed.
+
+The current recipe offers should be displayed on the home page of the website and at the bottom of the specific recipe page.
+
+### Browse, search for recipes
+Recipes should be sortable by name, date, etc.
+
+Users should be able to search for recipes by name, various attributes such as dish, ingredients, cooking time, etc., and select filters (vegan, gluten-free, etc.).
+
+Recipes should be able to be grouped into different categories or tags such as starters, soups, salads, main courses, desserts, etc.
 
 ## Architecture
 
